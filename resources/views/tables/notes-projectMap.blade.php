@@ -3,6 +3,14 @@
         <h2>Дневник проекта</h2>
         <a href="{{ route('notes-word', [$project->id, $project->projNum]) }}" class="btn">Скачать в WORD</a>
     </div>
+    <div class="mb-5">
+        <h2>Новая запись</h2>
+        <form action="{{ route('tables.notes-add', $project->id) }}" method="post">
+            @csrf
+            <textarea name="comment" placeholder="Введите текст заметки" required></textarea>
+            <button type="submit">Создать</button>
+        </form>
+    </div>
     <ul>
         @forelse ($notes as $note)
             <li>
@@ -53,11 +61,7 @@
             <li>Нет записей.</li>
         @endforelse
     </ul>
-
-    <h2>Новая запись</h2>
-    <form action="{{ route('tables.notes-add', $project->id) }}" method="post">
-        @csrf
-        <textarea name="comment" placeholder="Введите текст заметки" required></textarea>
-        <button type="submit">Создать</button>
-    </form>
+{{--    <div class="d-flex justify-content-center">--}}
+{{--        {!! $notes->links() !!}--}}
+{{--    </div>--}}
 </div>

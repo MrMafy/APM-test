@@ -96,8 +96,6 @@
     @if ($RegReestrKP->isNotEmpty())
         <div class="modal fade" id="editKPModal" tabindex="-1" aria-labelledby="editKPModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                {{-- <form id="editKPFormModal" method="post" action="{{ route('reestr-kp.update', ['id' => $item->id]) }}"
-                enctype="multipart/form-data"> --}}
                 <form id="editKPFormModal" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -170,19 +168,6 @@
                                     @if ($additionalFiles->count() > 0)
                                         <ul>
                                             @foreach ($additionalFiles as $file)
-                                                {{-- <li class="mb-2">
-                                                <a href="{{ route('download-kpAdditional', ['id' => $file->id]) }}"
-                                                    download class="me-3"
-                                                    id="additionalFileName_{{ $file->id }}">{{ $file->original_file_name }}</a>
-                                                <label for="additionalFile_{{ $file->id }}"
-                                                    class="btn btn-sm btn-danger ms-3">
-                                                    Заменить файл
-                                                    <input type="file" class="form-control additionalFile"
-                                                        name="additionalFile_{{ $file->id }}"
-                                                        id="additionalFile_{{ $file->id }}"
-                                                        data-file-id="{{ $file->id }}" style="display: none;">
-                                                </label>
-                                            </li> --}}
                                             @endforeach
                                         </ul>
                                     @endif
@@ -211,7 +196,6 @@
                 </form>
             </div>
         </div>
-
 
         <div class="modal fade" id="confirmDeleteKP" tabindex="-1" aria-labelledby="confirmDeleteKPLabel"
             aria-hidden="true">
@@ -355,7 +339,7 @@
                                     file.id + '" class="btn btn-sm btn-danger ms-3">';
                                 additionalFilesHtml += 'Заменить файл';
                                 additionalFilesHtml +=
-                                    '<input type="file" class="form-control additionalFile" name="additionalFile_' +
+                                    '<input type="file" class="form-control additionalFile" name="additionalFile' +
                                     file.id + '" id="additionalFile_' + file.id +
                                     '" data-file-id="' + file.id +
                                     '" style="display: none;">';
@@ -409,13 +393,15 @@
                     }
                 });
             });
+
             // Обработчик события изменения дополнительного файла
             $(document).on('change', '.additionalFile', function() {
                 var file = this.files[0];
                 var fileId = $(this).data('file-id'); // Получаем ID файла
                 var formData = new FormData();
-                formData.append('additional_file', file);
-                formData.append('_method', 'PUT'); // Добавляем вручную метод PUT
+                // formData.append('additional_file', file);
+                formData.append('additionalFile' + fileId, file);
+                formData.append('_method', 'PUT');
 
                 // Получаем токен CSRF из мета-тега
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -429,7 +415,8 @@
                 $.ajax({
                     url: '/reestr-kp/additional-files/' +
                         fileId, // Используем ID файла для замены соответствующего файла
-                    type: 'POST', // Используем POST для замены файла
+                    // type: 'POST', // Используем POST для замены файла
+                    type: 'PUT',
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -511,6 +498,8 @@
                     }
                 });
             });
+
+
 
             // Удаление кп
             let deleteItemId;

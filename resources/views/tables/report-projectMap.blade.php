@@ -306,7 +306,7 @@
 				<span>Руководитель проекта</span>
 				<hr style="width:200px;text-align:left;margin-left:0">
 				<input type="text" class="form-control gray" name="nameTMC" id="nameTMC"
-					value="{{ $project->projManager }}" style="max-width:200px;">
+					value="{{ $project->projManager }}" readonly style="max-width:200px;">
 			</div>
 		</div>
 	</div>
@@ -619,12 +619,11 @@
 													id="roleBonus_change"
 													placeholder="Введите дополнительную премию, руб. без НДС"
 													value="{{ $item->roleBonus }}"></td>
-											<td class="gray"><input type="hidden" class="form-control" name="roles[{{ $index }}][premium_part]"
-												id="premium_part_change" placeholder="Введите дополнительную премию, руб. без НДС"
-												value="{{ $item->premium_part }}"></td>
+											<input type="hidden" class="form-control" name="roles[{{ $index }}][premium_part]"
+												id="premium_part_change" value="{{ $item->premium_part }}">
 											<td>
 												<button class="btn btn-danger btn-sm deleteTeam_Btn"
-													data-id="{{ $item->id }}">Удалить</button>
+													data-id="{{ $item->id }}"><i class="fas fa-times"></i></button>
 											</td>
 
 										</tr>

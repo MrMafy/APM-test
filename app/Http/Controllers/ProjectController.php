@@ -30,6 +30,7 @@ use App\Models\RegSInteg;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
 
 class ProjectController extends Controller
 {
@@ -51,12 +52,13 @@ class ProjectController extends Controller
     public function showOneMessage($id, $tab = null)
     {
         $project = Projects::with('equipment', 'expenses', 'totals', 'markups', 'contacts', 'risks', 'workGroup', 'basicReference', 'basicInfo', 'notes')->find($id);
+        $notes = $project->notes()->paginate(3);
 
         if (!$project) {
             abort(404, 'Project not found');
         }
 
-        $notes = $project->notes;
+//        $notes = $project->notes;
         $baseRisks = baseRisks::all();
 
         $defaultTab = 'calculation';

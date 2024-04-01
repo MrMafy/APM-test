@@ -181,25 +181,25 @@ class RegReestrKPController extends Controller
 
     public function updateAdditionalFile(Request $request, $id)
     {
-        // Находим запись дополнительного файла по ID
-        $additionalFile = AdditionalFile::findOrFail($id);
+        // Check if the file exists in the request
+        if ($request->hasFile('additionalFile')) {
+            // Find the existing additional file by ID
+            $additionalFile = AdditionalFile::findOrFail($id);
 
-        // Обновляем файл, если он был загружен
-        if ($request->hasFile('additional_file')) {
-            $file = $request->file('additional_file');
+            // Get the uploaded file
+            $file = $request->file('additionalFile');
             $fileName = $file->getClientOriginalName();
-            $file->storeAs('additional_files', $fileName); // Предполагается, что дополнительные файлы сохраняются в папку additional_files
 
-            // Обновляем имя файла и содержимое
+            // Store the new file content
             $additionalFile->file_name = $fileName;
             $additionalFile->original_file_name = $fileName;
-            $additionalFile->file_content = file_get_contents($file->getRealPath()); // Предполагается, что содержимое файла сохраняется в базе данных
+            $additionalFile->file_content = file_get_contents($file->getRealPath());
             $additionalFile->save();
 
             return response()->json(['name' => $fileName]);
         }
 
-        // Редирект или возврат ответа в зависимости от вашей логики
+        // If the file doesn't exist in the request, return success
         return response()->json(['success' => true]);
     }
 
@@ -227,49 +227,71 @@ class RegReestrKPController extends Controller
             $reestrKP->original_file_name = $fileName;
         }
 
-        // Обработка загрузки дополнительных файлов
-        if ($request->hasFile('additional_files')) {
-            foreach ($request->file('additional_files') as $file) {
-                $originalFileName = $file->getClientOriginalName(); // Получаем исходное имя файла
-                $fileName = $reestrKP->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $fileContent = file_get_contents($file->getRealPath()); // Получаем содержимое файла
-                // Сохранение файла в таблице для дополнительных файлов
-                AdditionalFile::create([
-                    'kp_id' => $reestrKP->id,
-                    'original_file_name' => $originalFileName, // Сохраняем оригинальное имя файла
-                    'file_name' => $fileName,
-                    'file_content' => $fileContent,
-                ]);
-                // Сохранение файла на сервере
-                $file->storeAs('additional_files', $originalFileName); // Используем оригинальное имя файла для сохранения
+        // Обработка дополнительных файлов
+        foreach ($request->all() as $key => $value) {
+            // Если ключ содержит 'additional_files', обрабатываем как новые дополнительные файлы
+            if (strpos($key, 'additional_files') !== false && $request->hasFile($key)) {
+                foreach ($request->file($key) as $file) {
+                    $originalFileName = $file->getClientOriginalName(); // Получаем исходное имя файла
+                    $fileName = $reestrKP->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                    $fileContent = file_get_contents($file->getRealPath()); // Получаем содержимое файла
+
+                    // Создаем новую запись для дополнительного файла
+                    AdditionalFile::create([
+                        'kp_id' => $reestrKP->id,
+                        'original_file_name' => $originalFileName,
+                        'file_name' => $fileName,
+                        'file_content' => $fileContent,
+                    ]);
+
+                    // Сохранение файла на сервере
+                    $file->storeAs('additional_files', $originalFileName); // Используем оригинальное имя файла для сохранения
+                }
+            }
+            // Если ключ содержит 'additionalFile', обрабатываем как замену текущего файла
+            elseif (strpos($key, 'additionalFile') !== false && $request->hasFile($key)) {
+                $fileId = str_replace('additionalFile', '', $key); // Извлекаем ID файла из ключа
+                $existingFile = AdditionalFile::findOrFail($fileId); // Находим существующий файл
+
+                // Получаем загруженный файл
+                $file = $request->file($key);
+                $fileName = $file->getClientOriginalName();
+
+                // Обновляем содержимое существующего файла
+                $existingFile->file_name = $fileName;
+                $existingFile->original_file_name = $fileName;
+                $existingFile->file_content = file_get_contents($file->getRealPath());
+                $existingFile->save();
             }
         }
 
         // Сохраняем изменения
         $reestrKP->save();
 
-        // Обработка замены дополнительных файлов
-        foreach ($request->all() as $key => $value) {
-            if (strpos($key, 'additionalFile_') !== false) {
-                $fileId = substr($key, strrpos($key, '_') + 1);
-                $file = $request->file($key);
-                if ($file) {
-                    // Находим существующую запись дополнительного файла по ID
-                    $additionalFile = AdditionalFile::findOrFail($fileId);
-
-                    // Если файл был изменен, обновляем его
-                    if ($file->isValid()) {
-                        $fileName = $file->getClientOriginalName();
-                        $file->storeAs('additional_files', $fileName);
-                        $additionalFile->file_name = $fileName;
-                        $additionalFile->original_file_name = $fileName;
-                        $additionalFile->file_content = file_get_contents($file->getRealPath());
-                        $additionalFile->save();
-                    }
-                }
-            }
-        }
+//        // Обработка замены дополнительных файлов
+//        foreach ($request->all() as $key => $value) {
+//            if (strpos($key, 'additionalFile_') !== false) {
+//                $fileId = substr($key, strrpos($key, '_') + 1);
+//                $file = $request->file($key);
+//                if ($file) {
+//                    // Находим существующую запись дополнительного файла по ID
+//                    $additionalFile = AdditionalFile::findOrFail($fileId);
+//
+//                    // Если файл был изменен, обновляем его
+//                    if ($file->isValid()) {
+//                        $fileName = $file->getClientOriginalName();
+//                        $file->storeAs('additional_files', $fileName);
+//                        $additionalFile->file_name = $fileName;
+//                        $additionalFile->original_file_name = $fileName;
+//                        $additionalFile->file_content = file_get_contents($file->getRealPath());
+//                        $additionalFile->save();
+//                    }
+//                }
+//            }
+//        }
         // return response()->json(['success' => true]);
+
+
         return redirect()->route('rco');
     }
 
