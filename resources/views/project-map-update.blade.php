@@ -475,7 +475,7 @@
                                                                 <button
                                                                     class="delete_additionalExpense btn btn-xs btn-danger"
                                                                     data-target="additional_expenses"
-                                                                    data-id="{{ $additionalExpense->id }}">Удалить</button>
+                                                                    data-id="{{ $additionalExpense->id }}"><i class="fa-solid fa-trash-can"></i></button>
                                                             </td>
                                                         </tr>
                                                     @endforeach

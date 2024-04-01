@@ -229,28 +229,28 @@
                             </select>
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 hidden-field" style="display: none;">
                             <label for="risk_reason">Причина риска</label>
                             <ul class="json_field" id="reasonList"></ul>
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 hidden-field" style="display: none;">
                             <label for="risk_consequences">Последствия наступления риска</label>
                             <ul class="json_field" id="consequenceList"></ul>
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 hidden-field" style="display: none;">
                             <label for="risk_counteraction">Противодействие риску</label>
                             <ul class="json_field" id="counteringRiskList"></ul>
                         </div>
 
-                        <div class="form-group mb-3 d-flex flex-column">
+                        <div class="form-group mb-3 d-flex flex-column hidden-field" style="display: none;">
                             <label for="risk_term">Срок</label>
                             <input id="termList" type="text" class="input_editable" name="risk_term"
                                 value="" readonly>
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 hidden-field" style="display: none;">
                             <label for="risk_measures">Мероприятия при осуществлении риска</label>
                             <ul class="json_field" id="riskManagMeasuresList"></ul>
                         </div>
@@ -335,6 +335,7 @@
                     risk: selectedRisk
                 },
                 success: function(response) {
+                    $('.hidden-field').css("display", "block");
                     // Обновляем переменные и отображаем данные
                     response.reasonData.forEach(function(reason, index) {
                         $('#reasonList').append(
