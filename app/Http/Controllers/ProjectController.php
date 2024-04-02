@@ -42,9 +42,11 @@ class ProjectController extends Controller
         return view('all-maps', ['data' => $projects]);
     }
 
-    function getProjectIdByVnNum($vnNum) {
-        $project = DB::table('projects')->where('projNum', $vnNum)->first();
-//        return $project ? $project->id : null;
+    // Метод для получения ID проекта по vnNum
+    public function getProjectIdByVnNum($vnNum)
+    {
+        $project = Projects::where('projNum', $vnNum)->first(); // Используем Eloquent для поиска проекта по projNum
+        return $project ? $project->id : null; // Возвращаем ID проекта, если найден, иначе null
     }
 
 
@@ -676,9 +678,12 @@ class ProjectController extends Controller
 
 
     // --------------- ДОБАВЛЕНИЕ В РЕЕСТР -----------------------------
-    // группа 1
+    // группа 2
     private function addToRegistryEob($project)
     {
+//        Log::info('Adding to registry EOB 2:');
+//        Log::info($project->toArray());
+
         RegEob::create([
             'vnNum' => $project->projNum,
             'purchaseName' => $project->objectName,
@@ -698,9 +703,12 @@ class ProjectController extends Controller
             'projectManager' => $project->projManager,
         ]);
     }
-    // группа 2
+    // группа 1
     private function addToRegistrySinteg($project)
     {
+//        Log::info('Adding to registry SInteg 1:');
+//        Log::info($project->toArray());
+
         RegSInteg::create([
             'vnNum' => $project->projNum,
             'purchaseName' => $project->objectName,
@@ -723,6 +731,9 @@ class ProjectController extends Controller
     // группа 3
     private function addToRegistryNhrs($project)
     {
+//        Log::info('Adding to registry NHRS 3:');
+//        Log::info($project->toArray());
+
         RegNHRS::create([
             'vnNum' => $project->projNum,
             'purchaseName' => $project->objectName,
@@ -745,6 +756,9 @@ class ProjectController extends Controller
     // группа 4
     private function addToRegistryOther($project)
     {
+//        Log::info('Adding to registry Other 4:');
+//        Log::info($project->toArray());
+
         RegOther::create([
             'vnNum' => $project->projNum,
             'purchaseName' => $project->objectName,

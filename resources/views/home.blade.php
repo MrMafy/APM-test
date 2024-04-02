@@ -99,10 +99,10 @@
     </div>
 
     <script>
-        var $table = $('#table');
-        var $tableEob = $('#table_eob');
-        var $tableNHRS = $('#table_nhrs');
-        var $tableOther = $('#table_other');
+        let $table = $('#table');
+        let $tableEob = $('#table_eob');
+        let $tableNHRS = $('#table_nhrs');
+        let $tableOther = $('#table_other');
 
         function cellStyle(value, row, index, field) {
             if (value === 1) {
@@ -118,36 +118,36 @@
             $.get('/getData_group_1', function(data) {
                 initTable($table, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
-                var totalRows = data.length;
+                let totalRows = data.length;
                 $table.attr('data-total-rows', totalRows);
             });
 
             // Отправляем AJAX запрос и при получении данных инициализируем вторую таблицу
             $.get('/getData_group_2', function(data) {
-                initTable($tableNHRS, data);
+                initTable($tableEob, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
-                var totalRows = data.length;
-                $tableNHRS.attr('data-total-rows', totalRows);
+                let totalRows = data.length;
+                $tableEob.attr('data-total-rows', totalRows);
             });
 
             // Отправляем AJAX запрос и при получении данных инициализируем вторую таблицу
             $.get('/getData_group_3', function(data) {
-                initTable($tableEob, data);
+                initTable($tableNHRS, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
-                var totalRows = data.length;
-                $tableEob.attr('data-total-rows', totalRows);
+                let totalRows = data.length;
+                $tableNHRS.attr('data-total-rows', totalRows);
             });
             // Отправляем AJAX запрос и при получении данных инициализируем вторую таблицу
             $.get('/getData_group_4', function(data) {
                 initTable($tableOther, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
-                var totalRows = data.length;
+                let totalRows = data.length;
                 $tableOther.attr('data-total-rows', totalRows);
             });
         });
 
         function detailFormatter(index, row) {
-            var fieldNames = {
+            let fieldNames = {
                 'vnNum': 'Вн. Номер',
                 'purchaseName': 'Наим. закупки',
                 'delivery': 'Поставка',
@@ -165,9 +165,9 @@
                 'submissionDate': 'Дата подачи предложения',
                 'projectManager': 'Руководитель проекта',
             };
-            var html = [];
+            let html = [];
             $.each(row, function(key, value) {
-                var fieldName = fieldNames[key] ||
+                let fieldName = fieldNames[key] ||
                     key; // Получаем название поля из объекта fieldNames или используем ключ, если название не найдено
                 if (key !== 'area' && key !== 'id' && key !== 'tech' && key !== 'primeCost' && key !== 'tkpCost' &&
                     key !== 'notes' && key !== 'created_at' && key !== 'updated_at') {
@@ -178,7 +178,7 @@
         }
 
         function getProjectIdByVnNum(vnNum) {
-            var projectId = null;
+            let projectId = null;
             $.ajax({
                 url: '/get-project-id/' + vnNum,
                 type: 'GET',
@@ -206,12 +206,12 @@
                         valign: 'middle',
                         sortable: true,
                         formatter: function(value, row, index, field) {
-                            var vnNum = value; // Получаем значение поля 'vnNum'
+                            let vnNum = value; // Получаем значение поля 'vnNum'
                             // Преобразуем значение vnNum в JSON и передаем в JavaScript
                             // Вызываем JavaScript функцию для получения projectId
-                            var projectId = getProjectIdByVnNum(vnNum);
+                            let projectId = getProjectIdByVnNum(vnNum);
                             // Создаем ссылку
-                            var href = "/project-maps/all/" + projectId + '#calculation';
+                            let href = "/project-maps/all/" + projectId + '#calculation';
                             // Используем значение поля vnNum в качестве текста ссылки
                             return '<a href="' + href + '">' + vnNum + '</a>';
                         }

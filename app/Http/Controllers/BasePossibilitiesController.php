@@ -46,7 +46,7 @@ class BasePossibilitiesController extends Controller
 
     public function update(Request $request)
     {
-        $itemId = $request->input('editItemId_possib');
+        $itemId = $request->input('editItemId');
 
         $basePossibilities = BasePossibilities::find($itemId);
 
@@ -56,16 +56,16 @@ class BasePossibilitiesController extends Controller
         $basePossibilities->nameRisk = $request->input('nameRisk_possib_edit');
 
         $reasonRiskData = $request->input('reason_possib_edit');
-        $basePossibilities->reasonRisk = json_encode(array_map(fn ($reason) => ['reasonRisk_possib' => $reason], $reasonRiskData));
+        $basePossibilities->reasonRisk = json_encode(array_map(fn ($reason) => ['reasonRisk' => $reason], $reasonRiskData));
 
         $conseqRiskData = $request->input('conseq_possib_edit');
-        $basePossibilities->conseqRiskOnset = json_encode(array_map(fn ($conseq) => ['conseqRiskOnset_possib' => $conseq], $conseqRiskData));
+        $basePossibilities->conseqRiskOnset = json_encode(array_map(fn ($conseq) => ['conseqRiskOnset' => $conseq], $conseqRiskData));
 
         $counteringRiskData = $request->input('countering_possib_edit');
-        $basePossibilities->counteringRisk = json_encode(array_map(fn ($countering) => ['counteringRisk_possib' => $countering], $counteringRiskData));
+        $basePossibilities->counteringRisk = json_encode(array_map(fn ($countering) => ['counteringRisk' => $countering], $counteringRiskData));
 
         $measuresRiskData = $request->input('measures_possib_edit');
-        $basePossibilities->riskManagMeasures = json_encode(array_map(fn ($measures) => ['riskManagMeasures_possib' => $measures], $measuresRiskData));
+        $basePossibilities->riskManagMeasures = json_encode(array_map(fn ($measures) => ['riskManagMeasures' => $measures], $measuresRiskData));
 
         $basePossibilities->term = $request->input('term_possib_edit');
 
