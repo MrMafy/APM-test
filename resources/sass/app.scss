@@ -19,8 +19,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-color: #005aa50f !important;
-  //background-image: url(/storage/apm_back.jpg);
-   background-image: url(http://apmtest.kst-energo.ru/storage/apm_back.jpg);
+  background-image: url(/storage/apm_back.jpg);
+    // background-image: url(http://apmtest.kst-energo.ru/storage/apm_back.jpg);
 }
 
 .navbar.bg-white {
@@ -104,6 +104,11 @@ main {
     padding: 2rem;
     background-color: #ffffffb0;
   }
+    &-logo {
+        img {
+            max-height: 100px;
+        }
+    }
   &-block {
     height: 100vh;
   }
@@ -220,6 +225,70 @@ main {
   letter-spacing: 0.1em;
 }
 
+// ----------------- PROFILE ----------------
+.profile {
+    .card{
+        border:none;
+        position:relative;
+        overflow:hidden;
+        border-radius:8px;
+        cursor:pointer;
+
+        svg {
+            max-height: 100px;
+        }
+        &:before{
+            content:"";
+            position:absolute;
+            left:0;
+            top:0;
+            width:4px;
+            height:100%;
+            background-color: #bed7e7;
+            transform:scaleY(1);
+            transition:all 0.5s;
+            transform-origin: bottom
+        }
+        &:after{
+            content:"";
+            position:absolute;
+            left:0;
+            top:0;
+            width:4px;
+            height:100%;
+            background-color: #242baa;
+            transform:scaleY(0);
+            transition:all 0.5s;
+            transform-origin: bottom
+        }
+        &:hover::after{
+            transform:scaleY(1);
+        }
+    }
+    .fonts{
+        font-size:16px;
+    }
+    .buttons {
+        button:nth-child(1) {
+            border: 1px solid #242baa !important;
+            color: #ffffff;
+            height: 40px;
+            &:hover {
+                border: 1px solid #242baa !important;
+                color: #fff;
+                height: 40px;
+                background-color: #242baa;
+            }
+        }
+        button:nth-child(2){
+            border:1px solid #242baa !important;
+            background-color:#242baa;
+            color:#fff;
+            height:40px;
+        }
+    }
+}
+
 table {
   text-decoration: none;
   border-collapse: collapse;
@@ -324,10 +393,10 @@ tbody#changes-inputs td {
   margin-left: auto !important;
   display: block !important;
   form {
-    height: calc(100% - var(--bs-modal-margin) * 2);
-    display: flex;
-    align-items: center;
-    min-height: calc(100% - var(--bs-modal-margin) * 2);
+    //height: calc(100% - var(--bs-modal-margin) * 2);
+    //display: flex;
+    //align-items: center;
+    //min-height: calc(100% - var(--bs-modal-margin) * 2);
   }
 }
 

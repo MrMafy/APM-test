@@ -313,15 +313,14 @@
              // привязываем обработчик событий к родительскому элементу таблицы
              $table.on('click', '.editPossibility', function(event) {
                  event.preventDefault();
-                 var itemId = $(this).closest('tr').data('id');
+                 var itemId = $(this).data('id');
                  var nameRiskToEdit = $(this).closest('tr').find('[data-label="nameRisk_possib"]')
              .text();
 
                  let modal = $('#editBasePossibilities');
                  modal.find('.modal-title').text(`Редактирование возможности "${nameRiskToEdit}"`);
-                 modal.data('nameRisk',
-                 nameRiskToEdit); // Добавляем атрибут data-nameRisk к модальному окну
-                 modal.find('#editItemId').val(itemId);
+                 modal.data('nameRisk', nameRiskToEdit); // Добавляем атрибут data-nameRisk к модальному окну
+                 $('#editItemId_possib').val(itemId);
                  fillEditModal(itemId);
                  modal.modal('show');
              });
