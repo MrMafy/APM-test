@@ -19,8 +19,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-color: #005aa50f !important;
-  //background-image: url(/storage/apm_back.jpg);
-   background-image: url(http://apmtest.kst-energo.ru/storage/apm_back.jpg);
+  background-image: url(/storage/apm_back.jpg);
+    // background-image: url(http://apmtest.kst-energo.ru/storage/apm_back.jpg);
 }
 
 .navbar.bg-white {
@@ -104,6 +104,11 @@ main {
     padding: 2rem;
     background-color: #ffffffb0;
   }
+    &-logo {
+        img {
+            max-height: 100px;
+        }
+    }
   &-block {
     height: 100vh;
   }
