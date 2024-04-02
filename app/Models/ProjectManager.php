@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectManager extends Model
 {
     use HasFactory;
-    protected $fillable = ['fio'];
+    protected $table = 'project_managers';
+    protected $fillable = ['fio', 'groupNum'];
 }
