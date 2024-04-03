@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -194,8 +195,11 @@ class ProjectController extends Controller
 
         $projectManagers = ProjectManager::all();
         $baseRisks = baseRisks::all();
-
-        return view('add-map', compact('projectNum', 'currentYear', 'projectManagers', 'baseRisks'));
+        // Получение group_num пользователя
+        $currentUserGroupNum = Auth::user()->group_num;
+        // Получение текущего пользователя
+        $user = Auth::user();
+        return view('add-map', compact('projectNum', 'currentYear', 'projectManagers', 'baseRisks', 'currentUserGroupNum', 'user'));
     }
 
     // ДОБАВЛЕНИЕ   новой карты проекта
