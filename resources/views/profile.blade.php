@@ -1,6 +1,8 @@
 {{--страница личный кабинет --}}
 @extends('layouts.app')
-
+@section('title')
+    {{ "APM | КСТ | Личный кабинет" }}
+@endsection
 @section('content')
     <div class="profile container mt-5">
         <div class="row d-flex justify-content-center">
@@ -23,19 +25,19 @@
                     <div class="text-center mt-3">
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white me-4">
                             Роль:
-{{--                            @if(Auth::user()->role == 'admin_proj')--}}
-                            {{--                                Администратор проекта--}}
-                            {{--                            @elseif(Auth::user()->role == 'resp_group')--}}
-                            {{--                                Ответственный группы--}}
-                            {{--                            @elseif(Auth::user()->role == 'director')--}}
-                            {{--                                Руководитель--}}
-                            {{--                            @else--}}
-                            {{--                                Неопределено--}}
-                            {{--                            @endif--}}
+                            @if(Auth::user()->role == 'admin')
+                                                            Администратор
+                                                        @elseif(Auth::user()->role == 'responsible')
+                                                            Ответственный группы администраторов проектов
+                                                        @elseif(Auth::user()->role == 'proj_manager')
+                                                            Администратор проекта
+                                                        @else
+                                                            Неопределено
+                                                        @endif
                         </span>
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white">
                             Группа:
-
+                            {{ Auth::user()->group_num }}
                         </span>
                         <h5 class="mt-4 mb-4 text-start"><strong class="me-4">Фамилия
                                 Имя:</strong> {{ Auth::user()->name }}</h5>
