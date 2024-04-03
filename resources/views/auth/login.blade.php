@@ -70,16 +70,19 @@
                                     class="col-md-4 col-form-label text-md-end">{{ __('Пароль') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required autocomplete="current-password">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+                                        <span class="input-group-btn" id="eyeSlash" style="display: none;">
+                                            <button class="btn btn-default reveal" onclick="visibility3()" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
                                         </span>
-                                    @enderror
+                                        <span class="input-group-btn" id="eyeShow">
+                                            <button class="btn btn-default reveal" onclick="visibility3()" type="button"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                        </span>
+                                    </div>
+
                                 </div>
+
+
                             </div>
 
                             <div class="row mb-3">
@@ -114,6 +117,24 @@
             </div>
         </div>
     </div>
+    <script>
+        function visibility3() {
+            var x = document.getElementById('password');
+            var eyeShow = document.getElementById('eyeShow');
+            var eyeSlash = document.getElementById('eyeSlash');
+
+            if (x.type === 'password') {
+                x.type = "text";
+                eyeShow.style.display = 'none';
+                eyeSlash.style.display = 'inline-block';
+            } else {
+                x.type = "password";
+                eyeShow.style.display = 'inline-block';
+                eyeSlash.style.display = 'none';
+            }
+        }
+    </script>
+
 </body>
 
 </html>
