@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\DataController;
+use App\Models\RegSInteg;
+use App\Models\RegEOB;
+use App\Models\RegNHRS;
+use App\Models\RegOther;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,6 +27,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+//        Gate::define('update-user-post', function (User $user))
+//            if($user->id == $post->user_id){
+//
+//            }
         //
     }
 }

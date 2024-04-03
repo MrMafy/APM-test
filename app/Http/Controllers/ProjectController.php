@@ -29,16 +29,56 @@ use App\Models\RegSInteg;
 
 use PhpOffice\PhpWord\TemplateProcessor;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 
 class ProjectController extends Controller
 {
+//    public function getUser()
+//    {
+//        $user = Auth::user();
+//
+//        if ($user->role == 2 && $user->projNumSuf == 'Группа 4') {
+//            $data = YourModel::where('role', 2)
+//                ->where('projNumSuf', 'Группа 4')
+//                ->paginate(10); // измените модель и условия фильтрации согласно вашим требованиям
+//        } else {
+//            $data = YourModel::paginate(10); // загрузка всех данных
+//        }
+//
+//        return view('all-maps');
+//    }
+
+
+
     // Отображение списка всех проектов на странице карты проекта
+//    public function allData()
+//    {
+//        // $projects = new Projects;
+//        $projects = Projects::paginate(3);
+//
+//        return view('all-maps', ['data' => $projects]);
+//    }
+
     public function allData()
     {
-        // $projects = new Projects;
-        $projects = Projects::paginate(3);
+        $user = Auth::user();
+        // Если текущий пользователь имеет роль 2 и projNumSurf равен "Группа 4",
+        // тогда загружаем только соответствующие данные, иначе загружаем все данные
+        if ($user->role == 2 && $user->id_group == '4') {
+            $projects = Projects::where('projNumSuf', 'Группа 4')
+                ->paginate(3);
+        } elseif ($user->role == 2 && $user->id_group == '3'){
+            $projects = Projects::where('projNumSuf', 'Группа 3')
+                ->paginate(3);
+        }
+        else {
+            $projects = Projects::paginate(3); // загрузка всех данных
+        }
+
         return view('all-maps', ['data' => $projects]);
     }
 

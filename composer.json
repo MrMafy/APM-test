@@ -14,6 +14,7 @@
         "livewire/livewire": "^2.12",
         "okipa/laravel-table": "^5.3",
         "phpoffice/phpword": "^1.1",
+        "wnikk/laravel-access-rules": "^2.0",
         "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {

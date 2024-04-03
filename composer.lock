@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2f0b8eefb6db9de0dc40749e4738b7c",
+    "content-hash": "201d98affcdfd3b51ad3257fc0a820a5",
     "packages": [
         {
             "name": "brick/math",
@@ -6019,6 +6019,75 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wnikk/laravel-access-rules",
+            "version": "2.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wnikk/laravel-access-rules.git",
+                "reference": "563dbd0ee8a2629f2cc16183f0ee00f34a60c37b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wnikk/laravel-access-rules/zipball/563dbd0ee8a2629f2cc16183f0ee00f34a60c37b",
+                "reference": "563dbd0ee8a2629f2cc16183f0ee00f34a60c37b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "^8.0|^9.0|^10.0",
+                "illuminate/cache": "^8.0|^9.0|^10.0",
+                "illuminate/console": "^8.0|^9.0|^10.0",
+                "illuminate/container": "^8.0|^9.0|^10.0",
+                "illuminate/contracts": "^8.0|^9.0|^10.0",
+                "illuminate/database": "^8.0|^9.0|^10.0",
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wnikk\\LaravelAccessRules\\AccessRulesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [],
+                "psr-4": {
+                    "Wnikk\\LaravelAccessRules\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolya May",
+                    "homepage": "https://nikk.dev",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple system of ACR (access control rules) for Laravel, with roles, groups, unlimited inheritance and possibility of multiplayer use.",
+            "homepage": "https://github.com/wnikk/laravel-access-rules",
+            "keywords": [
+                "acl",
+                "acr",
+                "laravel",
+                "manager",
+                "permission",
+                "permissions",
+                "rbac",
+                "roles",
+                "rules",
+                "security",
+                "wnikk"
+            ],
+            "support": {
+                "issues": "https://github.com/wnikk/laravel-access-rules/issues",
+                "source": "https://github.com/wnikk/laravel-access-rules/tree/v2.0.11"
+            },
+            "time": "2023-04-10T15:46:34+00:00"
         },
         {
             "name": "yajra/laravel-datatables-oracle",
