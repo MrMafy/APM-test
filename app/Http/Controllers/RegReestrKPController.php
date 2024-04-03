@@ -12,15 +12,12 @@ use Illuminate\Support\Str;
 
 class RegReestrKPController extends Controller
 {
-    // public function index()
-    // {
-    //     $RegReestrKP = RegReestrKP::all();
-    //     $additionalFiles = AdditionalFile::all(); // Получаем все дополнительные файлы
-
-    //     return view('commercial-offers', compact('RegReestrKP', 'additionalFiles'));
-    // }
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
+        $projects = Projects::where('projNumSuf', $user->group_num)->get();
+        $projects_names = $projects->where('projManager', $user->name);
+
         $RegReestrKP = RegReestrKP::all();
 
         // Получаем все дополнительные файлы для каждого объекта RegReestrKP
@@ -28,7 +25,41 @@ class RegReestrKPController extends Controller
             $regReestrKP->additionalFiles = $regReestrKP->additionalFiles()->get();
         });
 
+        if ($user->role === 'admin'){
+            $RegReestrKP = RegReestrKP::all();
+        } elseif ($user->role === 'proj_manager') {
+            if ($user->group_num === 'Группа 1') {
+                $projectNames = $projects_names->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNames)->get();
+            } elseif ($user->group_num === 'Группа 2') {
+                $projectNames = $projects_names->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNames)->get();
+            } elseif ($user->group_num === 'Группа 3') {
+                $projectNames = $projects_names->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNames)->get();
+            } elseif ($user->group_num === 'Группа 4') {
+                $projectNames = $projects_names->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNames)->get();
+            }
+
+        } elseif ($user->role === 'responsible') {
+            if ($user->group_num === 'Группа 1') {
+                $projectNumbers = $projects->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNumbers)->get();
+            } elseif ($user->group_num === 'Группа 2') {
+                $projectNumbers = $projects->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNumbers)->get();
+            } elseif ($user->group_num === 'Группа 3') {
+                $projectNumbers = $projects->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNumbers)->get();
+            } elseif ($user->group_num === 'Группа 4') {
+                $projectNumbers = $projects->pluck('projNum')->toArray();
+                $RegReestrKP = RegReestrKP::whereIn('project_num', $projectNumbers)->get();
+            }
+
+        }
         return view('commercial-offers', compact('RegReestrKP'));
+
     }
 
     public function showForm()
