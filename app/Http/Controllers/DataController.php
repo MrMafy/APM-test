@@ -10,39 +10,100 @@ use App\Models\RegOther;
 
 class DataController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $RegSInteg = RegSInteg::all();
-        $RegEOB = RegEOB::all();
-        $RegNHRS = RegNHRS::all();
-        $RegOther = RegOther::all();
-        return view('home', compact('RegSInteg', 'RegEOB', 'RegNHRS', 'RegOther'));
+        $user = $request->user();
+        $RegSInteg = [];
+        $RegEOB = [];
+        $RegNHRS = [];
+        $RegOther = [];
+
+        // Проверка роли пользователя и его группы
+        if ($user->role === 'admin') {
+            $RegSInteg = RegSInteg::all();
+            $RegEOB = RegEOB::all();
+            $RegNHRS = RegNHRS::all();
+            $RegOther = RegOther::all();
+        } elseif ($user->role === 'proj_manager') {
+            if ($user->group_num === 'Группа 1') {
+                $RegSInteg = RegSInteg::where('projectManager', $user->name)->get();
+            } elseif ($user->group_num === 'Группа 2') {
+                $RegEOB = RegEOB::where('projectManager', $user->name)->get();
+            } elseif ($user->group_num === 'Группа 3') {
+                $RegNHRS = RegNHRS::where('projectManager', $user->name)->get();
+            } elseif ($user->group_num === 'Группа 4') {
+                $RegOther = RegOther::where('projectManager', $user->name)->get();
+            }
+        } elseif ($user->role === 'responsible') {
+            if ($user->group_num === 'Группа 1') {
+                $RegSInteg = RegSInteg::all();
+            } elseif ($user->group_num === 'Группа 2') {
+                $RegEOB = RegEOB::all();
+            } elseif ($user->group_num === 'Группа 3') {
+                $RegNHRS = RegNHRS::all();
+            } elseif ($user->group_num === 'Группа 4') {
+                $RegOther = RegOther::all();
+            }
+        }
+
+        return view('home', compact('RegSInteg', 'RegEOB', 'RegNHRS', 'RegOther'))->with('user', $user);
     }
 
-    public function getData_group_1()
+    public function getData_group_1(Request $request)
     {
-        $RegSInteg = RegSInteg::all();
+        $user = $request->user();
+        $RegSInteg = [];
+
+        if ($user->role === 'proj_manager') {
+            $RegSInteg = RegSInteg::where('projectManager', $user->name)->get();
+        } else {
+            $RegSInteg = RegSInteg::all();
+        }
 
         // Возвращаем данные в формате JSON
         return response()->json($RegSInteg);
     }
-    public function getData_group_2()
+
+    public function getData_group_2(Request $request)
     {
-        $RegEOB = RegEOB::all();
+        $user = $request->user();
+        $RegEOB = [];
+
+        if ($user->role === 'proj_manager') {
+            $RegEOB = RegEOB::where('projectManager', $user->name)->get();
+        } else {
+            $RegEOB = RegEOB::all();
+        }
 
         // Возвращаем данные в формате JSON
         return response()->json($RegEOB);
     }
-    public function getData_group_3()
+
+    public function getData_group_3(Request $request)
     {
-        $RegNHRS = RegNHRS::all();
+        $user = $request->user();
+        $RegNHRS = [];
+
+        if ($user->role === 'proj_manager') {
+            $RegNHRS = RegNHRS::where('projectManager', $user->name)->get();
+        } else {
+            $RegNHRS = RegNHRS::all();
+        }
 
         // Возвращаем данные в формате JSON
         return response()->json($RegNHRS);
     }
-    public function getData_group_4()
+
+    public function getData_group_4(Request $request)
     {
-        $RegOther = RegOther::all();
+        $user = $request->user();
+        $RegOther = [];
+
+        if ($user->role === 'proj_manager') {
+            $RegOther = RegOther::where('projectManager', $user->name)->get();
+        } else {
+            $RegOther = RegOther::all();
+        }
 
         // Возвращаем данные в формате JSON
         return response()->json($RegOther);

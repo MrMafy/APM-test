@@ -29,7 +29,7 @@
                     </div>
                 @endforeach
                 <div class="d-flex justify-content-center">
-                    {!! $data->links() !!}
+{{--                    {!! $data->links() !!}--}}
                 </div>
             @else
                 <h4 style="color: white;">Нет карт проекта</h4>

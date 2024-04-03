@@ -4,9 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Projects extends Model
 {
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function equipment()
     {
         return $this->hasMany(Equipment::class, 'project_num', 'projNum');
@@ -16,7 +22,7 @@ class Projects extends Model
     {
         return $this->hasMany(SmkMain::class, 'project_num', 'projNum');
     }
-    
+
     public function smk_sub()
     {
         return $this->hasMany(SmkSub::class, 'project_num', 'projNum');
@@ -91,5 +97,5 @@ class Projects extends Model
     {
         return $this->hasMany(RegReestrKP::class, 'project_num', 'projNum');
     }
-    
+
 }

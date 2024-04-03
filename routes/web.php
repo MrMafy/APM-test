@@ -44,6 +44,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/getData_group_3', 'App\Http\Controllers\DataController@getData_group_3');
     Route::get('/getData_group_4', 'App\Http\Controllers\DataController@getData_group_4');
 
+
+
+
+//    --------------------------------------------------------------- РОЛИ ----------------------------------------------------------------
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/admin', 'AdminController@index')->name('admin.index');
+    });
+    Route::middleware(['auth', 'proj_manager'])->group(function () {
+        Route::get('/proj_manager', 'ProjManagerController@index')->name('proj_manager.index');
+    });
+    Route::middleware(['auth', 'responsible'])->group(function () {
+        Route::get('/responsible', 'ResponsibleController@index')->name('responsible.index');
+    });
+
+//    -------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
     // Все карты проекта
     Route::get('/project-maps/all', 'App\Http\Controllers\ProjectController@allData')->name('project-maps');
     // одна карта проекта
