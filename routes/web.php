@@ -17,6 +17,25 @@ Route::middleware(['guest'])->group(function () {
 // Все маршруты доступны только аутентифицированным пользователям
 Route::middleware(['auth'])->group(function () {
 
+    // ---------------------------- ЛИЧНЫЙ КАБИНЕТ --------------------------------------------------------------------
+    Route::get('/home/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+    // обновление данных профиля
+    Route::put('/home/profile/update', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('profile.update');
+    // изменение пароля профиля
+    Route::put('/home/profile/change-password', [App\Http\Controllers\HomeController::class, 'changePassword'])->name('profile.change-password');
+    // добавление руководителей проекта в список
+    Route::post('/home/profile/edit-pm', [App\Http\Controllers\HomeController::class, 'editPM'])->name('profile.editPM');
+    // Маршрут для получения списка руководителей проектов
+    Route::get('/get-project-managers', [App\Http\Controllers\HomeController::class, 'getProjectManagers']);
+    // Маршрут для удаления руководителя проекта
+    Route::delete('/delete-project-manager/{id}', [App\Http\Controllers\HomeController::class, 'deleteProjectManager']);
+    // Маршрут для сохранения изменений в руководителе проекта
+    Route::post('/save-project-manager', [App\Http\Controllers\HomeController::class, 'saveProjectManager']);
+    // Маршрут для добавления нового руководителя проекта
+    Route::post('/add-project-manager', [App\Http\Controllers\HomeController::class, 'addProjectManager']);
+
+    // ----------------------------------------------------------------------------------------------------------------
+
     // Главная страница (отображение реестров)
     Route::get('/home', 'App\Http\Controllers\DataController@index')->name('home');
 
@@ -24,6 +43,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/getData_group_2', 'App\Http\Controllers\DataController@getData_group_2');
     Route::get('/getData_group_3', 'App\Http\Controllers\DataController@getData_group_3');
     Route::get('/getData_group_4', 'App\Http\Controllers\DataController@getData_group_4');
+
+
+
+
+//    --------------------------------------------------------------- РОЛИ ----------------------------------------------------------------
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/admin', 'AdminController@index')->name('admin.index');
+    });
+    Route::middleware(['auth', 'proj_manager'])->group(function () {
+        Route::get('/proj_manager', 'ProjManagerController@index')->name('proj_manager.index');
+    });
+    Route::middleware(['auth', 'responsible'])->group(function () {
+        Route::get('/responsible', 'ResponsibleController@index')->name('responsible.index');
+    });
+
+//    -------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
     // Все карты проекта
     Route::get('/project-maps/all', 'App\Http\Controllers\ProjectController@allData')->name('project-maps');
@@ -54,7 +93,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/project-maps/all/{id}/changes-update', 'App\Http\Controllers\ProjectController@updateChangesSubmit')->name('changes-update-submit');
 
 
-
     //удаление карты проекта (НЕАКТУАЛЬНО)
     Route::get('/project-maps/all/{id}/delete', 'App\Http\Controllers\ProjectController@deleteMessage')->name('project-map-delete');
 
@@ -71,7 +109,6 @@ Route::middleware(['auth'])->group(function () {
 
     // реестр КП
     Route::get('/register-commercial-offers', 'App\Http\Controllers\RegReestrKPController@index')->name('rco');
-
 
 
     // Марщрут страницы базы рисков
@@ -124,7 +161,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/autosave-project-data', 'App\Http\Controllers\ProjectController@autoSave')->name('autosave-project-data');
 
 
-
     Route::delete('/delete_additional_expense/{id}', 'App\Http\Controllers\ProjectController@deleteRow')->name('delete.additional.expense');
 
     // создание карты проекта -> РЕАЛИЗАЦИЯ
@@ -147,14 +183,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/project-maps/changes-delete/{id}', 'App\Http\Controllers\changesController@delete')->name('changes-delete');
 
 
-
-
-
     Route::get('/project-maps/all/{id}/{tab}/update-smk', 'App\Http\Controllers\ProjectController@updateSMK')->name('update-smk');
     Route::get('/project-maps/create/smk-{id}', 'App\Http\Controllers\SmkController@showDataSMK')->name('smk-create');
     Route::post('/project-maps/create/smk-{id}/save', 'App\Http\Controllers\SmkController@storeNew')->name('smk-store');
     Route::put('/project-maps/smk-update/{id}', 'App\Http\Controllers\SmkController@update')->name('smk-update');
-
 
 
     // создание карты проекта ОТЧЕТ -> сохранение в БД
@@ -179,7 +211,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/project-maps/risk-update/{id}', 'App\Http\Controllers\risksController@update')->name('risks-update');
 
     Route::get('/project-maps/risk-delete/{id}', 'App\Http\Controllers\risksController@delete')->name('risks-delete');
-
 
 
     // обработка запросов поиска на странице все карты проекта

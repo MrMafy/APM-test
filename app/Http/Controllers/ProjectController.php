@@ -29,57 +29,44 @@ use App\Models\RegSInteg;
 
 use PhpOffice\PhpWord\TemplateProcessor;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 
 class ProjectController extends Controller
 {
-//    public function getUser()
-//    {
-//        $user = Auth::user();
-//
-//        if ($user->role == 2 && $user->projNumSuf == 'Группа 4') {
-//            $data = YourModel::where('role', 2)
-//                ->where('projNumSuf', 'Группа 4')
-//                ->paginate(10); // измените модель и условия фильтрации согласно вашим требованиям
-//        } else {
-//            $data = YourModel::paginate(10); // загрузка всех данных
-//        }
-//
-//        return view('all-maps');
-//    }
-
-
-
     // Отображение списка всех проектов на странице карты проекта
-//    public function allData()
-//    {
-//        // $projects = new Projects;
-//        $projects = Projects::paginate(3);
-//
-//        return view('all-maps', ['data' => $projects]);
-//    }
-
-    public function allData()
+    public function allData(Request $request)
     {
-        $user = Auth::user();
-        // Если текущий пользователь имеет роль 2 и projNumSurf равен "Группа 4",
-        // тогда загружаем только соответствующие данные, иначе загружаем все данные
-        if ($user->role == 2 && $user->id_group == '4') {
-            $projects = Projects::where('projNumSuf', 'Группа 4')
-                ->paginate(3);
-        } elseif ($user->role == 2 && $user->id_group == '3'){
-            $projects = Projects::where('projNumSuf', 'Группа 3')
-                ->paginate(3);
-        }
-        else {
-            $projects = Projects::paginate(3); // загрузка всех данных
-        }
+        $user = $request->user();
 
+        if ($user->role === 'admin'){
+            $projects = Projects::all();
+        } elseif ($user->role === 'proj_manager') {
+//            $projects = Projects::where('projManager', $user->name)->get();
+            if ($user->group_num === 'Группа 1') {
+                $projects = Projects::where('projManager', $user->name)->get();
+            } elseif ($user->group_num === 'Группа 2') {
+                $projects = Projects::where('projManager', $user->name)->get();
+            } elseif ($user->group_num === 'Группа 3') {
+                $projects = Projects::where('projManager', $user->name)->get();
+            } elseif ($user->group_num === 'Группа 4') {
+                $projects = Projects::where('projManager', $user->name)->get();
+            }
+
+        } elseif ($user->role === 'responsible') {
+            if ($user->group_num === 'Группа 1'){
+                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+            } elseif ($user->group_num === 'Группа 2') {
+                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+            } elseif ($user->group_num === 'Группа 3') {
+                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+            } elseif ($user->group_num === 'Группа 4') {
+                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+            }
+
+        }
         return view('all-maps', ['data' => $projects]);
+
     }
 
     // Метод для получения ID проекта по vnNum
@@ -700,12 +687,32 @@ class ProjectController extends Controller
 
     public function search(Request $request)
     {
+        $user = $request->user();
         $search_text = $request->input('search');
+        $data = null;
 
-        $data = Projects::where('projManager', 'LIKE', '%' . $search_text . '%')
-            ->orWhere('projNum', 'LIKE', '%' . $search_text . '%')
-            ->orWhere('objectName', 'LIKE', '%' . $search_text . '%')
-            ->paginate(3);
+        if ($user->role === 'admin') {
+            $data = Projects::where('projManager', 'LIKE', '%' . $search_text . '%')
+                ->orWhere('projNum', 'LIKE', '%' . $search_text . '%')
+                ->orWhere('objectName', 'LIKE', '%' . $search_text . '%')
+                ->get();
+        } elseif ($user->role === 'proj_manager') {
+            $data = Projects::where('projManager', $user->name)
+                ->where(function ($query) use ($search_text) {
+                    $query->where('projManager', 'LIKE', '%' . $search_text . '%')
+                        ->orWhere('projNum', 'LIKE', '%' . $search_text . '%')
+                        ->orWhere('objectName', 'LIKE', '%' . $search_text . '%');
+                })
+                ->get();
+        } elseif ($user->role === 'responsible') {
+            $data = Projects::where('projNumSuf', $user->group_num)
+                ->where(function ($query) use ($search_text) {
+                    $query->where('projManager', 'LIKE', '%' . $search_text . '%')
+                        ->orWhere('projNum', 'LIKE', '%' . $search_text . '%')
+                        ->orWhere('objectName', 'LIKE', '%' . $search_text . '%');
+                })
+                ->get();
+        }
 
         if ($data->isEmpty()) {
             // Выводим текст, если результаты поиска пусты

@@ -11,31 +11,35 @@
                 <div class="card__main">
                     <ul class="nav nav-mytabs" id="myTab" role="tablist">
                         <!-- Первая вкладка (активная) -->
-                        @if($user->role != 2 || $user->id_group != 2 && $user->id_group != 3 && $user->id_group != 4)
-                        <li class="nav-item flex-sm-fill">
-                            <a class="nav-link border-0 text-uppercase font-weight-bold active" id="SInteg-tab"
-                                data-bs-toggle="tab" href="#SInteg" role="tab" data-toggle="tab" aria-controls="SInteg"
-                                aria-selected="true">Группа 1</a>
-                        </li>
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 1') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 1'))
+                            <li class="nav-item flex-sm-fill">
+                                <a class="nav-link border-0 text-uppercase font-weight-bold active" id="SInteg-tab"
+                                   data-bs-toggle="tab" href="#SInteg" role="tab" data-toggle="tab" aria-controls="SInteg"
+                                   aria-selected="true">Группа 1</a>
+                            </li>
                         @endif
                         <!-- Вторая вкладка -->
-                        @if($user->role != 2 || $user->id_group != 1 && $user->id_group != 3 && $user->id_group != 4)
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 2') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 2'))
                             <li class="nav-item flex-sm-fill">
                                 <a class="nav-link border-0 text-uppercase font-weight-bold" id="EOB-tab" data-bs-toggle="tab"
-                                    href="#EOB" role="tab" data-toggle="tab" aria-controls="EOB"
-                                    aria-selected="false">Группа 2</a>
+                                   href="#EOB" role="tab" data-toggle="tab" aria-controls="EOB"
+                                   aria-selected="false">Группа 2</a>
                             </li>
                         @endif
                         <!-- Третья вкладка -->
-                        @if($user->role != 2 || $user->id_group != 1 && $user->id_group != 2 && $user->id_group != 4)
-                        <li class="nav-item flex-sm-fill">
-                            <a class="nav-link border-0 text-uppercase font-weight-bold" id="NHRS-tab" data-bs-toggle="tab"
-                                href="#NHRS" role="tab" data-toggle="tab" aria-controls="NHRS"
-                                aria-selected="false">Группа 3</a>
-                        </li>
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 3') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 3'))
+                            <li class="nav-item flex-sm-fill">
+                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="NHRS-tab" data-bs-toggle="tab"
+                                    href="#NHRS" role="tab" data-toggle="tab" aria-controls="NHRS"
+                                    aria-selected="false">Группа 3</a>
+                            </li>
                         @endif
                         <!-- Четвёртая вкладка -->
-                        @if($user->role != 2 || $user->id_group != 1 && $user->id_group != 2 && $user->id_group != 3)
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 4') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 4'))
                         <li class="nav-item flex-sm-fill">
                             <a class="nav-link border-0 text-uppercase font-weight-bold" id="Other-tab" data-bs-toggle="tab"
                                 href="#Other" role="tab" data-toggle="tab" aria-controls="Other"
@@ -51,21 +55,23 @@
                             </select>
                         </div>
                         <!-- Содержимое первой вкладки -->
-                        @if($user->role != 2 || $user->id_group != 2 && $user->id_group != 3 && $user->id_group != 4)
-                        <div class="tab-pane fade show active" id="SInteg" role="tabpanel" aria-labelledby="SInteg-tab">
-                            <div class="card-body">
-                                <table id="table" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
-                                    data-show-toggle="true" data-show-fullscreen="true" data-show-columns="true"
-                                    data-show-columns-toggle-all="true" data-detail-view="true" data-show-export="true"
-                                    data-click-to-select="true" data-detail-formatter="detailFormatter"
-                                    data-minimum-count-columns="12" data-show-pagination-switch="true" data-pagination="true"
-                                    data-id-field="id" data-url="/getData_group_1" data-response-handler="responseHandler">
-                                </table>
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 1') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 1'))
+                            <div class="tab-pane fade show active" id="SInteg" role="tabpanel" aria-labelledby="SInteg-tab">
+                                <div class="card-body">
+                                    <table id="table" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+                                        data-show-toggle="true" data-show-fullscreen="true" data-show-columns="true"
+                                        data-show-columns-toggle-all="true" data-detail-view="true" data-show-export="true"
+                                        data-click-to-select="true" data-detail-formatter="detailFormatter"
+                                        data-minimum-count-columns="12" data-show-pagination-switch="true" data-pagination="true"
+                                        data-id-field="id" data-url="/getData_group_1" data-response-handler="responseHandler">
+                                    </table>
+                                </div>
                             </div>
-                        </div>
                         @endif
-                        @if($user->role != 2 || $user->id_group != 1 && $user->id_group != 3 && $user->id_group != 4)
                         <!-- Содержимое второй вкладки -->
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 2') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 2'))
                             <div class="tab-pane fade" id="EOB" role="tabpanel" aria-labelledby="EOB-tab">
                                 <div class="card-body">
                                     <table id="table_eob" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
@@ -78,35 +84,37 @@
                                 </div>
                             </div>
                         @endif
-                        @if($user->role != 2 || $user->id_group != 1 && $user->id_group != 2 && $user->id_group != 4)
                         <!-- Содержимое третьей вкладки -->
-                        <div class="tab-pane fade" id="NHRS" role="tabpanel" aria-labelledby="NHRS-tab">
-                            <div class="card-body">
-                                <table id="table_nhrs" data-toolbar="#toolbar" data-search="true"
-                                    data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
-                                    data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
-                                    data-show-export="true" data-click-to-select="true"
-                                    data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
-                                    data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
-                                    data-url="/getData_group_3" data-response-handler="responseHandler">
-                                </table>
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 3') ||
+                            ($user->role === 'responsible' && $user->group_num === 'Группа 3'))
+                            <div class="tab-pane fade" id="NHRS" role="tabpanel" aria-labelledby="NHRS-tab">
+                                <div class="card-body">
+                                    <table id="table_nhrs" data-toolbar="#toolbar" data-search="true"
+                                        data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
+                                        data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
+                                        data-show-export="true" data-click-to-select="true"
+                                        data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
+                                        data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
+                                        data-url="/getData_group_3" data-response-handler="responseHandler">
+                                    </table>
+                                </div>
                             </div>
-                        </div>
                         @endif
-                        @if($user->role != 2 || $user->id_group != 1 && $user->id_group != 2 && $user->id_group != 3)
                         <!-- Содержимое четвёртой вкладки -->
-                        <div class="tab-pane fade" id="Other" role="tabpanel" aria-labelledby="Other-tab">
-                            <div class="card-body">
-                                <table id="table_other" data-toolbar="#toolbar" data-search="true"
-                                    data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
-                                    data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
-                                    data-show-export="true" data-click-to-select="true"
-                                    data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
-                                    data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
-                                    data-url="/getData_group_4" data-response-handler="responseHandler">
-                                </table>
+                        @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->group_num === 'Группа 4') ||
+                        ($user->role === 'responsible' && $user->group_num === 'Группа 4'))
+                            <div class="tab-pane fade" id="Other" role="tabpanel" aria-labelledby="Other-tab">
+                                <div class="card-body">
+                                    <table id="table_other" data-toolbar="#toolbar" data-search="true"
+                                        data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
+                                        data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
+                                        data-show-export="true" data-click-to-select="true"
+                                        data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
+                                        data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
+                                        data-url="/getData_group_4" data-response-handler="responseHandler">
+                                    </table>
+                                </div>
                             </div>
-                        </div>
                         @endif
                     </div>
                 </div>

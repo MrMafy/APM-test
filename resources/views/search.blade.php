@@ -1,6 +1,4 @@
-@if ($data->isEmpty())
-    <p class="nothing">Нет соответствующих записей</p>
-@else
+@if (isset($data) && !$data->isEmpty())
     @foreach ($data as $el)
         <div class="alert alert-info">
             <h3>{{ $el->projNum }}</h3>
@@ -11,7 +9,9 @@
             </a>
         </div>
     @endforeach
-    <div class="d-flex justify-content-center">
-        {!! $data->appends(['search' => $search_text])->links() !!}
-    </div>
+@else
+    <p class="nothing">Нет соответствующих записей</p>
+{{--    <div class="d-flex justify-content-center">--}}
+{{--        {!! $data->appends(['search' => $search_text])->links() !!}--}}
+{{--    </div>--}}
 @endif
