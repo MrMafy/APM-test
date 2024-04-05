@@ -19,7 +19,7 @@
                                 <input type="hidden" class="form-control" name="projNumPre" id="projNumPre"
                                 value="{{ $currentYear }}" readonly>
                             <div>
-                                @if($user->role === 'admin')
+                                @if($user->role === 'admin' || $user->role === 'responsible')
                                 <input list="projNumbs" name="projNumSuf" required placeholder="Выберите тип"
                                     id="projNumSuf" class="form-control" />
                                 <datalist id="projNumbs">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="projManager">Руководитель проекта:</label>
-                        @if($user->role === 'admin')
+                        @if($user->role === 'admin' || $user->role === 'responsible')
                         <select class="form-control" name="projManager" id="projManager" required>
                             @foreach ($projectManagers as $manager)
                                 <option value="{{ $manager->fio }}" data-group="{{ $manager->groupNum }}">
@@ -46,7 +46,7 @@
                             @endforeach
                         </select>
                         @else
-                            <input class="form-control w-100" data-group="{{ $user->group_num}}" value="{{ $user->name }}" readonly/>
+                            <input class="form-control w-100" name="projManager" id="projManager"  data-group="{{ $user->group_num}}" value="{{ $user->name }}" readonly/>
                         @endif
                     </div>
                     <div class="form-group mb-3">
