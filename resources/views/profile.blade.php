@@ -1,6 +1,8 @@
 {{--страница личный кабинет --}}
 @extends('layouts.app')
-
+@section('title')
+    {{ "APM | КСТ | Личный кабинет" }}
+@endsection
 @section('content')
     <div class="profile container mt-5">
         <div class="row d-flex justify-content-center">
@@ -24,14 +26,14 @@
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white me-4">
                             Роль:
                             @if(Auth::user()->role == 'admin')
-                                                            Администратор
-                                                        @elseif(Auth::user()->role == 'responsible')
-                                                            Ответственный группы администраторов проектов
-                                                        @elseif(Auth::user()->role == 'proj_manager')
-                                                            Администратор проекта
-                                                        @else
-                                                            Неопределено
-                                                        @endif
+                                Администратор
+                            @elseif(Auth::user()->role == 'responsible')
+                                Ответственный группы руководитлей проектов
+                            @elseif(Auth::user()->role == 'proj_manager')
+                                Руководитель проекта
+                            @else
+                                Неопределено
+                            @endif
                         </span>
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white">
                             Группа:
