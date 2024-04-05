@@ -319,7 +319,8 @@
                                                             <input type="text"
                                                                 name="equipment[{{ $index }}][priceUnit]"
                                                                 id="priceUnit{{ $index }}"
-                                                                value="{{ $item->priceUnit }}" class="input_editable">
+                                                                value="{{ $item->priceUnit }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                   data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -367,7 +368,8 @@
                                                                 <input type="text"
                                                                     name="expense[{{ $index }}][commandir]"
                                                                     value="{{ $expense->commandir }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -377,7 +379,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="rd"
                                                                     name="expense[{{ $index }}][rd]"
-                                                                    value="{{ $expense->rd }}" class="input_editable">
+                                                                    value="{{ $expense->rd }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -387,7 +390,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="shmr"
                                                                     name="expense[{{ $index }}][shmr]"
-                                                                    value="{{ $expense->shmr }}" class="input_editable">
+                                                                    value="{{ $expense->shmr }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -397,7 +401,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="pnr"
                                                                     name="expense[{{ $index }}][pnr]"
-                                                                    value="{{ $expense->pnr }}" class="input_editable">
+                                                                    value="{{ $expense->pnr }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -407,7 +412,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="cert"
                                                                     name="expense[{{ $index }}][cert]"
-                                                                    value="{{ $expense->cert }}" class="input_editable">
+                                                                    value="{{ $expense->cert }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -418,7 +424,8 @@
                                                                 <input type="text" id="delivery"
                                                                     name="expense[{{ $index }}][delivery]"
                                                                     value="{{ $expense->delivery }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -429,7 +436,8 @@
                                                                 <input type="text" id="rastam"
                                                                     name="expense[{{ $index }}][rastam]"
                                                                     value="{{ $expense->rastam }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -439,7 +447,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="ppo"
                                                                     name="expense[{{ $index }}][ppo]"
-                                                                    value="{{ $expense->ppo }}" class="input_editable">
+                                                                    value="{{ $expense->ppo }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -450,7 +459,8 @@
                                                                 <input type="text" id="guarantee"
                                                                     name="expense[{{ $index }}][guarantee]"
                                                                     value="{{ $expense->guarantee }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -460,7 +470,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="check"
                                                                     name="expense[{{ $index }}][check]"
-                                                                    value="{{ $expense->check }}" class="input_editable">
+                                                                    value="{{ $expense->check }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -471,7 +482,8 @@
                                                             <td>
                                                                 <input type="text"
                                                                     name="additional_expenses[{{ $additionalExpense->id }}][cost]"
-                                                                    value="{{ $additionalExpense->cost }}">
+                                                                    value="{{ $additionalExpense->cost }}" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                                 <button
                                                                     class="delete_additionalExpense btn btn-xs btn-danger"
                                                                     data-target="additional_expenses"
