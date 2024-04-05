@@ -64,11 +64,11 @@
                              <div class="d-flex gap-2">
                                  <a class="editPossibility btn btn-xs btn-info" href="#" data-bs-toggle="modal"
                                      data-bs-target="#editBasePossibilities" data-id="{{ $possibility->id }}"
-                                     data-nameRisk_possib="{{ $possibility->nameRisk }}"><i
+                                     data-nameRisk_possib="{{ $possibility->nameRisk }}" data-toggle="tooltip" title="Редактировать запись"><i
                                          class="fa-solid fa-edit"></i></a>
                                  <a class="deletePossibilities btn btn-xs btn-danger" href="#"
                                      data-bs-toggle="modal" data-bs-target="#confirmationModal_Possibilities"
-                                     data-id="{{ $possibility->id }}"><i class="fa-solid fa-trash-can"></i></a>
+                                     data-id="{{ $possibility->id }}" data-toggle="tooltip" title="Удалить запись"><i class="fa-solid fa-trash-can"></i></a>
                              </div>
                          </td>
                      </tr>

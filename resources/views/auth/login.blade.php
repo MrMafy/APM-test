@@ -72,10 +72,10 @@
                                 <div class="col-md-6">
                                     <div class="input-group">
                                         <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
-                                        <span class="input-group-btn" id="eyeSlash" style="display: none;">
+                                        <span data-toggle="tooltip" title="Скрыть пароль" class="input-group-btn" id="eyeSlash" style="display: none;">
                                             <button class="btn btn-default reveal" onclick="visibility3()" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
                                         </span>
-                                        <span class="input-group-btn" id="eyeShow">
+                                        <span data-toggle="tooltip" title="Показать пароль" class="input-group-btn" id="eyeShow">
                                             <button class="btn btn-default reveal" onclick="visibility3()" type="button"><i class="fa fa-eye" aria-hidden="true"></i></button>
                                         </span>
                                     </div>

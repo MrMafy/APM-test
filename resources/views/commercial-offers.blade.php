@@ -77,12 +77,12 @@
                                 <td>
                                     <a class="btn btn-xs btn-info me-2 editKPButton" href="#" data-bs-toggle="modal"
                                         data-bs-target="#editKPModal" data-id="{{ $item->id }}"
-                                        data-kp-id="{{ $item->id }}">
+                                        data-kp-id="{{ $item->id }}" data-toggle="tooltip" title="Редактировать запись">
                                         <i class="fa-solid fa-edit"></i>
                                     </a>
 
                                     <a class="btn btn-xs btn-danger deleteKPButton" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#confirmDeleteKP" data-id="{{ $item->id }}"><i
+                                        data-bs-target="#confirmDeleteKP" data-id="{{ $item->id }}" data-toggle="tooltip" title="Удалить запись"><i
                                             class="fa-solid fa-trash-can"></i></a>
                                 </td>
                             </tr>

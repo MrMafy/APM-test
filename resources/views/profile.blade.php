@@ -24,7 +24,7 @@
                     </div>
                     <div class="text-center mt-3">
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white me-4">
-                            Роль:
+                            Роль в системе:
                             @if(Auth::user()->role == 'admin')
                                 Администратор
                             @elseif(Auth::user()->role == 'responsible')
@@ -39,8 +39,7 @@
                             Группа:
                             {{ Auth::user()->group_num }}
                         </span>
-                        <h5 class="mt-4 mb-4 text-start"><strong class="me-4">Фамилия
-                                Имя:</strong> {{ Auth::user()->name }}</h5>
+                        <h5 class="mt-4 mb-4 text-start"><strong class="me-4">ФИО:</strong> {{ Auth::user()->name }}</h5>
                         <h5 class="mt-2 mb-5 text-start"><strong class="me-4">Почта:</strong> {{ Auth::user()->email }}
                         </h5>
                         <div class="buttons d-flex gap-3 justify-content-center">
