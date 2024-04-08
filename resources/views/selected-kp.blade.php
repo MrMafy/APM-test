@@ -1,15 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    {{ "APM | КСТ | Реестр коммерческих предложений" }}
+    {{ "APM | КСТ | $selectedKP->numIncoming" }}
 @endsection
 @section('content')
     <div class="container">
-        <h1 class="mb-5">Реестр КП</h1>
-        <div class="card">
+        <h2>Технико-коммерческое предложение {{ $selectedKP->numIncoming }}</h2>
+        <a class="btn btn-info" href="{{route('rco')}}">открыть реестр КП</a>
+        <div class="card mt-5">
             <div class="card-body">
-                <select class="form-control d-none" id="locale">
-                    <option value="ru-RU">ru-RU</option>
-                </select>
                 <table id="kp-datatable" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
                        data-show-toggle="true" data-show-fullscreen="true" data-show-columns="true"
                        data-show-columns-toggle-all="true" data-show-export="true"
@@ -17,88 +15,87 @@
                        data-show-pagination-switch="true" data-pagination="true"
                        data-id-field="id" data-response-handler="responseHandler">
                     <thead>
-                        <tr>
-                            <th>№ исх.</th>
-                            <th>проект</th>
-                            <th>Дата</th>
-                            <th>% наценки</th>
-                            <th>Согласовано (ФИО)</th>
-                            <th>Наим. организации</th>
-                            <th>Кому</th>
-                            <th>Отправитель</th>
-                            <th>Сумма (руб. c НДС)</th>
-                            <th>№ закупки</th>
-                            <th>Примечания</th>
-                            <th>Документ</th>
-                            <th>Доп. файлы</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>№ исх.</th>
+                        <th>проект</th>
+                        <th>Дата</th>
+                        <th>% наценки</th>
+                        <th>Согласовано (ФИО)</th>
+                        <th>Наим. организации</th>
+                        <th>Кому</th>
+                        <th>Отправитель</th>
+                        <th>Сумма (руб. c НДС)</th>
+                        <th>№ закупки</th>
+                        <th>Примечания</th>
+                        <th>Документ</th>
+                        <th>Доп. файлы</th>
+                        <th>Действия</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach ($RegReestrKP as $item)
-                            <tr data-id="{{ $item->id }}">
-                                 <td>{{ $item->numIncoming }}</td>
-                                <td><a
-                                        href="{{ route('project-data-one', ['id' => $item->project->id, 'tab' => '#calculation']) }}">{{ $item->project_num }}</a>
-                                </td>
-                                <td>{{ date('d.m.Y', strtotime($item->date)) }}</td>
-                                <td>{{ $item->percentage }}</td>
-                                <td>{{ $item->agreedFio }}</td>
-                                <td>{{ $item->orgName }}</td>
-                                <td>{{ $item->whom }}</td>
-                                <td>{{ $item->sender }}</td>
-                                <td>{{ $item->amountNDS }}</td>
-                                <td>{{ $item->purchNum }}</td>
-                                {{-- <td>
-                                    {{ $item->note }}
-                                </td> --}}
-                                <td class="editable" data-field="note" data-id="{{ $item->id }}" contenteditable>
-                                    {{ $item->note }}</td>
-                                <td>
-                                    @if ($item->word_file)
-                                        <a href="{{ route('download-kp', ['id' => $item->id]) }}"
-                                            download>{{ $item->original_file_name }}</a>
-                                    @else
-                                        Нет файла
-                                    @endif
-                                </td>
-                                <td>
-                                    @php
-                                        $additionalFiles = $item->additionalFiles;
-                                    @endphp
-                                    @if ($additionalFiles->count() > 0)
-                                        <ul>
-                                            @foreach ($additionalFiles as $file)
-                                                <li>
-                                                    <a href="{{ route('download-kpAdditional', ['id' => $file->id]) }}"
-                                                        download>{{ $file->original_file_name }}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        Нет дополнительных файлов
-                                    @endif
-                                </td>
-                                <td>
-                                    <a class="btn btn-xs btn-info me-2 editKPButton" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#editKPModal" data-id="{{ $item->id }}"
-                                        data-kp-id="{{ $item->id }}" data-toggle="tooltip" title="Редактировать запись">
-                                        <i class="fa-solid fa-edit"></i>
-                                    </a>
-
-                                    <a class="btn btn-xs btn-danger deleteKPButton" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#confirmDeleteKP" data-id="{{ $item->id }}" data-toggle="tooltip" title="Удалить запись"><i
-                                            class="fa-solid fa-trash-can"></i></a>
-                                </td>
-                            </tr>
-                        @endforeach
+                    <tr>
+                        <td>{{ $selectedKP->numIncoming }}</td>
+                        <td>
+                            <a href="{{ route('project-data-one', ['id' => $selectedKP->project->id, 'tab' => '#calculation']) }}">
+                                {{ $selectedKP->project_num }}
+                            </a>
+                        </td>
+                        <td>{{ date('d.m.Y', strtotime($selectedKP->date)) }}</td>
+                        <td>{{ $selectedKP->percentage }}</td>
+                        <td>{{ $selectedKP->agreedFio }}</td>
+                        <td>{{ $selectedKP->orgName }}</td>
+                        <td>{{ $selectedKP->whom }}</td>
+                        <td>{{ $selectedKP->sender }}</td>
+                        <td>{{ $selectedKP->amountNDS }}</td>
+                        <td>{{ $selectedKP->purchNum }}</td>
+                        <td class="editable" data-field="note" data-id="{{ $selectedKP->id }}" contenteditable>
+                            {{ $selectedKP->note }}</td>
+                        <td>
+                            @if ($selectedKP->word_file)
+                                <a href="{{ route('download-kp', ['id' => $selectedKP->id]) }}" download>
+                                    {{ $selectedKP->original_file_name }}
+                                </a>
+                            @else
+                                Нет файла
+                            @endif
+                        </td>
+                        <td>
+                            @php
+                                $additionalFiles = $selectedKP->additionalFiles;
+                            @endphp
+                            @if ($additionalFiles->count() > 0)
+                                <ul>
+                                    @foreach ($additionalFiles as $file)
+                                        <li>
+                                            <a href="{{ route('download-kpAdditional', ['id' => $file->id]) }}"
+                                               download>{{ $file->original_file_name }}</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                Нет дополнительных файлов
+                            @endif
+                        </td>
+                        <td>
+                            <a class="btn btn-xs btn-info me-2 editKPButton" href="#" data-bs-toggle="modal"
+                               data-bs-target="#editKPModal" data-id="{{ $selectedKP->id }}" data-kp-id="{{ $selectedKP->id }}"
+                               data-toggle="tooltip" title="Редактировать запись">
+                                <i class="fa-solid fa-edit"></i>
+                            </a>
+                            <a class="btn btn-xs btn-danger deleteKPButton" href="#" data-bs-toggle="modal"
+                               data-bs-target="#confirmDeleteKP" data-id="{{ $selectedKP->id }}" data-toggle="tooltip"
+                               title="Удалить запись">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    @if ($RegReestrKP->isNotEmpty())
+    <!-- Модальное окно для редактирования КП -->
         <div class="modal fade" id="editKPModal" tabindex="-1" aria-labelledby="editKPModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <form id="editKPFormModal" method="post" enctype="multipart/form-data">
@@ -119,41 +116,41 @@
                                 <div class="form-group mb-3">
                                     <label for="orgName">Наименование организации:</label>
                                     <input type="text" class="form-control" name="orgName" id="orgName"
-                                        value="{{ $item->orgName }}" placeholder="Введите наименование организации"
-                                        required>
+                                           value="{{ $selectedKP->orgName }}" placeholder="Введите наименование организации"
+                                           required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="whom">Кому:</label>
                                     <input type="text" class="form-control" name="whom" id="whom"
-                                        value="{{ $item->whom }}" placeholder="Введите получателя"required>
+                                           value="{{ $selectedKP->whom }}" placeholder="Введите получателя"required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="sender">Отправитель:</label>
                                     <input type="text" class="form-control" name="sender" id="sender"
-                                        value="{{ $item->sender }}" placeholder="Введите отправителя" required>
+                                           value="{{ $selectedKP->sender }}" placeholder="Введите отправителя" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="amountNDS">Сумма в НДС:</label>
                                     <input type="text" class="form-control" name="amountNDS" id="amountNDS"
-                                        value="{{ $item->amountNDS }}" placeholder="Введите сумму в НДС" required>
+                                           value="{{ $selectedKP->amountNDS }}" placeholder="Введите сумму в НДС" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="purchNum">№ закупки:</label>
                                     <input type="text" class="form-control" name="purchNum" id="purchNum"
-                                        value="{{ $item->purchNum }}" placeholder="Введите номер закупки" required>
+                                           value="{{ $selectedKP->purchNum }}" placeholder="Введите номер закупки" required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="purchNum">Дата:</label>
                                     <input type="date" class="form-control" name="date" id="date"
-                                        value="{{ $item->date }}" placeholder="Выберите дату" required>
+                                           value="{{ $selectedKP->date }}" placeholder="Выберите дату" required>
                                 </div>
                                 <!-- Поле для замены файла Word -->
                                 <span>Документ КП:</span>
                                 <div class="form-group mb-5" id="wordFileRow">
                                     <div>
-                                        @if ($item->word_file)
-                                            <a href="{{ route('download-kp', ['id' => $item->id]) }}" download
-                                                class="me-3" id="wordFileName">{{ $item->original_file_name }}</a>
+                                        @if ($selectedKP->word_file)
+                                            <a href="{{ route('download-kp', ['id' => $selectedKP->id]) }}" download
+                                               class="me-3" id="wordFileName">{{ $selectedKP->original_file_name }}</a>
                                             {{-- <button type="button" class="btn btn-sm btn-danger"
                                                 id="deleteWordFileButton">Удалить файл</button> --}}
                                         @else
@@ -162,7 +159,7 @@
                                         <label for="wordFile" class="btn btn-sm btn-danger ms-3">
                                             Заменить файл
                                             <input type="file" class="form-control" name="word_file" id="wordFile"
-                                                style="display: none;">
+                                                   style="display: none;">
                                         </label>
                                     </div>
                                 </div>
@@ -182,7 +179,7 @@
                                 <div class="form-group mb-3">
                                     <label for="additionalFilesNew">Добавить новые дополнительные файлы:</label>
                                     <input type="file" class="form-control" name="additional_files[]"
-                                        id="additionalFilesNew" multiple>
+                                           id="additionalFilesNew" multiple>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +190,7 @@
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
                             </div>
                             <a class="btn btn-xs btn-danger deleteKPButton" href="#" data-bs-toggle="modal"
-                                data-bs-target="#confirmDeleteKP" data-id="{{ $item->id }}">
+                               data-bs-target="#confirmDeleteKP" data-id="{{ $selectedKP->id }}">
                                 Удалить</a>
                             <input type="hidden" name="delete_offer" id="deleteOffer" value="0">
                         </div>
@@ -202,105 +199,30 @@
             </div>
         </div>
 
-        <div class="modal fade" id="confirmDeleteKP" tabindex="-1" aria-labelledby="confirmDeleteKPLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteKPLabel">Подтверждение удаления КП
-                            {{ $item->numIncoming }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Вы уверены, что хотите удалить это коммерческое предложение?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <button type="button" class="btn btn-danger" id="confirmDelete">Удалить</button>
-                    </div>
+    <!-- Модальное окно для подтверждения удаления КП -->
+    <div class="modal fade" id="confirmDeleteKP" tabindex="-1" aria-labelledby="confirmDeleteKPLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteKPLabel">Подтверждение удаления КП
+                        {{ $selectedKP->numIncoming }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить это коммерческое предложение?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Удалить</button>
                 </div>
             </div>
         </div>
-    @endif
+    </div>
+
 
     <script>
         $(document).ready(function() {
             var $table = $('#kp-datatable');
-            initTable($table);
-            function initTable($table) {
-                $table.bootstrapTable({
-                    locale: $('#locale').val(),
-                    pagination: true,
-                    pageNumber: 1,
-                    pageSize: 5,
-                    pageList: [5, 15, 50, 'all'],
-                    // columns: [
-                    //     {
-                    //         field: 'numIncoming',
-                    //         title: '№ исходящего',
-                    //         valign: 'middle',
-                    //         sortable: true,
-                    //     },
-                    //     {
-                    //         field: 'date',
-                    //         title: 'Дата',
-                    //         valign: 'middle',
-                    //         sortable: true,
-                    //     },
-                    //     {
-                    //         field: 'orgName',
-                    //         title: 'Наименование организации',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'whom',
-                    //         title: 'Кому',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'sender',
-                    //         title: 'Отправитель',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'amountNDS',
-                    //         title: 'Сумма (руб. c НДС)',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'purchNum',
-                    //         title: '№ закупки',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'note',
-                    //         title: 'Примечания',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'word_file',
-                    //         title: 'Документ',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     },
-                    //     {
-                    //         field: 'original_file_name',
-                    //         title: 'Доп. файлы',
-                    //         valign: 'middle',
-                    //         sortable: true
-                    //     }
-                    // ]
-                }).on('post-body.bs.table', function () {
-                    // После загрузки данных в таблицу
-                    setEditableCells();
-                });
-            }
             setEditableCells();
 
 
@@ -534,16 +456,16 @@
             });
 
             function setEditableCells() {
-            // Получаем все ячейки с классом "editable"
-            const editableCells = document.querySelectorAll('.editable');
-            // Добавляем обработчик событий для каждой ячейки
-            editableCells.forEach(cell => {
-                cell.setAttribute('contenteditable', 'true');
-                cell.addEventListener('blur', function() {
-                    const id = this.getAttribute('data-id'); // Получаем идентификатор записи
-                    const field = this.getAttribute('data-field'); // Получаем название поля
-                    const value = this.innerText.trim(); // Получаем значение из ячейки
-                    fetch(`/update-note/${id}`, {
+                // Получаем все ячейки с классом "editable"
+                const editableCells = document.querySelectorAll('.editable');
+                // Добавляем обработчик событий для каждой ячейки
+                editableCells.forEach(cell => {
+                    cell.setAttribute('contenteditable', 'true');
+                    cell.addEventListener('blur', function() {
+                        const id = this.getAttribute('data-id'); // Получаем идентификатор записи
+                        const field = this.getAttribute('data-field'); // Получаем название поля
+                        const value = this.innerText.trim(); // Получаем значение из ячейки
+                        fetch(`/update-note/${id}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -554,21 +476,22 @@
                                 value: value
                             })
                         })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Ошибка сохранения');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            // console.log(data);
-                        })
-                        .catch(error => {
-                            console.error('Ошибка:',error);
-                        });
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Ошибка сохранения');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // console.log(data);
+                            })
+                            .catch(error => {
+                                console.error('Ошибка:',error);
+                            });
+                    });
                 });
-            });
             }
         });
     </script>
+
 @endsection

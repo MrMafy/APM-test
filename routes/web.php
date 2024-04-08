@@ -109,6 +109,7 @@ Route::middleware(['auth'])->group(function () {
 
     // реестр КП
     Route::get('/register-commercial-offers', 'App\Http\Controllers\RegReestrKPController@index')->name('rco');
+    Route::get('/selected-kp/{id}', 'App\Http\Controllers\RegReestrKPController@showSelectedKP')->name('selected-kp.show');
 
 
     // Марщрут страницы базы рисков

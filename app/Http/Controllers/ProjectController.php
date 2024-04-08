@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RegReestrKP;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -81,8 +82,9 @@ class ProjectController extends Controller
     // Отображение одного проекта и связанных данных (отображает данные по id) на странице карты проекта
     public function showOneMessage($id, $tab = null)
     {
-        $project = Projects::with('equipment', 'expenses', 'totals', 'markups', 'contacts', 'risks', 'workGroup', 'basicReference', 'basicInfo', 'notes')->find($id);
+        $project = Projects::with('equipment', 'expenses', 'totals', 'contacts', 'risks', 'workGroup', 'basicReference', 'basicInfo', 'notes')->find($id);
         $notes = $project->notes()->paginate(3);
+        $user = auth()->user();
 
         if (!$project) {
             abort(404, 'Project not found');
@@ -98,7 +100,7 @@ class ProjectController extends Controller
         }
 
         if (view()->exists("tables.{$tab}-projectMap")) {
-            return view('project-map', compact('baseRisks', 'project', 'tab'));
+            return view('project-map', compact('baseRisks', 'project', 'tab', 'user'));
         } else {
             abort(404, 'Tab not found');
         }
@@ -320,6 +322,12 @@ class ProjectController extends Controller
         $maxRiskId = CalcRisk::max('id');
         $projectManagers = ProjectManager::all();
 
+        $RegReestrKP = RegReestrKP::all();
+        // Получаем все дополнительные файлы для каждого объекта RegReestrKP
+        $RegReestrKP->each(function ($regReestrKP) {
+            $regReestrKP->additionalFiles = $regReestrKP->additionalFiles()->get();
+        });
+
         if (!$project) {
             return response()->json(['error' => 'Project not found'], 404);
         }
@@ -327,7 +335,8 @@ class ProjectController extends Controller
         return view('project-map-update', [
             'project' => $project,
             'maxRiskId' => $maxRiskId,
-            'projectManagers' => $projectManagers
+            'projectManagers' => $projectManagers,
+            'RegReestrKP' => $RegReestrKP
         ]);
     }
 
@@ -1204,20 +1213,20 @@ class ProjectController extends Controller
         $totals->price = $priceTotals;
         $totals->save();
         // уровень наценки
-        if ($request->has('markups')) {
-            $data_markups = array();
-            foreach ($request->input('markups') as $index => $markupsData) {
-                $item = array(
-                    'project_num' => $project->projNum,
-                    'date' => $markupsData['date'],
-                    'percentage' => $markupsData['percentage'],
-                    'priceSubTkp' => $markupsData['priceSubTkp'],
-                    'agreedFio' => $markupsData['agreedFio']
-                );
-                array_push($data_markups, $item);
-            }
-            Markup::insert($data_markups);
-        }
+//        if ($request->has('markups')) {
+//            $data_markups = array();
+//            foreach ($request->input('markups') as $index => $markupsData) {
+//                $item = array(
+//                    'project_num' => $project->projNum,
+//                    'date' => $markupsData['date'],
+//                    'percentage' => $markupsData['percentage'],
+//                    'priceSubTkp' => $markupsData['priceSubTkp'],
+//                    'agreedFio' => $markupsData['agreedFio']
+//                );
+//                array_push($data_markups, $item);
+//            }
+//            Markup::insert($data_markups);
+//        }
         // риски
         if ($request->has('risks')) {
             $data_risks = array();

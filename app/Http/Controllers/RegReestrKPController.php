@@ -62,6 +62,19 @@ class RegReestrKPController extends Controller
 
     }
 
+    public function showSelectedKP($id) {
+        $selectedKP = RegReestrKP::findOrFail($id);
+        return view('selected-kp', compact('selectedKP'));
+    }
+    public function commercialOffers()
+    {
+        // Здесь обработайте запрос и передайте необходимые данные в представление
+        // Например:
+        $KP = RegReestrKP::all(); // Получите данные всех КП
+
+        return view('commercial-offers', ['KP' => $KP]);
+    }
+
     public function showForm()
     {
         $year = date('y');

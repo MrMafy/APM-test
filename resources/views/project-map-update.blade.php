@@ -247,6 +247,44 @@
                                             data-target="contacts">Добавить
                                             строку</button>
                                     </div>
+
+                                    <div class="mt-5">
+                                        <h4 class="text-center mb-3">Технико-коммерческое предложение</h4>
+                                        @if ($project->registry_reestrKP->count() > 0)
+                                            <div class="table-responsive">
+                                                <table class="table ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>КП № исходящего</th>
+                                                        <th>Сумма (руб. c НДС)</th>
+                                                        <th>Дата</th>
+                                                        <th>Документ</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach ($project->registry_reestrKP as $index => $KP)
+                                                        <tr>
+                                                            <td>
+                                                                <a href="/register-commercial-offers">{{ $KP->numIncoming }}</a>
+                                                            </td>
+                                                            <td>{{ $KP->amountNDS }}</td>
+                                                            <td>{{ $KP->date }}</td>
+                                                            <td>
+                                                                @if ($KP->word_file)
+                                                                    <a href="{{ route('download-kp', ['id' => $KP->id]) }}" download>{{ $KP->original_file_name }}</a>
+                                                                @else
+                                                                    Нет файла
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @else
+                                            <p class="text-center">Нет данных</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -555,76 +593,12 @@
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#calculation-collapseFive" aria-expanded="false"
                                     aria-controls="calculation-collapseFive">
-                                    V Уровень наценки
+                                    V Риски
                                 </button>
                             </h2>
                             <div id="calculation-collapseFive" class="accordion-collapse collapse"
                                 aria-labelledby="calculation-headingFive">
                                 <div class="accordion-body  input-field">
-                                    <table id="markups-datatable" class="display nowrap projMap" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Дата</th>
-                                                <th>% наценки</th>
-                                                <th>Сумма подачи ТКП в руб. без НДС</th>
-                                                <th>С кем согласовано (Фамилия И.О.)</th>
-                                                {{-- <th></th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody id="markups-inputs">
-                                            @if ($project->markups->count() > 0)
-                                                @foreach ($project->markups as $index => $markup)
-                                                    <tr data-id="{{ $markup->id }}" data-index="{{ $index }}"
-                                                        data-target="markups">
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="date"
-                                                                    name="markup[{{ $index }}][date]"
-                                                                    value="{{ $markup->date }}" class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="text"
-                                                                    name="markup[{{ $index }}][percentage]"
-                                                                    value="{{ $markup->percentage }}"
-                                                                    class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="text"
-                                                                    name="markup[{{ $index }}][priceSubTkp]"
-                                                                    value="{{ $markup->priceSubTkp }}"
-                                                                    class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="text"
-                                                                    name="markup[{{ $index }}][agreedFio]"
-                                                                    value="{{ $markup->agreedFio }}"
-                                                                    class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        {{-- <td>
-                                                            <a class="remove-btn btn btn-xs btn-danger"
-                                                                data-index="{{ $index }}"
-                                                                data-id="{{ $markup->id }}" data-target="markups">
-                                                                <i class="fa-solid fa-trash-can"></i>
-                                                            </a>
-                                                        </td> --}}
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                    {{-- <button type="button" class="addMore-button btn btn-success mt-4"
-                                        data-target="markups">Добавить строку</button> --}}
-
-                                    <div class="mt-5">
-                                        <h4 class="text-center mb-3">Риски</h4>
                                         <table id="risks-datatable" class="display nowrap projMap" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -660,11 +634,11 @@
                                         <button type="button" class="addMore-button btn btn-success mt-4"
                                             data-target="risks">Добавить
                                             строку</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
                     <input type="hidden" name="equipment_ids[]" value="">
                     <input type="hidden" name="markup_ids[]" value="">
