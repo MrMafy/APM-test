@@ -4,9 +4,15 @@
         $project->expenses()->exists() &&
         $project->expenses->first())
 
-    <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary mb-4">
-        Сформировать КП
-    </a>
+    <div class="d-flex gap-4 align-items-center  mb-4">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
+            Сформировать КП
+        </a>
+        <div>
+            <span>Хэштэг:</span>
+            <input class="form-control" value="{{$project->proj_note}}">
+        </div>
+    </div>
 
     <div class="accordion calculation" id="accordionCalculation">
         <div class="accordion-item">
@@ -135,13 +141,15 @@
                                     @foreach ($project->registry_reestrKP as $index => $KP)
                                         <tr>
                                             <td>
-                                                <a target="_blank" href="{{ route('selected-kp.show', ['id' => $KP->id]) }}">{{ $KP->numIncoming }}</a>
+                                                <a target="_blank"
+                                                   href="{{ route('selected-kp.show', ['id' => $KP->id]) }}">{{ $KP->numIncoming }}</a>
                                             </td>
                                             <td>{{ $KP->amountNDS }}</td>
                                             <td>{{ $KP->date }}</td>
                                             <td>
                                                 @if ($KP->word_file)
-                                                    <a href="{{ route('download-kp', ['id' => $KP->id]) }}" download>{{ $KP->original_file_name }}</a>
+                                                    <a href="{{ route('download-kp', ['id' => $KP->id]) }}"
+                                                       download>{{ $KP->original_file_name }}</a>
                                                 @else
                                                     Нет файла
                                                 @endif
@@ -553,186 +561,187 @@
         </div>
     </div>
 
-@endif
+
+    <script>
+        $(document).ready(function () {
 
 
-<script>
-    $(document).ready(function () {
-        var values = $('.total-equipment');
-        var total = 0;
-        values.each(function () {
-            var value = parseFloat($(this).text().replace(',', '.'));
-            // console.log('Value:', value, 'Type:', typeof value);
-            if (!isNaN(value)) {
-                total += value;
-            }
-        });
-        $('#equipment-footer').text(total.toFixed(2));
-        // Обработчик изменений в поле выбора "Наименование риска"
-        $('#risk_name').change(function () {
-            // Очищаем списки
-            $('#reasonList').empty();
-            $('#consequenceList').empty();
-            $('#counteringRiskList').empty();
-            $('#riskManagMeasuresList').empty();
 
-            // Получаем выбранное значение
-            var selectedOption = $(this).find(':selected');
-            var selectedRisk = selectedOption.val();
+            var values = $('.total-equipment');
+            var total = 0;
+            values.each(function () {
+                var value = parseFloat($(this).text().replace(',', '.'));
+                // console.log('Value:', value, 'Type:', typeof value);
+                if (!isNaN(value)) {
+                    total += value;
+                }
+            });
+            $('#equipment-footer').text(total.toFixed(2));
+            // Обработчик изменений в поле выбора "Наименование риска"
+            $('#risk_name').change(function () {
+                // Очищаем списки
+                $('#reasonList').empty();
+                $('#consequenceList').empty();
+                $('#counteringRiskList').empty();
+                $('#riskManagMeasuresList').empty();
 
-            // Запрос на сервер для получения данных по выбранному риску
-            $.ajax({
-                url: '/getRiskData',
-                method: 'GET',
-                data: {
-                    risk: selectedRisk
-                },
-                success: function (response) {
-                    // Обновляем переменные и отображаем данные
-                    response.reasonData.forEach(function (reason, index) {
-                        $('#reasonList').append(
-                            '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_reason[' +
-                            index + '][reasonRisk]" value="' + reason
-                                .reasonRisk + '"</li>');
-                    });
+                // Получаем выбранное значение
+                var selectedOption = $(this).find(':selected');
+                var selectedRisk = selectedOption.val();
 
-                    response.consequenceData.forEach((consequence, index) => {
-                        $('#consequenceList').append(
-                            '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_consequences[' +
-                            index + '][conseqRiskOnset]" value="' + consequence
-                                .conseqRiskOnset + '"</li>');
-                    });
-
-                    if (Array.isArray(response.counteringRiskData)) {
-                        response.counteringRiskData.forEach(function (counteringRisk,
-                                                                      index) {
-                            $('#counteringRiskList').append(
-                                '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_counteraction[' +
-                                index + '][counteringRisk]" value="' +
-                                counteringRisk.counteringRisk + '"</li>');
+                // Запрос на сервер для получения данных по выбранному риску
+                $.ajax({
+                    url: '/getRiskData',
+                    method: 'GET',
+                    data: {
+                        risk: selectedRisk
+                    },
+                    success: function (response) {
+                        // Обновляем переменные и отображаем данные
+                        response.reasonData.forEach(function (reason, index) {
+                            $('#reasonList').append(
+                                '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_reason[' +
+                                index + '][reasonRisk]" value="' + reason
+                                    .reasonRisk + '"</li>');
                         });
-                    }
 
-                    if (Array.isArray(response.riskManagMeasuresData)) {
-                        response.riskManagMeasuresData.forEach(function (measure, index) {
-                            if (typeof measure === 'object') {
-                                // Если это объект, выведите свойства объекта
-                                for (var prop in measure) {
-                                    if (measure.hasOwnProperty(prop)) {
-                                        $('#riskManagMeasuresList').append(
-                                            '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_measures[' +
-                                            index +
-                                            '][riskManagMeasures]" value="' +
-                                            measure[prop] + '"</li>');
+                        response.consequenceData.forEach((consequence, index) => {
+                            $('#consequenceList').append(
+                                '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_consequences[' +
+                                index + '][conseqRiskOnset]" value="' + consequence
+                                    .conseqRiskOnset + '"</li>');
+                        });
+
+                        if (Array.isArray(response.counteringRiskData)) {
+                            response.counteringRiskData.forEach(function (counteringRisk,
+                                                                          index) {
+                                $('#counteringRiskList').append(
+                                    '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_counteraction[' +
+                                    index + '][counteringRisk]" value="' +
+                                    counteringRisk.counteringRisk + '"</li>');
+                            });
+                        }
+
+                        if (Array.isArray(response.riskManagMeasuresData)) {
+                            response.riskManagMeasuresData.forEach(function (measure, index) {
+                                if (typeof measure === 'object') {
+                                    // Если это объект, выведите свойства объекта
+                                    for (var prop in measure) {
+                                        if (measure.hasOwnProperty(prop)) {
+                                            $('#riskManagMeasuresList').append(
+                                                '<li class="mb-3"><input type="text" class="input_editable" required readonly name="risk_measures[' +
+                                                index +
+                                                '][riskManagMeasures]" value="' +
+                                                measure[prop] + '"</li>');
+                                        }
                                     }
+                                } else {
+                                    // В противном случае просто выведите значение
+                                    $('#riskManagMeasuresList').append('<li>' +
+                                        measure + '</li>');
                                 }
-                            } else {
-                                // В противном случае просто выведите значение
-                                $('#riskManagMeasuresList').append('<li>' +
-                                    measure + '</li>');
-                            }
-                        });
+                            });
+                        }
+
+                        // Устанавливаем значение поля "Срок" из базы данных
+                        $('#termList').val(response.term);
+                    },
+                    error: function (error) {
+                        console.error('Error fetching risk data:', error);
                     }
-
-                    // Устанавливаем значение поля "Срок" из базы данных
-                    $('#termList').val(response.term);
-                },
-                error: function (error) {
-                    console.error('Error fetching risk data:', error);
-                }
+                });
             });
-        });
-        // Подтверждение удаления
-        let itemIdToDelete;
-        $('#confirmationModal').on('show.bs.modal', function (event) {
-            itemIdToDelete = $(event.relatedTarget).data('id');
-            projId = $(".modalId").data('id');
-        });
-        $('#confirmDelete').click(function () {
-            $.ajax({
-                method: 'GET',
-                url: `/project-maps/risk-delete/${itemIdToDelete}`,
-                success: function (data) {
-                    toastr.success('Запись была удалена', 'Успешно');
-                    let projectId = data.projectId;
-                    setTimeout(function () {
-                        window.location.href = `/project-maps/all/${projId}/#risks`;
-                    }, 1000);
-                },
-                error: function (error) {
-                    if (error.responseText) {
-                        toastr.error(error.responseText, 'Ошибка');
-                    } else {
-                        toastr.error('Ошибка удаления', 'Ошибка');
+            // Подтверждение удаления
+            let itemIdToDelete;
+            $('#confirmationModal').on('show.bs.modal', function (event) {
+                itemIdToDelete = $(event.relatedTarget).data('id');
+                projId = $(".modalId").data('id');
+            });
+            $('#confirmDelete').click(function () {
+                $.ajax({
+                    method: 'GET',
+                    url: `/project-maps/risk-delete/${itemIdToDelete}`,
+                    success: function (data) {
+                        toastr.success('Запись была удалена', 'Успешно');
+                        let projectId = data.projectId;
+                        setTimeout(function () {
+                            window.location.href = `/project-maps/all/${projId}/#risks`;
+                        }, 1000);
+                    },
+                    error: function (error) {
+                        if (error.responseText) {
+                            toastr.error(error.responseText, 'Ошибка');
+                        } else {
+                            toastr.error('Ошибка удаления', 'Ошибка');
+                        }
                     }
-                }
+                });
+                $('#confirmationModal').modal('hide');
             });
-            $('#confirmationModal').modal('hide');
-        });
 
-        // Обязательные поля ввода
-        function validateAndSubmit() {
-            // Удаление предыдущих стилей ошибок
-            $('.required-field').removeClass('required-field');
-            $('.error-message').remove();
+            // Обязательные поля ввода
+            function validateAndSubmit() {
+                // Удаление предыдущих стилей ошибок
+                $('.required-field').removeClass('required-field');
+                $('.error-message').remove();
 
-            // Проверка каждого обязательного поля
-            $('#dependentFields :input[required]').each(function () {
-                const fieldValue = $(this).val();
-                if (!fieldValue.trim()) {
-                    // Выделение пустого поля красной рамкой
-                    $(this).addClass('required-field');
+                // Проверка каждого обязательного поля
+                $('#dependentFields :input[required]').each(function () {
+                    const fieldValue = $(this).val();
+                    if (!fieldValue.trim()) {
+                        // Выделение пустого поля красной рамкой
+                        $(this).addClass('required-field');
 
-                    // Отображение сообщения об ошибке
-                    const errorMessage = $(
-                        '<div class="error-message">Обязательное поле для заполнения</div>');
-                    $(this).parent().append(errorMessage);
-                }
-            });
-        }
-
-        // Привязка функции validateAndSubmit к событию клика кнопки отправки
-        $('#submitBtn').click(function () {
-            // console.log('Button clicked!');
-            validateAndSubmit();
-        });
-    });
-
-    $(document).ready(function () {
-        // индесы для каждого из разделов
-        let indices = {
-            equipment: 1,
-            markups: 1,
-            contacts: 1,
-            expenses: 1,
-            risks: 1
-        };
-
-        /* при нажатии на кнопки определяем какой у нас target и в зависимости от него добавляет HTML,
-           возвращенный функцией getHtml, в соответствующую секцию */
-        $(".modal-content").on("click", ".addMore-button", function (event) {
-            event.preventDefault();
-            const target = $(this).data("target");
-
-            // Добавление новой строки
-            // $(`#${target}-inputs`).append(getHtml(target, indices[target]));
-            // indices[target]++;
-            // Проверяем, существует ли уже элемент с этим индексом
-            if ($(`#${target}-inputs [data-index=${indices[target]}]`).length === 0) {
-                // Добавление новой строки
-                $(`#${target}-inputs`).append(getHtml(target, indices[target]));
+                        // Отображение сообщения об ошибке
+                        const errorMessage = $(
+                            '<div class="error-message">Обязательное поле для заполнения</div>');
+                        $(this).parent().append(errorMessage);
+                    }
+                });
             }
-            indices[target]++;
-        });
-    });
 
-    // функция возвращающая html в секцию
-    function getHtml(target, index) {
-        let removeButton =
-            `<button class="btn btn-danger remove-btn" data-index="${index}" data-target="${target}">Удалить</button>`;
-        switch (target) {
-            case 'equipment':
-                return `<tr data-target="${target}" data-index="${index}">
+            // Привязка функции validateAndSubmit к событию клика кнопки отправки
+            $('#submitBtn').click(function () {
+                // console.log('Button clicked!');
+                validateAndSubmit();
+            });
+        });
+
+        $(document).ready(function () {
+            // индесы для каждого из разделов
+            let indices = {
+                equipment: 1,
+                markups: 1,
+                contacts: 1,
+                expenses: 1,
+                risks: 1
+            };
+
+            /* при нажатии на кнопки определяем какой у нас target и в зависимости от него добавляет HTML,
+               возвращенный функцией getHtml, в соответствующую секцию */
+            $(".modal-content").on("click", ".addMore-button", function (event) {
+                event.preventDefault();
+                const target = $(this).data("target");
+
+                // Добавление новой строки
+                // $(`#${target}-inputs`).append(getHtml(target, indices[target]));
+                // indices[target]++;
+                // Проверяем, существует ли уже элемент с этим индексом
+                if ($(`#${target}-inputs [data-index=${indices[target]}]`).length === 0) {
+                    // Добавление новой строки
+                    $(`#${target}-inputs`).append(getHtml(target, indices[target]));
+                }
+                indices[target]++;
+            });
+        });
+
+        // функция возвращающая html в секцию
+        function getHtml(target, index) {
+            let removeButton =
+                `<button class="btn btn-danger remove-btn" data-index="${index}" data-target="${target}">Удалить</button>`;
+            switch (target) {
+                case 'equipment':
+                    return `<tr data-target="${target}" data-index="${index}">
                         <td><input type="text" class="form-control" name="equipment[${index}][nameTMC]" id="nameTMC"
                                 placeholder="Введите наименование ТМЦ"></td>
                         <td> <input type="text" class="form-control" name="equipment[${index}][manufacture]" id="manufacture"
@@ -745,8 +754,8 @@
                             placeholder="Введите цену за ед."></td>
                         <td style="border:none;">${removeButton} </td>
                     </tr>`;
-            case 'markups':
-                return `<div class="mb-3 block" data-target="${target}" data-index="${index}">---
+                case 'markups':
+                    return `<div class="mb-3 block" data-target="${target}" data-index="${index}">---
                         <div class="form-group mb-3">
                             <label for="date">Дата:</label>
                             <input type="date" class="form-control" name="markups[${index}][date]" id="date"
@@ -769,11 +778,11 @@
                         </div>
                         ${removeButton}
                     </div>`;
-            case 'contacts':
-                return `<div class="mb-3 block" data-target="${target}" data-index="${index}">---
+                case 'contacts':
+                    return `<div class="mb-3 block" data-target="${target}" data-index="${index}">---
                         <div class="form-group mb-3">
                             <label for="fio">ФИО:</label>
-                            <input type="fio" class="form-control" name="contacts[${index}][fio]" id="fio"
+                            <input type="text" class="form-control" name="contacts[${index}][fio]" id="fio"
                                 placeholder="Введите ФИО">
                         </div>
                         <div class="form-group mb-3">
@@ -803,27 +812,29 @@
                         </div>
                         ${removeButton}
                     </div>`;
-            case 'risks':
-                return `<div class="form-group mb-3 block" data-target="${target}" data-index="${index}">---
+                case 'risks':
+                    return `<div class="form-group mb-3 block" data-target="${target}" data-index="${index}">---
                         <label for="riskName">Наименование риска:</label>
-                        <input type="riskName" class="form-control" name="risks[${index}][riskName]" id="riskName"
+                        <input type="text" class="form-control" name="risks[${index}][riskName]" id="riskName"
                             placeholder="Введите наименование риска">
                             ${removeButton}
                     </div>`;
-            case 'expenses': // Добавленный case для дополнительных расходов
-                return `<div class="form-group mb-3 block" data-target="${target}" data-index="${index}">
+                case 'expenses': // Добавленный case для дополнительных расходов
+                    return `<div class="form-group mb-3 block" data-target="${target}" data-index="${index}">
                         <label for="additionalExpense">Дополнительный расход:</label>
                         <input type="text" class="form-control" name="additional_expenses[]" id="additionalExpense"
                             placeholder="Введите дополнительный расход">
                         ${removeButton}
                     </div>`;
+            }
         }
-    }
 
-    $(document).on('click', '.remove-btn', function (e) {
-        e.preventDefault();
-        let target = $(this).data('target');
-        let index = $(this).data('index');
-        $(`[data-target=${target}][data-index=${index}]`).remove();
-    });
-</script>
+        $(document).on('click', '.remove-btn', function (e) {
+            e.preventDefault();
+            let target = $(this).data('target');
+            let index = $(this).data('index');
+            $(`[data-target=${target}][data-index=${index}]`).remove();
+        });
+    </script>
+@endif
+

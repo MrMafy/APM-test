@@ -11,6 +11,7 @@
                 {{-- Общая информация --}}
                 <div class="project-add alert">
                     <h2>I Общая информация по проекту</h2>
+
                     <div class="form-group mb-3">
                         <label for="projNum">Номер проекта по реестру:</label>
                         <div class="d-flex gap-3">

@@ -35,7 +35,7 @@
                                 <td colspan="3">{{ $item->projGoal }}</td>
                             </tr>
                             <tr>
-                                <th>Куратор проекта/Руководитель направления</th>
+                                <th>Руководитель группы</th>
                                 <td colspan="3">{{ $item->projCurator }}</td>
                             </tr>
                             <tr>
@@ -149,7 +149,7 @@
     <a href="{{ route('update-realization', ['id' => $project->id, 'tab' => 'realization']) }}"><button class="btn btn-primary">Редактировать</button></a>
 </div>
 
-@elseif($project && $project->totals && $project->totals->isNotEmpty()) 
+@elseif($project && $project->totals && $project->totals->isNotEmpty())
 <a href="{{ route('realization-create', $project->id) }}" class="btn btn-primary" target="_blank">Добавить реализацию</a>
 @else
     <p>Для добавления реализации необходимо заполнить "Расчет" полностью.</p>
