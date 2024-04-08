@@ -77,7 +77,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Куратор проекта/Руководитель направления</th>
+                                            <th>Руководитель группы</th>
                                             <td colspan="3">
                                                 <div class="col-3">
                                                     <input type="text" name="projCurator"

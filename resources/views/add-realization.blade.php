@@ -56,10 +56,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Куратор проекта/Руководитель направления</th>
+                            <th>Руководитель группы</th>
                             <td colspan="3">
                                 <input type="text" class="form-control" name="projCurator" id="projCurator"
-                                    placeholder="Введите куратора проекта/руководителя направления">
+                                    placeholder="Введите руководителя группы" value="{{ $user->name }}">
                             </td>
                         </tr>
                         <tr>

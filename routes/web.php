@@ -74,6 +74,7 @@ Route::middleware(['auth'])->group(function () {
 
     // ТАБЫ на странице КАРТА ПРОЕКТА
     Route::get('/tables/{tab}/{id}', 'App\Http\Controllers\TabController@show')->name('tab.show');
+    Route::post('/update-proj-note/{id}', 'App\Http\Controllers\ProjectController@updateNote')->name('update-proj-note');
 
 
     // обновление (редактирование) карты проекта -> РАСЧЕТ
@@ -109,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
 
     // реестр КП
     Route::get('/register-commercial-offers', 'App\Http\Controllers\RegReestrKPController@index')->name('rco');
+    Route::get('/selected-kp/{id}', 'App\Http\Controllers\RegReestrKPController@showSelectedKP')->name('selected-kp.show');
 
 
     // Марщрут страницы базы рисков

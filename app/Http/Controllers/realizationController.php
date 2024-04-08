@@ -8,20 +8,24 @@ use App\Models\Projects;
 use App\Models\BasicReference;
 use App\Models\BasicInfo;
 use App\Models\workGroup;
+use Illuminate\Support\Facades\Auth;
+
 
 class realizationController extends Controller
 {
     // переход на страницу создание реализации
     public function create()
     {
-        return view('add-realization');
+        $user = Auth::user();
+        return view('add-realization', compact('user'));
     }
 
     // Отображение данных из расчета
     public function showDataCalculation($id)
     {
         $project = Projects::with('equipment', 'expenses', 'totals', 'markups', 'contacts', 'risks')->find($id);
-        return view('add-realization', compact('project'));
+        $user = Auth::user();
+        return view('add-realization', compact('project', 'user'));
     }
 
     // сохранение данных
@@ -78,7 +82,7 @@ class realizationController extends Controller
             $workGroup->supply = $request->supply;
             $workGroup->logistics = $request->logistics;
             $workGroup->save();
-    
+
 
         return redirect()->route('project-data-one', $id)->with('success');
         }

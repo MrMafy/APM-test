@@ -67,11 +67,11 @@
                             <div class="d-flex gap-2">
                                 <a class="editProduct btn btn-xs btn-info" href="#" data-bs-toggle="modal"
                                    data-bs-target="#editBaseRisks" data-id="{{ $item->id }}"
-                                   data-nameRisk="{{ $item->nameRisk }}">
+                                   data-nameRisk="{{ $item->nameRisk }}" data-toggle="tooltip" title="Редактировать запись">
                                     <i class="fa-solid fa-edit"></i>
                                 </a>
                                 <a class="deleteProduct btn btn-xs btn-danger" href="#" data-bs-toggle="modal"
-                                   data-bs-target="#confirmationModal" data-id="{{ $item->id }}"><i
+                                   data-bs-target="#confirmationModal" data-id="{{ $item->id }}" data-toggle="tooltip" title="Удалить запись"><i
                                         class="fa-solid fa-trash-can"></i></a>
                             </div>
                         </td>

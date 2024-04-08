@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RegReestrKP;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -80,8 +82,9 @@ class ProjectController extends Controller
     // Отображение одного проекта и связанных данных (отображает данные по id) на странице карты проекта
     public function showOneMessage($id, $tab = null)
     {
-        $project = Projects::with('equipment', 'expenses', 'totals', 'markups', 'contacts', 'risks', 'workGroup', 'basicReference', 'basicInfo', 'notes')->find($id);
+        $project = Projects::with('equipment', 'expenses', 'totals', 'contacts', 'risks', 'workGroup', 'basicReference', 'basicInfo', 'notes')->find($id);
         $notes = $project->notes()->paginate(3);
+        $user = auth()->user();
 
         if (!$project) {
             abort(404, 'Project not found');
@@ -97,11 +100,30 @@ class ProjectController extends Controller
         }
 
         if (view()->exists("tables.{$tab}-projectMap")) {
-            return view('project-map', compact('baseRisks', 'project', 'tab'));
+            return view('project-map', compact('baseRisks', 'project', 'tab', 'user'));
         } else {
             abort(404, 'Tab not found');
         }
     }
+
+    public function updateNote(Request $request, $id)
+    {
+        // Проверяем, существует ли проект с указанным ID
+        $project = Projects::find($id);
+
+        // Если проект не найден, возвращаем ошибку 404
+        if (!$project) {
+            abort(404, 'Project not found');
+        }
+
+        // Обновляем заметку проекта
+        $project->proj_note = $request->input('value');
+        $project->save();
+
+        // Отправляем ответ в формате JSON
+        return response()->json(['message' => 'Note updated successfully']);
+    }
+
 
     // удаление карты проекта (НЕАКТУАЛЬНО )
     public function deleteMessage($id)
@@ -194,8 +216,11 @@ class ProjectController extends Controller
 
         $projectManagers = ProjectManager::all();
         $baseRisks = baseRisks::all();
-
-        return view('add-map', compact('projectNum', 'currentYear', 'projectManagers', 'baseRisks'));
+        // Получение group_num пользователя
+        $currentUserGroupNum = Auth::user()->group_num;
+        // Получение текущего пользователя
+        $user = Auth::user();
+        return view('add-map', compact('projectNum', 'currentYear', 'projectManagers', 'baseRisks', 'currentUserGroupNum', 'user'));
     }
 
     // ДОБАВЛЕНИЕ   новой карты проекта
@@ -316,6 +341,12 @@ class ProjectController extends Controller
         $maxRiskId = CalcRisk::max('id');
         $projectManagers = ProjectManager::all();
 
+        $RegReestrKP = RegReestrKP::all();
+        // Получаем все дополнительные файлы для каждого объекта RegReestrKP
+        $RegReestrKP->each(function ($regReestrKP) {
+            $regReestrKP->additionalFiles = $regReestrKP->additionalFiles()->get();
+        });
+
         if (!$project) {
             return response()->json(['error' => 'Project not found'], 404);
         }
@@ -323,7 +354,8 @@ class ProjectController extends Controller
         return view('project-map-update', [
             'project' => $project,
             'maxRiskId' => $maxRiskId,
-            'projectManagers' => $projectManagers
+            'projectManagers' => $projectManagers,
+            'RegReestrKP' => $RegReestrKP
         ]);
     }
 
@@ -588,7 +620,8 @@ class ProjectController extends Controller
     public function updateRealization($id)
     {
         $project = new Projects;
-        return view('update-realization', ['project' => $project->find($id)]);
+        $user = Auth::user();
+        return view('update-realization', ['project' => $project->find($id), 'user']);
     }
     // РЕДАКТИРОВАНИЕ данных для карты проекта -> РЕАЛИЗАЦИЯ
     public function updateRealizationSubmit($id, Request $req)
@@ -1200,20 +1233,20 @@ class ProjectController extends Controller
         $totals->price = $priceTotals;
         $totals->save();
         // уровень наценки
-        if ($request->has('markups')) {
-            $data_markups = array();
-            foreach ($request->input('markups') as $index => $markupsData) {
-                $item = array(
-                    'project_num' => $project->projNum,
-                    'date' => $markupsData['date'],
-                    'percentage' => $markupsData['percentage'],
-                    'priceSubTkp' => $markupsData['priceSubTkp'],
-                    'agreedFio' => $markupsData['agreedFio']
-                );
-                array_push($data_markups, $item);
-            }
-            Markup::insert($data_markups);
-        }
+//        if ($request->has('markups')) {
+//            $data_markups = array();
+//            foreach ($request->input('markups') as $index => $markupsData) {
+//                $item = array(
+//                    'project_num' => $project->projNum,
+//                    'date' => $markupsData['date'],
+//                    'percentage' => $markupsData['percentage'],
+//                    'priceSubTkp' => $markupsData['priceSubTkp'],
+//                    'agreedFio' => $markupsData['agreedFio']
+//                );
+//                array_push($data_markups, $item);
+//            }
+//            Markup::insert($data_markups);
+//        }
         // риски
         if ($request->has('risks')) {
             $data_risks = array();

@@ -247,6 +247,44 @@
                                             data-target="contacts">Добавить
                                             строку</button>
                                     </div>
+
+                                    <div class="mt-5">
+                                        <h4 class="text-center mb-3">Технико-коммерческое предложение</h4>
+                                        @if ($project->registry_reestrKP->count() > 0)
+                                            <div class="table-responsive">
+                                                <table class="table ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>КП № исходящего</th>
+                                                        <th>Сумма (руб. c НДС)</th>
+                                                        <th>Дата</th>
+                                                        <th>Документ</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach ($project->registry_reestrKP as $index => $KP)
+                                                        <tr>
+                                                            <td>
+                                                                <a href="/register-commercial-offers">{{ $KP->numIncoming }}</a>
+                                                            </td>
+                                                            <td>{{ $KP->amountNDS }}</td>
+                                                            <td>{{ $KP->date }}</td>
+                                                            <td>
+                                                                @if ($KP->word_file)
+                                                                    <a href="{{ route('download-kp', ['id' => $KP->id]) }}" download>{{ $KP->original_file_name }}</a>
+                                                                @else
+                                                                    Нет файла
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @else
+                                            <p class="text-center">Нет данных</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -319,7 +357,8 @@
                                                             <input type="text"
                                                                 name="equipment[{{ $index }}][priceUnit]"
                                                                 id="priceUnit{{ $index }}"
-                                                                value="{{ $item->priceUnit }}" class="input_editable">
+                                                                value="{{ $item->priceUnit }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                   data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -367,7 +406,8 @@
                                                                 <input type="text"
                                                                     name="expense[{{ $index }}][commandir]"
                                                                     value="{{ $expense->commandir }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -377,7 +417,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="rd"
                                                                     name="expense[{{ $index }}][rd]"
-                                                                    value="{{ $expense->rd }}" class="input_editable">
+                                                                    value="{{ $expense->rd }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -387,7 +428,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="shmr"
                                                                     name="expense[{{ $index }}][shmr]"
-                                                                    value="{{ $expense->shmr }}" class="input_editable">
+                                                                    value="{{ $expense->shmr }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -397,7 +439,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="pnr"
                                                                     name="expense[{{ $index }}][pnr]"
-                                                                    value="{{ $expense->pnr }}" class="input_editable">
+                                                                    value="{{ $expense->pnr }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -407,7 +450,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="cert"
                                                                     name="expense[{{ $index }}][cert]"
-                                                                    value="{{ $expense->cert }}" class="input_editable">
+                                                                    value="{{ $expense->cert }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -418,7 +462,8 @@
                                                                 <input type="text" id="delivery"
                                                                     name="expense[{{ $index }}][delivery]"
                                                                     value="{{ $expense->delivery }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -429,7 +474,8 @@
                                                                 <input type="text" id="rastam"
                                                                     name="expense[{{ $index }}][rastam]"
                                                                     value="{{ $expense->rastam }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -439,7 +485,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="ppo"
                                                                     name="expense[{{ $index }}][ppo]"
-                                                                    value="{{ $expense->ppo }}" class="input_editable">
+                                                                    value="{{ $expense->ppo }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -450,7 +497,8 @@
                                                                 <input type="text" id="guarantee"
                                                                     name="expense[{{ $index }}][guarantee]"
                                                                     value="{{ $expense->guarantee }}"
-                                                                    class="input_editable">
+                                                                    class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -460,7 +508,8 @@
                                                             <div class="col-3">
                                                                 <input type="text" id="check"
                                                                     name="expense[{{ $index }}][check]"
-                                                                    value="{{ $expense->check }}" class="input_editable">
+                                                                    value="{{ $expense->check }}" class="input_editable" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -471,7 +520,8 @@
                                                             <td>
                                                                 <input type="text"
                                                                     name="additional_expenses[{{ $additionalExpense->id }}][cost]"
-                                                                    value="{{ $additionalExpense->cost }}">
+                                                                    value="{{ $additionalExpense->cost }}" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                                       data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                                                 <button
                                                                     class="delete_additionalExpense btn btn-xs btn-danger"
                                                                     data-target="additional_expenses"
@@ -543,76 +593,12 @@
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#calculation-collapseFive" aria-expanded="false"
                                     aria-controls="calculation-collapseFive">
-                                    V Уровень наценки
+                                    V Риски
                                 </button>
                             </h2>
                             <div id="calculation-collapseFive" class="accordion-collapse collapse"
                                 aria-labelledby="calculation-headingFive">
                                 <div class="accordion-body  input-field">
-                                    <table id="markups-datatable" class="display nowrap projMap" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Дата</th>
-                                                <th>% наценки</th>
-                                                <th>Сумма подачи ТКП в руб. без НДС</th>
-                                                <th>С кем согласовано (Фамилия И.О.)</th>
-                                                {{-- <th></th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody id="markups-inputs">
-                                            @if ($project->markups->count() > 0)
-                                                @foreach ($project->markups as $index => $markup)
-                                                    <tr data-id="{{ $markup->id }}" data-index="{{ $index }}"
-                                                        data-target="markups">
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="date"
-                                                                    name="markup[{{ $index }}][date]"
-                                                                    value="{{ $markup->date }}" class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="text"
-                                                                    name="markup[{{ $index }}][percentage]"
-                                                                    value="{{ $markup->percentage }}"
-                                                                    class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="text"
-                                                                    name="markup[{{ $index }}][priceSubTkp]"
-                                                                    value="{{ $markup->priceSubTkp }}"
-                                                                    class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="col-3">
-                                                                <input type="text"
-                                                                    name="markup[{{ $index }}][agreedFio]"
-                                                                    value="{{ $markup->agreedFio }}"
-                                                                    class="input_editable">
-                                                            </div>
-                                                        </td>
-                                                        {{-- <td>
-                                                            <a class="remove-btn btn btn-xs btn-danger"
-                                                                data-index="{{ $index }}"
-                                                                data-id="{{ $markup->id }}" data-target="markups">
-                                                                <i class="fa-solid fa-trash-can"></i>
-                                                            </a>
-                                                        </td> --}}
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                    {{-- <button type="button" class="addMore-button btn btn-success mt-4"
-                                        data-target="markups">Добавить строку</button> --}}
-
-                                    <div class="mt-5">
-                                        <h4 class="text-center mb-3">Риски</h4>
                                         <table id="risks-datatable" class="display nowrap projMap" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -648,11 +634,11 @@
                                         <button type="button" class="addMore-button btn btn-success mt-4"
                                             data-target="risks">Добавить
                                             строку</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
                     <input type="hidden" name="equipment_ids[]" value="">
                     <input type="hidden" name="markup_ids[]" value="">

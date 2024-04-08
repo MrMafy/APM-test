@@ -9,7 +9,8 @@ class RegReestrKP extends Model
 {
     use HasFactory;
     protected $table = 'registry_reestrKP';
-    protected $fillable = ['numIncoming', 'date', 'orgName', 'whom', 'sender', 'amountNDS', 'purchNum', 'note', 'word_file', 'original_word_file_name']; // Добавляем 'original_word_file_name'
+    protected $fillable = ['numIncoming', 'date', 'orgName', 'whom', 'sender', 'amountNDS', 'purchNum', 'note', 'word_file', 'original_word_file_name',     'percentage',
+        'agreedFio',]; // Добавляем 'original_word_file_name'
 
     // Здесь можно добавить связь с дополнительными файлами, если необходимо
     public function additionalFiles()

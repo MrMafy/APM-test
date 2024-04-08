@@ -209,7 +209,8 @@
                                                         placeholder="Введите количество"></td>
                                                 <td><input type="text" class="form-control"
                                                         name="equipment[0][priceUnit]" id="priceUnit"
-                                                        placeholder="Введите цену за ед."></td>
+                                                        placeholder="Введите цену за ед." pattern="\d+(\.\d+)?" inputmode="decimal"
+                                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой"></td>
                                                 <td></td>
                                             </tr>
                                         </tbody>
@@ -229,52 +230,62 @@
                                 <div class="form-group mb-3">
                                     <label for="commandir">Командировочные:</label>
                                     <input type="text" class="form-control" name="commandir" id="commandir"
-                                        placeholder="Введите командировочные">
+                                        placeholder="Введите командировочные" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="rd">РД:</label>
                                     <input type="text" class="form-control" name="rd" id="rd"
-                                        placeholder="Введите РД">
+                                        placeholder="Введите РД" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="shmr">ШМР:</label>
                                     <input type="text" class="form-control" name="shmr" id="shmr"
-                                        placeholder="Введите ШМР">
+                                        placeholder="Введите ШМР" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="pnr">ПНР:</label>
                                     <input type="text" class="form-control" name="pnr" id="pnr"
-                                        placeholder="Введите ПНР">
+                                        placeholder="Введите ПНР" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="cert">Сертификаты:</label>
                                     <input type="text" class="form-control" name="cert" id="cert"
-                                        placeholder="Введите сертификаты">
+                                        placeholder="Введите сертификаты" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="delivery">Доставка/ Логистика:</label>
                                     <input type="text" class="form-control" name="delivery" id="delivery"
-                                        placeholder="Введите доставку/логистику">
+                                        placeholder="Введите доставку/логистику" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="rastam">Растаможка:</label>
                                     <input type="text" class="form-control" name="rastam" id="rastam"
-                                        placeholder="Введите растаможку">
+                                        placeholder="Введите растаможку" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="ppo">Разработка ППО:</label>
                                     <input type="text" class="form-control" name="ppo" id="ppo"
-                                        placeholder="Введите разработку ППО">
+                                        placeholder="Введите разработку ППО" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="guarantee">Банковская гарантия:</label>
                                     <input type="text" class="form-control" name="guarantee" id="guarantee"
-                                        placeholder="Введите банковскую гарантию">
+                                        placeholder="Введите банковскую гарантию" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="check">Поверка:</label>
                                     <input type="text" class="form-control" name="check" id="check"
-                                        placeholder="Введите поверку">
+                                        placeholder="Введите поверку" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary addMore-button" id="addMore-expenses"
@@ -307,36 +318,37 @@
                             </div>
                         </div>
                         {{-- Уровень наценки --}}
-                        <div class="markups-add alert pt-3">
-                            <h4 class="mb-3">V Уровень наценки</h4>
-                            <div id="markups-inputs">
-                                <div class="mb-3">
-                                    <div class="form-group mb-3">
-                                        <label for="date">Дата:</label>
-                                        <input type="date" class="form-control" name="markups[0][date]"
-                                            id="date" placeholder="Выберите дату">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="percentage">% наценки:</label>
-                                        <input type="text" class="form-control" name="markups[0][percentage]"
-                                            id="percentage" placeholder="Введитепроцент наценки">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="priceSubTkp">Сумма подачи ТКП в руб. без НДС:</label>
-                                        <input type="text" class="form-control" name="markups[0][priceSubTkp]"
-                                            id="priceSubTkp" placeholder="Введите сумму">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="agreedFio">С кем согласовано (Фамилия И.О.):</label>
-                                        <input type="text" class="form-control" name="markups[0][agreedFio]"
-                                            id="agreedFio" placeholder="Введите ФИО">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+{{--                        <div class="markups-add alert pt-3">--}}
+{{--                            <h4 class="mb-3">V Уровень наценки</h4>--}}
+{{--                            <div id="markups-inputs">--}}
+{{--                                <div class="mb-3">--}}
+{{--                                    <div class="form-group mb-3">--}}
+{{--                                        <label for="date">Дата:</label>--}}
+{{--                                        <input type="date" class="form-control" name="markups[0][date]"--}}
+{{--                                            id="date" placeholder="Выберите дату">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="form-group mb-3">--}}
+{{--                                        <label for="percentage">% наценки:</label>--}}
+{{--                                        <input type="text" class="form-control" name="markups[0][percentage]"--}}
+{{--                                            id="percentage" placeholder="Введитепроцент наценки">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="form-group mb-3">--}}
+{{--                                        <label for="priceSubTkp">Сумма подачи ТКП в руб. без НДС:</label>--}}
+{{--                                        <input type="text" class="form-control" name="markups[0][priceSubTkp]"--}}
+{{--                                            id="priceSubTkp" placeholder="Введите сумму" pattern="\d+(\.\d+)?" inputmode="decimal"--}}
+{{--                                               data-toggle="tooltip" title="Введите число с точкой, а не запятой">--}}
+{{--                                    </div>--}}
+{{--                                    <div class="form-group mb-3">--}}
+{{--                                        <label for="agreedFio">С кем согласовано (Фамилия И.О.):</label>--}}
+{{--                                        <input type="text" class="form-control" name="markups[0][agreedFio]"--}}
+{{--                                            id="agreedFio" placeholder="Введите ФИО">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         {{-- Риски --}}
                         <div class="risks-add alert pt-3">
-                            <h4 class="text-center">Риски</h4>
+                            <h4 class="mb-3">V Риски</h4>
                             <div id="risks-inputs">
                                 <div class="form-group mb-3">
                                     <label for="riskName">Наименование риска:</label>
@@ -386,17 +398,17 @@
                             <div class="form-group mb-3">
                                 <label for="orgName">Наименование организации:</label>
                                 <input type="text" class="form-control" name="offer[0][orgName]" id="orgName"
-                                    placeholder="Введите наименование организации" required="">
+                                    placeholder="Введите наименование организации" required="" value="{{ $project->endCustomer }}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="whom">Кому:</label>
                                 <input type="text" class="form-control" name="offer[0][whom]" id="whom"
-                                    placeholder="Введите получателя КП">
+                                    placeholder="Введите получателя КП" value="{{ $project->endCustomer }}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="sender">Отправитель:</label>
                                 <input type="text" class="form-control" name="offer[0][sender]" id="sender"
-                                    placeholder="Введите отправителя" required="">
+                                    placeholder="Введите отправителя" required="" value="{{ $user-> name}}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="amountNDS">Сумма в НДС:</label>
@@ -413,6 +425,18 @@
                                 <input type="date" class="form-control" name="offer[0][date]" id="date"
                                     value="{{ date('Y-m-d') }}">
                             </div>
+
+                            <div class="form-group mb-3">
+                                <label for="percentage">% наценки:</label>
+                                <input type="text" class="form-control" name="offer[0][percentage]"
+                                       id="percentage" placeholder="Введитепроцент наценки">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="agreedFio">С кем согласовано (Фамилия И.О.):</label>
+                                <input type="text" class="form-control" name="offer[0][agreedFio]"
+                                       id="agreedFio" placeholder="Введите ФИО">
+                            </div>
+
                             <div class="form-group mb-3">
                                 <label for="wordFile">Файл Word:</label>
                                 <input type="file" class="form-control" name="word_file" id="wordFile">
