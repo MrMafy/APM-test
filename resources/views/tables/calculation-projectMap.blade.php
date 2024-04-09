@@ -12,6 +12,12 @@
             <span>Хэштэг:</span>
             <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
         </div>
+        <div class="d-flex gap-3 mt-5">
+            <a href="{{ route('project-map-update', ['id' => $project->id, 'tab' => 'calculation']) }}">
+                <button class="btn btn-primary">Редактировать</button>
+            </a>
+            {{-- <a href="{{ route('project-map-delete', $project->id) }}"><button class="btn btn-danger">Удалить</button></a> --}}
+        </div>
     </div>
 
     <div class="accordion calculation" id="accordionCalculation">
@@ -186,6 +192,7 @@
                                 <th>Кол-во</th>
                                 <th>Цена за ед. (руб. без НДС)</th>
                                 <th>Стоимость (руб. без НДС)</th>
+                                <th>Доп. файлы</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -198,12 +205,20 @@
                                     <td>{{ $item->priceUnit ?? '-'}}</td>
                                     {{-- <td class="total-equipment">{{ $item->count * $item->priceUnit }}</td> --}}
                                     <td class="total-equipment">{{ $item->price ?? '-'}}</td>
+                                    <td>
+                                        @if ($item->equipment_fileName)
+                                            <a href="{{ route('download-equipment-file', ['id' => $item->id]) }}"
+                                               download>{{ $item->equipment_fileName }}</a>
+                                        @else
+                                            Нет файла
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th colspan="5" class="text-align-right">Всего</th>
+                                <th colspan="6" class="text-align-right">Всего</th>
                                 <th id="equipment-footer"></th>
                             </tfoot>
                         </table>
@@ -433,20 +448,18 @@
         </div>
 
     </div>
-    <div class="d-flex gap-3 mt-5">
-        <a href="{{ route('project-map-update', ['id' => $project->id, 'tab' => 'calculation']) }}">
-            <button class="btn btn-primary">Редактировать</button>
-        </a>
-        {{-- <a href="{{ route('project-map-delete', $project->id) }}"><button class="btn btn-danger">Удалить</button></a> --}}
-    </div>
 @else
-    <div class="btns d-flex gap-4 mb-4">
+    <div class="btns d-flex align-items-center gap-4 mb-4">
         <a href="#" data-bs-toggle="modal" data-bs-target="#addContinueModal" class="btn btn-lg btn-danger">
             Продолжить заполнение расчета
         </a>
         <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
             Сформировать КП
         </a>
+        <div data-toggle="tooltip" title="Для изменения нажмите редактировать">
+            <span>Хэштэг:</span>
+            <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
+        </div>
     </div>
     <div class="accordion calculation" id="accordionCalculation">
         <div class="accordion-item">
@@ -555,6 +568,45 @@
                             @endif
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-5">
+                        <h4 class="text-center mb-3">Технико-коммерческое предложение</h4>
+                        @if ($project->registry_reestrKP->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table ">
+                                    <thead>
+                                    <tr>
+                                        <th>КП № исходящего</th>
+                                        <th>Сумма (руб. c НДС)</th>
+                                        <th>Дата</th>
+                                        <th>Документ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($project->registry_reestrKP as $index => $KP)
+                                        <tr>
+                                            <td>
+                                                <a target="_blank"
+                                                   href="{{ route('selected-kp.show', ['id' => $KP->id]) }}">{{ $KP->numIncoming }}</a>
+                                            </td>
+                                            <td>{{ $KP->amountNDS }}</td>
+                                            <td>{{ $KP->date }}</td>
+                                            <td>
+                                                @if ($KP->word_file)
+                                                    <a href="{{ route('download-kp', ['id' => $KP->id]) }}"
+                                                       download>{{ $KP->original_file_name }}</a>
+                                                @else
+                                                    Нет файла
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <p class="text-center">Нет данных</p>
+                        @endif
                     </div>
                 </div>
             </div>

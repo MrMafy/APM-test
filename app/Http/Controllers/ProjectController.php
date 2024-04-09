@@ -1181,31 +1181,49 @@ class ProjectController extends Controller
     {
         // поиск связанной карты проекта
         $project = Projects::find($id);
-        // оборудование
+
+// оборудование
         if ($request->has('equipment')) {
-            $data_equipment = array();
-            $totalPrice = 0;
             foreach ($request->input('equipment') as $index => $equipmentData) {
                 // нахождения поля price(стоимость) путем умножения кол-ва на цену за ед. (count*priceUnit)
                 $count = intval($equipmentData['count']);
                 $priceUnit = floatval($equipmentData['priceUnit']);
                 $price = $count * $priceUnit; // Расчёт стоимости
 
-                $item = array(
+                // Создаем новую запись в таблице Equipment с указанием project_num
+                Equipment::create([
                     'project_num' => $project->projNum,
                     'nameTMC' => $equipmentData['nameTMC'],
                     'manufacture' => $equipmentData['manufacture'],
                     'unit' => $equipmentData['unit'],
                     'count' => $equipmentData['count'],
                     'priceUnit' => $equipmentData['priceUnit'],
-                    'price' => $price, //запись в бд расчитанной стоимости
-                );
-                array_push($data_equipment, $item);
-                $totalPrice += $price;
+                    'price' => $price,
+                    'equipment_file' => null, // Поскольку это создание новой записи, обнуляем значение файла
+                    'equipment_fileName' => null,
+                ]);
             }
-            Equipment::insert($data_equipment);
         }
 
+// Обработка загрузки файлов
+        if ($request->hasFile('equipment_file')) {
+            $files = $request->file('equipment_file');
+
+            foreach ($files as $index => $file) {
+                // Генерация уникального имени для файла
+                $fileName = $file->getClientOriginalName();
+                $filePath = $file->storeAs('equipment_files', $fileName);
+
+                // Создаем или обновляем записи в таблице Equipment с добавлением файла
+                Equipment::updateOrCreate(
+                    ['project_num' => $project->projNum],
+                    [
+                        'equipment_file' => $filePath,
+                        'equipment_fileName' => $fileName,
+                    ]
+                );
+            }
+        }
 
         // прочие расходы
         $expenses = new Expenses;
@@ -1268,7 +1286,8 @@ class ProjectController extends Controller
         $shipmentDays = floatval($request->shipmentDays);
         $periodDays = $kdDays + $equipmentDays + $productionDays + $shipmentDays; // Расчет итого
         // нахождения поля price(себестоимость) путем сложения поля всего из таблицы оборудования и всего из проч.расх.
-        $priceTotals = ($totalPrice + $total);
+//        $priceTotals = ($totalPrice + $total);
+        $priceTotals = ($price + $total);
         $totals->project_num = $project->projNum;
         $totals->kdDays = $request->kdDays;
         $totals->equipmentDays = $request->equipmentDays;
@@ -1307,4 +1326,11 @@ class ProjectController extends Controller
         }
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation'])->with('success', 'Project data successfully added');
     }
+    public function downloadEquipmentFile($id)
+    {
+        $equipment = Equipment::findOrFail($id);
+        $filePath = storage_path('app/equipment_files/' . $equipment->equipment_fileName);
+        return response()->download($filePath, $equipment->equipment_fileName);
+    }
+
 }
