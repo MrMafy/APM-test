@@ -4,13 +4,13 @@
         $project->expenses()->exists() &&
         $project->expenses->first())
 
-    <div class="d-flex gap-4 align-items-center  mb-4">
+    <div class="d-flex gap-4 align-items-center mb-4">
         <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
             Сформировать КП
         </a>
         <div>
             <span>Хэштэг:</span>
-            <input class="form-control" value="{{$project->proj_note}}">
+            <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
         </div>
     </div>
 
@@ -563,10 +563,33 @@
 
 
     <script>
+        $(document).ready(function() {
+            // Send AJAX request to update project note on focus out
+            $('#proj_note').focusout(function() {
+                var noteValue = $(this).val();
+                var projectId = {{ $project->id }};
+                $.ajax({
+                    type: 'POST',
+                    url: '/update-proj-note/' + projectId,
+                    data: {
+                        value: noteValue,
+                        _token: '{{ csrf_token() }}' // Add CSRF token for Laravel
+                    },
+                    success: function(response) {
+                        console.log(response.message);
+                        // Optionally, display a message or perform other actions upon successful update
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Optionally, handle errors
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
         $(document).ready(function () {
-
-
-
             var values = $('.total-equipment');
             var total = 0;
             values.each(function () {

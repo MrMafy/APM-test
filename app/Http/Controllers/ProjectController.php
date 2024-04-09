@@ -108,21 +108,18 @@ class ProjectController extends Controller
 
     public function updateNote(Request $request, $id)
     {
-        // Проверяем, существует ли проект с указанным ID
         $project = Projects::find($id);
 
-        // Если проект не найден, возвращаем ошибку 404
         if (!$project) {
             abort(404, 'Project not found');
         }
 
-        // Обновляем заметку проекта
         $project->proj_note = $request->input('value');
         $project->save();
 
-        // Отправляем ответ в формате JSON
         return response()->json(['message' => 'Note updated successfully']);
     }
+
 
 
     // удаление карты проекта (НЕАКТУАЛЬНО )
@@ -367,6 +364,7 @@ class ProjectController extends Controller
         // Обновление общая информация по проекту
         $project = Projects::find($id);
         // $project->projNum = $req->input('projNum');
+        $project->proj_note = $req->input('proj_note');
         $project->projManager = $req->input('projManager');
         $project->objectName = $req->input('objectName');
         $project->endCustomer = $req->input('endCustomer');
