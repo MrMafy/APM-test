@@ -16,6 +16,10 @@
         <div class="tab-content" id="pills-tabContent">
             <form action="{{ route('project-map-update-submit', $project->id) }}" method="post">
                 @csrf
+                <div class="mb-3">
+                    <span>Хэштэг:</span>
+                    <input id="proj_note" name="proj_note" class="form-control w-25" value="{{$project->proj_note}}">
+                </div>
                 {{-- расчет реадктирование --}}
                 <div class="tab-pane fade show active" id="pills-calculation" role="tabpanel"
                     aria-labelledby="pills-calculation-tab">
