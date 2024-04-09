@@ -35,10 +35,17 @@
                                     <div class="d-flex flex-column">
                                         <div class="input-field d-flex gap-3 mb-2">
                                             <p>Номер проекта по реестру:</p>
-                                            <div class="col-3" style="width: 20%;">
-                                                <input type="text" name="projNum" value="{{ $project->projNum }}"
-                                                    class="input_editable" readonly>
-                                            </div>
+                                            @if (Auth::user()->role == 'admin')
+                                                <div class="col-3" style="width: 20%;">
+                                                    <input type="text" name="projNum" value="{{ $project->projNum }}"
+                                                           class="input_editable">
+                                                </div>
+                                            @else
+                                                <div class="col-3" style="width: 20%;">
+                                                    <input type="text" name="projNum" value="{{ $project->projNum }}"
+                                                        class="input_editable" readonly>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="input-field d-flex gap-3 mb-2">
                                             <p>Руководитель проекта:</p>

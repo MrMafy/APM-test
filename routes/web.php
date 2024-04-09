@@ -203,7 +203,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/deleteRow/{id}', 'App\Http\Controllers\reportController@deleteRow')->name('deleteRow');
 
 
-    //создание новой записи в карта проекта -> РИСКИ -> сохранение в БД
+    //создание новой записи в карте проекта -> РИСКИ -> сохранение в БД
     Route::post('/project-maps/all/{id}/store-risks', 'App\Http\Controllers\risksController@store')->name('risks-store');
     Route::get('/getRiskData', 'App\Http\Controllers\risksController@getRiskData');
 

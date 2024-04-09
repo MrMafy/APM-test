@@ -41,7 +41,7 @@ class ProjectController extends Controller
     {
         $user = $request->user();
 
-        if ($user->role === 'admin'){
+        if ($user->role === 'admin') {
             $projects = Projects::all();
         } elseif ($user->role === 'proj_manager') {
 //            $projects = Projects::where('projManager', $user->name)->get();
@@ -56,7 +56,7 @@ class ProjectController extends Controller
             }
 
         } elseif ($user->role === 'responsible') {
-            if ($user->group_num === 'Группа 1'){
+            if ($user->group_num === 'Группа 1') {
                 $projects = Projects::where('projNumSuf', $user->group_num)->get();
             } elseif ($user->group_num === 'Группа 2') {
                 $projects = Projects::where('projNumSuf', $user->group_num)->get();
@@ -143,6 +143,7 @@ class ProjectController extends Controller
         $note->save();
         return redirect()->route('project-data-one', ['id' => $project->id, 'tab' => '#notes'])->with('success', 'Project data successfully updated');
     }
+
     //метод для удаления записи из дневника
     public function destroy(Projects $project, Note $note)
     {
@@ -151,10 +152,12 @@ class ProjectController extends Controller
         }
         return redirect()->route('project-data-one', ['id' => $project->id, 'tab' => '#notes'])->with('success', 'Project data successfully updated');
     }
+
     public function edit(Projects $project, Note $note)
     {
         return back();
     }
+
     public function update(Request $request, Projects $project, Note $note)
     {
         $note->update(['comment' => $request->comment]);
@@ -190,13 +193,13 @@ class ProjectController extends Controller
 
         $templateProcessor->setValue('projNum', $project->projNum);
 
-         // Сохраняем измененный файл
-         $newFilePath = storage_path("notes/дневник {$project->projNum}.docx");
-         $templateProcessor->saveAs($newFilePath);
+        // Сохраняем измененный файл
+        $newFilePath = storage_path("notes/дневник {$project->projNum}.docx");
+        $templateProcessor->saveAs($newFilePath);
 
 
-         // Возврат файла для загрузки
-         return response()->download($newFilePath)->deleteFileAfterSend();
+        // Возврат файла для загрузки
+        return response()->download($newFilePath)->deleteFileAfterSend();
     }
 
     // переход на страницу СОЗДАНИЯ КАРТЫ ПРОЕКТА
@@ -309,7 +312,6 @@ class ProjectController extends Controller
     }
 
 
-
     // Метод для получения данных по выбранному риску
     public function getRiskData(Request $request)
     {
@@ -364,8 +366,32 @@ class ProjectController extends Controller
     public function updateCalculationSubmit($id, Request $req)
     {
         // --------------РАСЧЕТ----------------//
+        $user = $req->user();
+
         // Обновление общая информация по проекту
         $project = Projects::find($id);
+        $old_projNum = Projects::find($id)->projNum;
+
+        switch ($project->projNumSuf) {
+            case 'Группа 1':
+                $this->updateRegistrySinteg($project, $req);
+                break;
+            case 'Группа 2':
+                $this->updateRegistryEob($project, $req);
+                break;
+            case 'Группа 3':
+                $this->updateRegistryNhrs($project, $req);
+                break;
+            case 'Группа 4':
+                $this->updateRegistryOther($project, $req);
+                break;
+        }
+
+        if ($user->role === 'admin') {
+            $project->projNum = $req->input('projNum');
+        }
+
+
         // $project->projNum = $req->input('projNum');
         $project->projManager = $req->input('projManager');
         $project->objectName = $req->input('objectName');
@@ -385,20 +411,6 @@ class ProjectController extends Controller
 
         $project->save();
 
-        switch ($project->projNumSuf) {
-            case 'Группа 1':
-                $this->updateRegistrySinteg($project);
-                break;
-            case 'Группа 2':
-                $this->updateRegistryEob($project);
-                break;
-            case 'Группа 3':
-                $this->updateRegistryNhrs($project);
-                break;
-            case 'Группа 4':
-                $this->updateRegistryOther($project);
-                break;
-        }
 
         // Обновление оборудования
         if ($req->has('equipment')) {
@@ -434,12 +446,10 @@ class ProjectController extends Controller
             }
         }
 
-
-
-        // Прочие расходы
-        $expenses = Expenses::where('project_num', $project->projNum)->firstOrFail();
+        // Прочие расходы.
+        // Получаем запись расходов, где project_num равен старому значению
+        $expenses = Expenses::where('project_num', $old_projNum)->firstOrFail();
         $total = 0;
-
         // Обработка основных расходов
         foreach ($req->input('expense') as $index => $expenseData) {
             foreach ($expenseData as $key => $value) {
@@ -450,7 +460,6 @@ class ProjectController extends Controller
                 }
             }
         }
-
         // Обновление или создание записей о дополнительных расходах
         if ($req->has('additional_expenses')) {
             foreach ($req->input('additional_expenses') as $id => $additionalExpenseData) {
@@ -470,16 +479,16 @@ class ProjectController extends Controller
                 }
             }
         }
-
+        // Обновляем project_num на новое значение
+        $expenses->project_num = $project->projNum;
         // Сохранение общей стоимости расходов
         $expenses->total = $total;
-
-
         $expenses->save();
 
 
-        //итого
-        $totals = Total::where('project_num', $project->projNum)->first();
+        //КСГ
+//        $totals = Total::where('project_num', $project->projNum)->first();
+        $totals = Total::where('project_num', $old_projNum)->firstOrFail();
         if ($totals) {
             $kdDays = floatval($req->kdDays);
             $equipmentDays = floatval($req->equipmentDays);
@@ -497,8 +506,10 @@ class ProjectController extends Controller
                 'productionDays' => $productionDays,
                 'shipmentDays' => $shipmentDays,
             ]);
+            $totals->project_num = $project->projNum;
             $totals->save();
         }
+
         //уровень наценки
         if ($req->has('markup')) {
             Markup::where('project_num', $project->projNum)->delete();
@@ -515,9 +526,10 @@ class ProjectController extends Controller
             }
             Markup::insert($data_markups);
         }
+
         // контакт лист
         if ($req->has('contact')) {
-            Contacts::where('project_num', $project->projNum)->delete();
+            Contacts::where('project_num', $old_projNum)->delete();
             $data_contacts = [];
             foreach ($req->input('contact') as $index => $contactsData) {
                 $item = [
@@ -536,7 +548,7 @@ class ProjectController extends Controller
         // риски
         if ($req->has('risk')) {
             // Удаляем существующие риски проекта
-            CalcRisk::where('project_num', $project->projNum)->delete();
+            CalcRisk::where('project_num', $old_projNum)->delete();
 
             $data_risks = [];
             foreach ($req->input('risk') as $index => $riskData) {
@@ -549,21 +561,8 @@ class ProjectController extends Controller
             // Вставляем новые данные о рисках
             CalcRisk::insert($data_risks);
         }
-        // if ($req->has('risk')) {
-        //     foreach ($req->input('risk') as $index => $risksData) {
-        //         $criteria = [
-        //             'project_num' => $project->projNum,
-        //         ];
 
-        //         $updateData = [
-        //             'calcRisk_name' => $risksData['riskName'],
-        //         ];
-
-        //         // Не указываем идентификатор, пусть база данных сама назначит автоинкрементный идентификатор
-        //         CalcRisk::updateOrCreate($criteria, $updateData);
-        //     }
-        // }
-        return redirect()->route('project-data-one', ['id' => $project->id, 'tab' => '#calculation'])->with('success', 'Project data successfully updated');
+        return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation']);
     }
 
     // ------------------- УДАЛЕНИЕ СТРОК ИЗ ТАБЛИЦЫ РАСЧЕТ ВО ВРЕМЯ РЕДАКТИРОВАНИЯ -----------------------------------
@@ -623,6 +622,7 @@ class ProjectController extends Controller
         $user = Auth::user();
         return view('update-realization', ['project' => $project->find($id), 'user']);
     }
+
     // РЕДАКТИРОВАНИЕ данных для карты проекта -> РЕАЛИЗАЦИЯ
     public function updateRealizationSubmit($id, Request $req)
     {
@@ -717,7 +717,6 @@ class ProjectController extends Controller
     }
 
 
-
     public function search(Request $request)
     {
         $user = $request->user();
@@ -752,7 +751,7 @@ class ProjectController extends Controller
             return view('search', ['noResults' => true]);
         }
 
-       return view('search', compact('data', 'search_text'));
+        return view('search', compact('data', 'search_text'));
     }
 
 
@@ -783,11 +782,13 @@ class ProjectController extends Controller
             'projectManager' => $project->projManager,
         ]);
     }
+
     // группа 1
     private function addToRegistrySinteg($project)
     {
 //        Log::info('Adding to registry SInteg 1:');
 //        Log::info($project->toArray());
+
 
         RegSInteg::create([
             'vnNum' => $project->projNum,
@@ -808,6 +809,7 @@ class ProjectController extends Controller
             'projectManager' => $project->projManager,
         ]);
     }
+
     // группа 3
     private function addToRegistryNhrs($project)
     {
@@ -833,6 +835,7 @@ class ProjectController extends Controller
             'projectManager' => $project->projManager,
         ]);
     }
+
     // группа 4
     private function addToRegistryOther($project)
     {
@@ -861,37 +864,17 @@ class ProjectController extends Controller
 
     // --------------- ИЗМЕНЕНИЯ В РЕЕСТРЕ ИЗ КАРТЫ ПРОЕКТА ----------------------------
     // группа 1
-    private function updateRegistryEob($project)
-    {
-        $registry = RegEob::where('vnNum', $project->projNum)->first();
-
-        if ($registry) {
-            $registry->update([
-                'purchaseName' => $project->objectName,
-                'delivery' => $project->delivery,
-                'pir' => $project->pir,
-                'kd' => $project->kd,
-                'prod' => $project->production,
-                'shmr' => $project->smr,
-                'pnr' => $project->pnr,
-                'po' => $project->po,
-                'smr' => $project->cmr,
-                'purchaseOrg' => $project->contractor,
-                'endUser' => $project->endCustomer,
-                'object' => $project->objectName,
-                'receiptDate' => $project->date_application,
-                'submissionDate' => $project->date_offer,
-                'projectManager' => $project->projManager,
-            ]);
-        }
-    }
-    // группа 2
-    private function updateRegistrySinteg($project)
+    private function updateRegistrySinteg($project, Request $req)
     {
         $registry = RegSInteg::where('vnNum', $project->projNum)->first();
 
+        $user = $req->user();
+        if ($user->role === 'admin')
+            $project->projNum = $req->input('projNum');
+
         if ($registry) {
             $registry->update([
+                'vnNum' => $project->projNum,
                 'purchaseName' => $project->objectName,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
@@ -910,13 +893,50 @@ class ProjectController extends Controller
             ]);
         }
     }
+
+    // группа 2
+    private function updateRegistryEob($project, Request $req)
+    {
+        $registry = RegEob::where('vnNum', $project->projNum)->first();
+
+        $user = $req->user();
+        if ($user->role === 'admin')
+            $project->projNum = $req->input('projNum');
+
+        if ($registry) {
+            $registry->update([
+                'vnNum' => $project->projNum,
+                'purchaseName' => $project->objectName,
+                'delivery' => $project->delivery,
+                'pir' => $project->pir,
+                'kd' => $project->kd,
+                'prod' => $project->production,
+                'shmr' => $project->smr,
+                'pnr' => $project->pnr,
+                'po' => $project->po,
+                'smr' => $project->cmr,
+                'purchaseOrg' => $project->contractor,
+                'endUser' => $project->endCustomer,
+                'object' => $project->objectName,
+                'receiptDate' => $project->date_application,
+                'submissionDate' => $project->date_offer,
+                'projectManager' => $project->projManager,
+            ]);
+        }
+    }
+
     // группа 3
-    private function updateRegistryNhrs($project)
+    private function updateRegistryNhrs($project, Request $req)
     {
         $registry = RegNHRS::where('vnNum', $project->projNum)->first();
 
+        $user = $req->user();
+        if ($user->role === 'admin')
+            $project->projNum = $req->input('projNum');
+
         if ($registry) {
             $registry->update([
+                'vnNum' => $project->projNum,
                 'purchaseName' => $project->objectName,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
@@ -935,13 +955,19 @@ class ProjectController extends Controller
             ]);
         }
     }
+
     // группа 4
-    private function updateRegistryOther($project)
+    private function updateRegistryOther($project, Request $req)
     {
         $registry = RegOther::where('vnNum', $project->projNum)->first();
 
+        $user = $req->user();
+        if ($user->role === 'admin')
+            $project->projNum = $req->input('projNum');
+
         if ($registry) {
             $registry->update([
+                'vnNum' => $project->projNum,
                 'purchaseName' => $project->objectName,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
@@ -1003,6 +1029,7 @@ class ProjectController extends Controller
         }
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation'])->with('success', 'Project data successfully added');
     }
+
     // --------------- ДОБАВЛЕНИЕ ПРОЧИХ РАСХОДОВ  ----------------------------
     public function addExpenses($id, Request $request)
     {
@@ -1021,7 +1048,7 @@ class ProjectController extends Controller
         $ppo = floatval($request->ppo);
         $guarantee = floatval($request->guarantee);
         $check = floatval($request->check);
-        $total =  $commandir + $rd + $shmr + $pnr + $cert + $delivery + $rastam + $ppo + $guarantee + $check; // Расчёт всего
+        $total = $commandir + $rd + $shmr + $pnr + $cert + $delivery + $rastam + $ppo + $guarantee + $check; // Расчёт всего
         $expenses->project_num = $project->projNum;
         $expenses->commandir = $request->commandir;
         $expenses->rd = $request->rd;
@@ -1034,11 +1061,12 @@ class ProjectController extends Controller
         $expenses->guarantee = $request->guarantee;
         $expenses->check = $request->check;
 
-        $expenses->total =  $total;
+        $expenses->total = $total;
         $expenses->save();
 
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation'])->with('success', 'Project data successfully added');
     }
+
     // --------------- ДОБАВЛЕНИЕ ИТОГО ----------------------------
     public function addTotals($id, Request $request)
     {
@@ -1087,6 +1115,7 @@ class ProjectController extends Controller
             return redirect()->back()->with('error', 'Expenses data not found for the project');
         }
     }
+
     // --------------- ДОБАВЛЕНИЕ УРОВНЯ НАЦЕНКИ ----------------------------
     public function addMarkups($id, Request $request)
     {
@@ -1108,6 +1137,7 @@ class ProjectController extends Controller
         }
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation'])->with('success', 'Project data successfully added');
     }
+
     // --------------- ДОБАВЛЕНИЕ РИСКИ ----------------------------
     public function addRisks($id, Request $request)
     {
@@ -1127,7 +1157,6 @@ class ProjectController extends Controller
 
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation'])->with('success', 'Project data successfully added');
     }
-
 
 
     // ------------------------ ПРОДОЛЖЕНИЕ ЗАПОЛНЕНИЯ КАРТЫ ПРОЕКТА -------------
