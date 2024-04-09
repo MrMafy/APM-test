@@ -43,11 +43,15 @@
                                                 <div class="col-3" style="width: 20%;">
                                                     <input type="text" name="projNum" value="{{ $project->projNum }}"
                                                            class="input_editable">
+                                                    <input type="hidden" name="projNumPre" value="{{ $project->projNumPre }}"
+                                                           class="input_editable">
                                                 </div>
                                             @else
                                                 <div class="col-3" style="width: 20%;">
                                                     <input type="text" name="projNum" value="{{ $project->projNum }}"
                                                         class="input_editable" readonly>
+                                                    <input type="hidden" name="projNumPre" value="{{ $project->projNumPre }}"
+                                                           class="input_editable">
                                                 </div>
                                             @endif
                                         </div>

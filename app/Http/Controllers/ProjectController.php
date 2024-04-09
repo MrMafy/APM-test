@@ -236,16 +236,21 @@ class ProjectController extends Controller
 
         // Определение количества проектов в выбранной группе
         $group = $request->projNumSuf;
-        $lastProjectInGroup = Projects::where('projNumSuf', $group)->orderBy('id', 'desc')->first();
+        $year = $request->projNumPre;
+//        $lastProjectInGroup = Projects::where('projNumSuf', $group)->orderBy('id', 'desc')->first();
+        $lastProjectInGroup = Projects::where('projNumSuf', $group)->where('projNumPre', $year)->orderBy('id', 'desc')->first();
 
         // Определение номера проекта в пределах группы
         $projectNumberInGroup = ($lastProjectInGroup) ? explode('-', $lastProjectInGroup->projNum)[0] + 1 : 1;
 
         // Формирование номера проекта
-        $projectNumber = $projectNumberInGroup . '-' . $request->projNumPre . ' ' . $group;
+//        $projectNumber = $projectNumberInGroup . '-' . $request->projNumPre . ' ' . $group;
+        // Формирование номера проекта
+        $projectNumber = $projectNumberInGroup . '-' . $year . ' ' . $group;
 
         // Создание записи проекта
         $project = new Projects;
+        $project->projNumPre = $request->projNumPre;;
         $project->projNum = $projectNumber;
         $project->projNumSuf = $group;
 
@@ -386,9 +391,23 @@ class ProjectController extends Controller
 
         if ($user->role === 'admin') {
             $project->projNum = $req->input('projNum');
+
+            $project->projNumPre =$req->input('projNumPre');
         }
 
+        //ВЫТАСКИВАНИЕ ГОДА ИЗ НОМЕРА ПРОЕКТА (projNum)
+        // Пример строки проекта
+        $projNum = $req->input('projNum');
+        // Разбиение строки по пробелу
+        $parts = explode(' ', $projNum);
+        // Получение первого элемента после разделения по пробелу
+        $numberPart = $parts[0];
+        // Далее, разбиваем эту часть по дефису
+        $numberParts = explode('-', $numberPart);
+        // Получение второго элемента после разделения по дефису
+        $desiredValue = $numberParts[1];
 
+        $project->projNumPre =$desiredValue;
         // $project->projNum = $req->input('projNum');
         $project->proj_note = $req->input('proj_note');
         $project->projManager = $req->input('projManager');
