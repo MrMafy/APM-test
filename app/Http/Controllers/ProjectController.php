@@ -40,34 +40,34 @@ class ProjectController extends Controller
     public function allData(Request $request)
     {
         $user = $request->user();
+        $projects = Projects::all();
 
-        if ($user->role === 'admin') {
-            $projects = Projects::all();
-        } elseif ($user->role === 'proj_manager') {
-//            $projects = Projects::where('projManager', $user->name)->get();
-            if ($user->group_num === 'Группа 1') {
-                $projects = Projects::where('projManager', $user->name)->get();
-            } elseif ($user->group_num === 'Группа 2') {
-                $projects = Projects::where('projManager', $user->name)->get();
-            } elseif ($user->group_num === 'Группа 3') {
-                $projects = Projects::where('projManager', $user->name)->get();
-            } elseif ($user->group_num === 'Группа 4') {
-                $projects = Projects::where('projManager', $user->name)->get();
-            }
-
-        } elseif ($user->role === 'responsible') {
-            if ($user->group_num === 'Группа 1') {
-                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-            } elseif ($user->group_num === 'Группа 2') {
-                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-            } elseif ($user->group_num === 'Группа 3') {
-                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-            } elseif ($user->group_num === 'Группа 4') {
-                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-            }
-
-        }
-        return view('all-maps', ['data' => $projects]);
+//        if ($user->role === 'admin') {
+//            $projects = Projects::all();
+//        } elseif ($user->role === 'proj_manager') {
+//            if ($user->group_num === 'Группа 1') {
+//                $projects = Projects::where('projManager', $user->name)->get();
+//            } elseif ($user->group_num === 'Группа 2') {
+//                $projects = Projects::where('projManager', $user->name)->get();
+//            } elseif ($user->group_num === 'Группа 3') {
+//                $projects = Projects::where('projManager', $user->name)->get();
+//            } elseif ($user->group_num === 'Группа 4') {
+//                $projects = Projects::where('projManager', $user->name)->get();
+//            }
+//
+//        } elseif ($user->role === 'responsible') {
+//            if ($user->group_num === 'Группа 1') {
+//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+//            } elseif ($user->group_num === 'Группа 2') {
+//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+//            } elseif ($user->group_num === 'Группа 3') {
+//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+//            } elseif ($user->group_num === 'Группа 4') {
+//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+//            }
+//
+//        }
+        return view('all-maps', ['data' => $projects, 'user' => $user]);
 
     }
 

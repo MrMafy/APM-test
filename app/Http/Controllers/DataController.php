@@ -7,6 +7,8 @@ use App\Models\RegSInteg;
 use App\Models\RegEOB;
 use App\Models\RegNHRS;
 use App\Models\RegOther;
+use App\Models\UserGroup;
+use App\Models\Group;
 
 class DataController extends Controller
 {
@@ -17,6 +19,8 @@ class DataController extends Controller
 //        $RegEOB = [];
 //        $RegNHRS = [];
 //        $RegOther = [];
+        $UserGroup = UserGroup::all();
+        $Group = Group::all();
         $RegSInteg = RegSInteg::all();
         $RegEOB = RegEOB::all();
         $RegNHRS = RegNHRS::all();
@@ -50,7 +54,7 @@ class DataController extends Controller
 //            }
 //        }
 
-        return view('home', compact('RegSInteg', 'RegEOB', 'RegNHRS', 'RegOther'))->with('user', $user);
+        return view('home', compact('UserGroup','Group', 'RegSInteg', 'RegEOB', 'RegNHRS', 'RegOther'))->with('user', $user);
     }
 
     public function getData_group_1(Request $request)

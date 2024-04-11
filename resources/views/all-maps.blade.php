@@ -20,13 +20,17 @@
         <div id="resultsContainer"> <!-- Этот блок будет содержать результаты поиска -->
             @if (count($data) > 0)
                 @foreach ($data as $el)
-                    <div class="alert alert-info">
-                        <h3>{{ $el->projNum }}</h3>
-                        <p>{{ $el->projManager }}</p>
-                        <p><small>{{ $el->objectName }}</small></p>
-                        <a href="{{ route('project-data-one', ['id' => $el->id, 'tab' => '#calculation']) }}"><button
-                                class="btn btn-outline-primary">Детальнее</button></a>
-                    </div>
+                    @if ($user->role === 'admin' ||
+                         ($user->role === 'proj_manager' && $user->name === $el->projManager) ||
+                         ($user->role === 'responsible' && $user->groups->contains('name', $el->projNumSuf)))
+                        <div class="alert alert-info">
+                            <h3>{{ $el->projNum }}</h3>
+                            <p>{{ $el->projManager }}</p>
+                            <p><small>{{ $el->objectName }}</small></p>
+                            <a href="{{ route('project-data-one', ['id' => $el->id, 'tab' => '#calculation']) }}"><button
+                                    class="btn btn-outline-primary">Детальнее</button></a>
+                        </div>
+                    @endif
                 @endforeach
                 <div class="d-flex justify-content-center">
 {{--                    {!! $data->links() !!}--}}
