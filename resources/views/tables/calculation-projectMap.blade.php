@@ -3,21 +3,23 @@
         $project->equipment->first() &&
         $project->expenses()->exists() &&
         $project->expenses->first())
-
-    <div class="d-flex gap-4 align-items-center mb-4">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
-            Сформировать КП
-        </a>
-        <div>
-            <span>Хэштэг:</span>
-            <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
-        </div>
-        <div class="d-flex gap-3 mt-5">
-            <a href="{{ route('project-map-update', ['id' => $project->id, 'tab' => 'calculation']) }}">
-                <button class="btn btn-primary">Редактировать</button>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-4 align-items-center mb-4">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
+                Сформировать КП
             </a>
-            {{-- <a href="{{ route('project-map-delete', $project->id) }}"><button class="btn btn-danger">Удалить</button></a> --}}
+            <div>
+                <span>Хэштэг:</span>
+                <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
+            </div>
+            <div class="d-flex gap-3 mt-5">
+                <a href="{{ route('project-map-update', ['id' => $project->id, 'tab' => 'calculation']) }}">
+                    <button class="btn btn-primary">Редактировать</button>
+                </a>
+                {{-- <a href="{{ route('project-map-delete', $project->id) }}"><button class="btn btn-danger">Удалить</button></a> --}}
+            </div>
         </div>
+        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#redirectModal">Переназначить проект </button>
     </div>
 
     <div class="accordion calculation" id="accordionCalculation">
@@ -449,18 +451,22 @@
 
     </div>
 @else
-    <div class="btns d-flex align-items-center gap-4 mb-4">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#addContinueModal" class="btn btn-lg btn-danger">
-            Продолжить заполнение расчета
-        </a>
-        <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
-            Сформировать КП
-        </a>
-        <div data-toggle="tooltip" title="Для изменения нажмите редактировать">
-            <span>Хэштэг:</span>
-            <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="btns d-flex align-items-center gap-4 mb-4">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#redirectModal" class="btn btn-lg btn-danger">
+                Продолжить заполнение расчета
+            </a>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">
+                Сформировать КП
+            </a>
+            <div data-toggle="tooltip" title="Для изменения нажмите редактировать">
+                <span>Хэштэг:</span>
+                <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
+            </div>
         </div>
+        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#redirectModal">Переназначить проект </button>
     </div>
+
     <div class="accordion calculation" id="accordionCalculation">
         <div class="accordion-item">
             <h2 class="accordion-header" id="calculation-headingOne">
@@ -615,9 +621,9 @@
 
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Send AJAX request to update project note on focus out
-            $('#proj_note').focusout(function() {
+            $('#proj_note').focusout(function () {
                 var noteValue = $(this).val();
                 var projectId = {{ $project->id }};
                 $.ajax({
@@ -627,11 +633,11 @@
                         value: noteValue,
                         _token: '{{ csrf_token() }}' // Add CSRF token for Laravel
                     },
-                    success: function(response) {
+                    success: function (response) {
                         console.log(response.message);
                         // Optionally, display a message or perform other actions upon successful update
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                         // Optionally, handle errors
                     }
@@ -913,3 +919,31 @@
     </script>
 @endif
 
+<div class="modal fade" id="redirectModal" tabindex="-1" aria-labelledby="redirectModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog w-50">
+        <form  action="{{ route('project-continue', $project->id) }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="redirectModalLabel">Переназначение карты проекта:
+                        {{ $project->projNum }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-5">Текущий руководитель проекта: {{ $project->projManager }}</p>
+                    <span>Выберите нового руководителя проекта:</span>
+                    <select>
+
+                    </select>
+                </div>
+                {{-- Кнопки --}}
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Переназначить</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

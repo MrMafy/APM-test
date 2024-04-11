@@ -11,4 +11,8 @@ class UserGroup extends Model
     {
         return $this->belongsTo('App\Group', 'group_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

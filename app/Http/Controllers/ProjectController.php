@@ -28,6 +28,8 @@ use App\Models\RegEOB;
 use App\Models\RegNHRS;
 use App\Models\RegOther;
 use App\Models\RegSInteg;
+use App\Models\User;
+use App\Models\UserGroup;
 
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -85,7 +87,8 @@ class ProjectController extends Controller
         $project = Projects::with('equipment', 'expenses', 'totals', 'contacts', 'risks', 'workGroup', 'basicReference', 'basicInfo', 'notes')->find($id);
         $notes = $project->notes()->paginate(3);
         $user = auth()->user();
-
+        $users = User::all(); // Получить всех пользователей
+        $groups = UserGroup::all();
         if (!$project) {
             abort(404, 'Project not found');
         }
@@ -100,7 +103,7 @@ class ProjectController extends Controller
         }
 
         if (view()->exists("tables.{$tab}-projectMap")) {
-            return view('project-map', compact('baseRisks', 'project', 'tab', 'user'));
+            return view('project-map', compact('baseRisks', 'project', 'tab', 'user', 'users', 'groups'));
         } else {
             abort(404, 'Tab not found');
         }
