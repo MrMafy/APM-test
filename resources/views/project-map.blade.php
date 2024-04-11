@@ -10,39 +10,40 @@
 
                 <ul class="nav nav-mytabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link{{ $tab === 'calculation' ? ' active' : '' }}"id="calculation-tab" data-toggle="tab"
-                            href="#calculation" role="tab" aria-controls="calculation" aria-selected="true">Расчет</a>
+                        <a class="nav-link{{ $tab === 'calculation' ? ' active' : '' }}" id="calculation-tab"
+                           data-toggle="tab"
+                           href="#calculation" role="tab" aria-controls="calculation" aria-selected="true">Расчет</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="realization-tab" data-toggle="tab" href="#realization" role="tab"
-                            aria-controls="realization" aria-selected="false">Реализация</a>
+                           aria-controls="realization" aria-selected="false">Реализация</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="risks-tab" data-toggle="tab" href="#risks" role="tab"
-                            aria-controls="risks" aria-selected="false">Риски</a>
+                           aria-controls="risks" aria-selected="false">Риски</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="changes-tab" data-toggle="tab" href="#changes" role="tab"
-                            aria-controls="changes" aria-selected="false">Изменения</a>
+                           aria-controls="changes" aria-selected="false">Изменения</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="report-tab" data-toggle="tab" href="#report" role="tab"
-                            aria-controls="report" aria-selected="false">Отчет</a>
+                           aria-controls="report" aria-selected="false">Отчет</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="smk-tab" data-toggle="tab" href="#smk" role="tab"
-                            aria-controls="smk" aria-selected="false">СМК</a>
+                           aria-controls="smk" aria-selected="false">СМК</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="notes-tab" data-toggle="tab" href="#notes" role="tab"
-                            aria-controls="notes" aria-selected="false">Дневник проекта</a>
+                           aria-controls="notes" aria-selected="false">Дневник проекта</a>
                     </li>
                 </ul>
 
 
                 <div class="tab-content mytab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="calculation" role="tabpanel"
-                        aria-labelledby="calculation-tab">
+                         aria-labelledby="calculation-tab">
                         {{-- @include('tables.calculation-projectMap') --}}
                     </div>
                     <div class="tab-pane fade" id="realization" role="tabpanel" aria-labelledby="realization-tab">
@@ -69,9 +70,10 @@
     </div>
 
     {{-- ---------------- ОКНО ЗАПОЛНЕНИЯ КАРТЫ ------------------- --}}
-    <div class="modal fade" id="addContinueModal" tabindex="-1" aria-labelledby="addContinueModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addContinueModal" tabindex="-1" aria-labelledby="addContinueModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
-            <form id="addContinueForm" action="{{ route('project-continue', $project->id) }}" method="post">
+            <form id="addContinueForm" action="{{ route('project-continue', $project->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -150,31 +152,31 @@
                             <h4 class="text-center mb-3">Контакт-лист</h4>
                             <table id="markups-contacts-datatable" class="display nowrap projMap" style="width:100%">
                                 <thead>
-                                    <tr>
-                                        {{-- <th>№</th> --}}
-                                        <th>ФИО</th>
-                                        <th>Должность</th>
-                                        <th>Организация</th>
-                                        <th>Зона ответственности</th>
-                                        <th>Телефон</th>
-                                        <th>Эл.почта</th>
-                                    </tr>
+                                <tr>
+                                    {{-- <th>№</th> --}}
+                                    <th>ФИО</th>
+                                    <th>Должность</th>
+                                    <th>Организация</th>
+                                    <th>Зона ответственности</th>
+                                    <th>Телефон</th>
+                                    <th>Эл.почта</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($project->contacts->count() > 0)
-                                        @foreach ($project->contacts as $index => $contact)
-                                            <tr>
-                                                {{-- <td>{{ $contact->id }}</td> --}}
-                                                <td>{{ $contact->fio }}</td>
-                                                <td>{{ $contact->post }}</td>
-                                                <td>{{ $contact->organization }}</td>
-                                                <td>{{ $contact->responsibility }}</td>
-                                                <td>{{ $contact->phone }}</td>
-                                                <td>{{ $contact->email }}</td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                    @endif
+                                @if ($project->contacts->count() > 0)
+                                    @foreach ($project->contacts as $index => $contact)
+                                        <tr>
+                                            {{-- <td>{{ $contact->id }}</td> --}}
+                                            <td>{{ $contact->fio }}</td>
+                                            <td>{{ $contact->post }}</td>
+                                            <td>{{ $contact->organization }}</td>
+                                            <td>{{ $contact->responsibility }}</td>
+                                            <td>{{ $contact->phone }}</td>
+                                            <td>{{ $contact->email }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                @endif
                                 </tbody>
                             </table>
                         </div>
@@ -185,43 +187,47 @@
                                 <div class="mb-3">
                                     <table id="equipment-datatable" class="display nowrap projMap" style="width:100%">
                                         <thead>
-                                            <tr>
-                                                <th>Наименование ТМЦ</th>
-                                                <th>Производитель</th>
-                                                <th>Ед. изм.</th>
-                                                <th>Кол-во</th>
-                                                <th>Цена за ед. (руб. без НДС)</th>
-                                                <th></th>
-                                            </tr>
+                                        <tr>
+                                            <th>Наименование ТМЦ</th>
+                                            <th>Производитель</th>
+                                            <th>Ед. изм.</th>
+                                            <th>Кол-во</th>
+                                            <th>Цена за ед. (руб. без НДС)</th>
+                                            <th></th>
+                                        </tr>
                                         </thead>
                                         <tbody id="equipment-inputs">
-                                            <tr>
-                                                <td><input type="text" class="form-control"
-                                                        name="equipment[0][nameTMC]" id="nameTMC"
-                                                        placeholder="Введите наименование ТМЦ"></td>
-                                                <td> <input type="text" class="form-control"
-                                                        name="equipment[0][manufacture]" id="manufacture"
-                                                        placeholder="Введите производителя"></td>
-                                                <td><input type="text" class="form-control" name="equipment[0][unit]"
-                                                        id="unit" placeholder="Введите ед.изм."></td>
-                                                <td> <input type="text" class="form-control"
-                                                        name="equipment[0][count]" id="count"
-                                                        placeholder="Введите количество"></td>
-                                                <td><input type="text" class="form-control"
-                                                        name="equipment[0][priceUnit]" id="priceUnit"
-                                                        placeholder="Введите цену за ед." pattern="\d+(\.\d+)?" inputmode="decimal"
-                                                           data-toggle="tooltip" title="Введите число с точкой, а не запятой"></td>
-                                                <td></td>
-                                            </tr>
+                                        <tr>
+                                            <td><input type="text" class="form-control"
+                                                       name="equipment[0][nameTMC]" id="nameTMC"
+                                                       placeholder="Введите наименование ТМЦ"></td>
+                                            <td><input type="text" class="form-control"
+                                                       name="equipment[0][manufacture]" id="manufacture"
+                                                       placeholder="Введите производителя"></td>
+                                            <td><input type="text" class="form-control" name="equipment[0][unit]"
+                                                       id="unit" placeholder="Введите ед.изм."></td>
+                                            <td><input type="text" class="form-control"
+                                                       name="equipment[0][count]" id="count"
+                                                       placeholder="Введите количество"></td>
+                                            <td><input type="text" class="form-control"
+                                                       name="equipment[0][priceUnit]" id="priceUnit"
+                                                       placeholder="Введите цену за ед." pattern="\d+(\.\d+)?"
+                                                       inputmode="decimal"
+                                                       data-toggle="tooltip"
+                                                       title="Введите число с точкой, а не запятой"></td>
+                                            <td></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <button type="button" id="addMore-equipment" data-target="equipment"
-                                class="btn btn-secondary addMore-button">
-                                Добавить еще оборудование
-                            </button>
-
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="button" id="addMore-equipment" data-target="equipment"
+                                        class="btn btn-secondary addMore-button w-100">
+                                    Добавить еще оборудование
+                                </button>
+                                <input type="file" multiple class="form-control" name="equipment_file[]" id="equipment_file">
+                            </div>
                         </div>
                         {{-- Прочие расходы --}}
                         <div class="expenses-add alert pt-3">
@@ -230,66 +236,70 @@
                                 <div class="form-group mb-3">
                                     <label for="commandir">Командировочные:</label>
                                     <input type="text" class="form-control" name="commandir" id="commandir"
-                                        placeholder="Введите командировочные" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите командировочные" pattern="\d+(\.\d+)?"
+                                           inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="rd">РД:</label>
                                     <input type="text" class="form-control" name="rd" id="rd"
-                                        placeholder="Введите РД" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите РД" pattern="\d+(\.\d+)?" inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="shmr">ШМР:</label>
                                     <input type="text" class="form-control" name="shmr" id="shmr"
-                                        placeholder="Введите ШМР" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите ШМР" pattern="\d+(\.\d+)?" inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="pnr">ПНР:</label>
                                     <input type="text" class="form-control" name="pnr" id="pnr"
-                                        placeholder="Введите ПНР" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите ПНР" pattern="\d+(\.\d+)?" inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="cert">Сертификаты:</label>
                                     <input type="text" class="form-control" name="cert" id="cert"
-                                        placeholder="Введите сертификаты" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите сертификаты" pattern="\d+(\.\d+)?" inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="delivery">Доставка/ Логистика:</label>
                                     <input type="text" class="form-control" name="delivery" id="delivery"
-                                        placeholder="Введите доставку/логистику" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите доставку/логистику" pattern="\d+(\.\d+)?"
+                                           inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="rastam">Растаможка:</label>
                                     <input type="text" class="form-control" name="rastam" id="rastam"
-                                        placeholder="Введите растаможку" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите растаможку" pattern="\d+(\.\d+)?" inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="ppo">Разработка ППО:</label>
                                     <input type="text" class="form-control" name="ppo" id="ppo"
-                                        placeholder="Введите разработку ППО" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите разработку ППО" pattern="\d+(\.\d+)?"
+                                           inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="guarantee">Банковская гарантия:</label>
                                     <input type="text" class="form-control" name="guarantee" id="guarantee"
-                                        placeholder="Введите банковскую гарантию" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите банковскую гарантию" pattern="\d+(\.\d+)?"
+                                           inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="check">Поверка:</label>
                                     <input type="text" class="form-control" name="check" id="check"
-                                        placeholder="Введите поверку" pattern="\d+(\.\d+)?" inputmode="decimal"
+                                           placeholder="Введите поверку" pattern="\d+(\.\d+)?" inputmode="decimal"
                                            data-toggle="tooltip" title="Введите число с точкой, а не запятой">
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary addMore-button" id="addMore-expenses"
-                                data-target="expenses">
+                                    data-target="expenses">
                                 Добавить еще дополнительный расход
                             </button>
                         </div>
@@ -299,53 +309,53 @@
                             <div class="form-group mb-3">
                                 <label for="kdDays">Разработка РКД (дн.):</label>
                                 <input type="text" class="form-control" name="kdDays" id="kdDays"
-                                    placeholder="Введите кол-во дней">
+                                       placeholder="Введите кол-во дней">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="equipmentDays">Комплектация (дн.):</label>
                                 <input type="text" class="form-control" name="equipmentDays" id="equipmentDays"
-                                    placeholder="Введите кол-во дней">
+                                       placeholder="Введите кол-во дней">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="productionDays">Производство (дн.):</label>
                                 <input type="text" class="form-control" name="productionDays" id="productionDays"
-                                    placeholder="Введите кол-во дней">
+                                       placeholder="Введите кол-во дней">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="shipmentDays">Доставка (дн.):</label>
                                 <input type="text" class="form-control" name="shipmentDays" id="shipmentDays"
-                                    placeholder="Введите кол-во дней">
+                                       placeholder="Введите кол-во дней">
                             </div>
                         </div>
                         {{-- Уровень наценки --}}
-{{--                        <div class="markups-add alert pt-3">--}}
-{{--                            <h4 class="mb-3">V Уровень наценки</h4>--}}
-{{--                            <div id="markups-inputs">--}}
-{{--                                <div class="mb-3">--}}
-{{--                                    <div class="form-group mb-3">--}}
-{{--                                        <label for="date">Дата:</label>--}}
-{{--                                        <input type="date" class="form-control" name="markups[0][date]"--}}
-{{--                                            id="date" placeholder="Выберите дату">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="form-group mb-3">--}}
-{{--                                        <label for="percentage">% наценки:</label>--}}
-{{--                                        <input type="text" class="form-control" name="markups[0][percentage]"--}}
-{{--                                            id="percentage" placeholder="Введитепроцент наценки">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="form-group mb-3">--}}
-{{--                                        <label for="priceSubTkp">Сумма подачи ТКП в руб. без НДС:</label>--}}
-{{--                                        <input type="text" class="form-control" name="markups[0][priceSubTkp]"--}}
-{{--                                            id="priceSubTkp" placeholder="Введите сумму" pattern="\d+(\.\d+)?" inputmode="decimal"--}}
-{{--                                               data-toggle="tooltip" title="Введите число с точкой, а не запятой">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="form-group mb-3">--}}
-{{--                                        <label for="agreedFio">С кем согласовано (Фамилия И.О.):</label>--}}
-{{--                                        <input type="text" class="form-control" name="markups[0][agreedFio]"--}}
-{{--                                            id="agreedFio" placeholder="Введите ФИО">--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                        {{--                        <div class="markups-add alert pt-3">--}}
+                        {{--                            <h4 class="mb-3">V Уровень наценки</h4>--}}
+                        {{--                            <div id="markups-inputs">--}}
+                        {{--                                <div class="mb-3">--}}
+                        {{--                                    <div class="form-group mb-3">--}}
+                        {{--                                        <label for="date">Дата:</label>--}}
+                        {{--                                        <input type="date" class="form-control" name="markups[0][date]"--}}
+                        {{--                                            id="date" placeholder="Выберите дату">--}}
+                        {{--                                    </div>--}}
+                        {{--                                    <div class="form-group mb-3">--}}
+                        {{--                                        <label for="percentage">% наценки:</label>--}}
+                        {{--                                        <input type="text" class="form-control" name="markups[0][percentage]"--}}
+                        {{--                                            id="percentage" placeholder="Введитепроцент наценки">--}}
+                        {{--                                    </div>--}}
+                        {{--                                    <div class="form-group mb-3">--}}
+                        {{--                                        <label for="priceSubTkp">Сумма подачи ТКП в руб. без НДС:</label>--}}
+                        {{--                                        <input type="text" class="form-control" name="markups[0][priceSubTkp]"--}}
+                        {{--                                            id="priceSubTkp" placeholder="Введите сумму" pattern="\d+(\.\d+)?" inputmode="decimal"--}}
+                        {{--                                               data-toggle="tooltip" title="Введите число с точкой, а не запятой">--}}
+                        {{--                                    </div>--}}
+                        {{--                                    <div class="form-group mb-3">--}}
+                        {{--                                        <label for="agreedFio">С кем согласовано (Фамилия И.О.):</label>--}}
+                        {{--                                        <input type="text" class="form-control" name="markups[0][agreedFio]"--}}
+                        {{--                                            id="agreedFio" placeholder="Введите ФИО">--}}
+                        {{--                                    </div>--}}
+                        {{--                                </div>--}}
+                        {{--                            </div>--}}
+                        {{--                        </div>--}}
                         {{-- Риски --}}
                         <div class="risks-add alert pt-3">
                             <h4 class="mb-3">V Риски</h4>
@@ -353,11 +363,11 @@
                                 <div class="form-group mb-3">
                                     <label for="riskName">Наименование риска:</label>
                                     <input type="riskName" class="form-control" name="risks[0][riskName]" id="riskName"
-                                        placeholder="Введите наименование риска">
+                                           placeholder="Введите наименование риска">
                                 </div>
                             </div>
                             <button type="button" id="addMore-risks" data-target="risks"
-                                class="btn btn-secondary addMore-button">
+                                    class="btn btn-secondary addMore-button">
                                 Добавить еще риск
                             </button>
                         </div>
@@ -387,7 +397,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" class="form-control" name="project_num" id="projectNum"
-                            value="{{ $project->projNum }}">
+                               value="{{ $project->projNum }}">
                         <div class="mb-3">
                             <!-- Другие поля формы -->
                             {{-- <div class="form-group mb-3">
@@ -398,32 +408,33 @@
                             <div class="form-group mb-3">
                                 <label for="orgName">Наименование организации:</label>
                                 <input type="text" class="form-control" name="offer[0][orgName]" id="orgName"
-                                    placeholder="Введите наименование организации" required="" value="{{ $project->endCustomer }}">
+                                       placeholder="Введите наименование организации" required=""
+                                       value="{{ $project->endCustomer }}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="whom">Кому:</label>
                                 <input type="text" class="form-control" name="offer[0][whom]" id="whom"
-                                    placeholder="Введите получателя КП" value="{{ $project->endCustomer }}">
+                                       placeholder="Введите получателя КП" value="{{ $project->endCustomer }}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="sender">Отправитель:</label>
                                 <input type="text" class="form-control" name="offer[0][sender]" id="sender"
-                                    placeholder="Введите отправителя" required="" value="{{ $user-> name}}">
+                                       placeholder="Введите отправителя" required="" value="{{ $user-> name}}">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="amountNDS">Сумма в НДС:</label>
                                 <input type="text" class="form-control" name="offer[0][amountNDS]" id="amountNDS"
-                                    placeholder="Введите сумму в НДС" required="">
+                                       placeholder="Введите сумму в НДС" required="">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="purchNum">№ закупки</label>
                                 <input type="text" class="form-control" name="offer[0][purchNum]" id="purchNum"
-                                    placeholder="Введите номер закупки">
+                                       placeholder="Введите номер закупки">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="date">Дата:</label>
                                 <input type="date" class="form-control" name="offer[0][date]" id="date"
-                                    value="{{ date('Y-m-d') }}">
+                                       value="{{ date('Y-m-d') }}">
                             </div>
 
                             <div class="form-group mb-3">
@@ -445,7 +456,7 @@
                             <div class="form-group mb-3">
                                 <label for="additionalFiles">Дополнительные файлы Word:</label>
                                 <input type="file" class="form-control" name="additional_files[]"
-                                    id="additionalFiles" multiple>
+                                       id="additionalFiles" multiple>
                             </div>
                         </div>
                     </div>
@@ -460,7 +471,7 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // $('#{{ $tab }}-tab').click();
             $('#{{ $tab }}-tab').tab('show');
 
@@ -485,14 +496,14 @@
                 $.ajax({
                     url: `/tables/${tabId}/${projectId}`, // Use the correct URL with both tabId and projectId
                     type: 'GET',
-                    success: function(response) {
+                    success: function (response) {
                         $(`#${tabId}`).html(response.content);
                         $(`#myTab a[href="#${tabId}"]`).tab("show");
 
                         const newUrl = `${url.split("#")[0]}#${tabId}`;
                         history.replaceState(null, null, newUrl);
                     },
-                    error: function(error) {
+                    error: function (error) {
                         console.error('Error fetching tab content:', error);
                     }
                 });
@@ -519,7 +530,7 @@
                 loadTabContent(tabId, '{{ $project->id }}'); // Передаем ID проекта при загрузке страницы
             }
 
-            $('a[data-toggle="tab"]').on("click", function() {
+            $('a[data-toggle="tab"]').on("click", function () {
                 const tabId = $(this).attr("aria-controls");
                 loadTabContent(tabId, '{{ $project->id }}'); // Pass both tabId and projectId
             });

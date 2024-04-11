@@ -34,4 +34,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Projects::class);
     }
+    public function groups()
+    {
+        return $this->belongsToMany('App\Models\Group', 'user_groups', 'user_id', 'group_id');
+    }
+
 }

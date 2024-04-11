@@ -145,6 +145,8 @@ Route::middleware(['auth'])->group(function () {
 
     // ---------------- ДОБАВЛЕНИЕ ОБОРУДОВАНИЯ -----------------
     Route::post('/project-continue/{id}', 'App\Http\Controllers\ProjectController@projectСontinue')->name('project-continue');
+    Route::get('/download-equipment-file/{id}', 'App\Http\Controllers\ProjectController@downloadEquipmentFile')->name('download-equipment-file');
+
 
 
     // ---------------- ДОБАВЛЕНИЕ ОБОРУДОВАНИЯ -----------------
