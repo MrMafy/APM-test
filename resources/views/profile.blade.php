@@ -36,8 +36,17 @@
                             @endif
                         </span>
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white">
-                            Группа:
-                            {{ Auth::user()->group_num }}
+                            Группы:
+                            @if(isset($groups) && count($groups) > 0)
+                                                        @foreach($groups as $group)
+                                                            {{ $group->name }}
+                                                            @if(!$loop->last)
+                                                                , <!-- добавляем запятую после каждой группы, кроме последней -->
+                                                            @endif
+                                                        @endforeach
+                                                    @else
+                                                        Не определено
+                                                    @endif
                         </span>
                         <h5 class="mt-4 mb-4 text-start"><strong class="me-4">ФИО:</strong> {{ Auth::user()->name }}</h5>
                         <h5 class="mt-2 mb-5 text-start"><strong class="me-4">Почта:</strong> {{ Auth::user()->email }}

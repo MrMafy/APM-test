@@ -37,8 +37,11 @@ class HomeController extends Controller
      */
     public function profile()
     {
-        return view('profile');
+        $user = Auth::user();
+        $groups = $user->groups()->get(); // Получаем все группы пользователя
+        return view('profile', compact('groups'));
     }
+
 
     /**
      * Update user's profile data.
