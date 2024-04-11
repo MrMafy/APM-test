@@ -35,9 +35,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($RegReestrKP as $item)
+                    @foreach ($RegReestrKP as $item)
+                        @if ($user->role === 'admin' ||
+                            ($user->role === 'proj_manager' && $user->name === $item->sender) ||
+                         ($user->role === 'responsible' && $user->groups->contains('name', implode(' ', array_slice(explode(' ', $item->project_num), 1))))
+                          )
                             <tr data-id="{{ $item->id }}">
-                                 <td>{{ $item->numIncoming }}</td>
+                                <td>{{ $item->numIncoming }}</td>
                                 <td><a
                                         href="{{ route('project-data-one', ['id' => $item->project->id, 'tab' => '#calculation']) }}">{{ $item->project_num }}</a>
                                 </td>
@@ -91,6 +95,7 @@
                                             class="fa-solid fa-trash-can"></i></a>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -99,6 +104,10 @@
     </div>
 
     @if ($RegReestrKP->isNotEmpty())
+        @foreach ($RegReestrKP as $item)
+        @php
+            $additionalFiles = $item->additionalFiles;
+        @endphp
         <div class="modal fade" id="editKPModal" tabindex="-1" aria-labelledby="editKPModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <form id="editKPFormModal" method="post" enctype="multipart/form-data">
@@ -221,6 +230,7 @@
                 </div>
             </div>
         </div>
+        @endforeach
     @endif
 
     <script>
