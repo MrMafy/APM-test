@@ -1,11 +1,21 @@
 @if ($project && $project->risks && $project->risks->first())
 
     <div class="mb-3">
+        <select class="form-control d-none" id="locale">
+            <option value="ru-RU">ru-RU</option>
+        </select>
         <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#risksModal">
             Добавить риски
         </button>
 
-        <table class="display nowrap table dataTable" id="risksTable" style="width:100%">
+        <table id="risksTable" data-toolbar="#toolbar" data-search="true"
+               data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
+               data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
+               data-show-export="true" data-click-to-select="true"
+               data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
+               data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
+               data-url="/getData_group_4" data-response-handler="responseHandler">
+
             <thead>
                 <tr>
                     <th>№</th>
@@ -120,7 +130,6 @@
                                 @endforeach
                             </ol>
                         </div>
-
                         <div class="form-group mb-3 d-flex flex-column">
                             <label for="risk_probability">Вероятность: </label>
                             <select name="risk_probability" id="risk_probability-select">
@@ -132,7 +141,6 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <div class="form-group mb-3 d-flex flex-column">
                             <label for="risk_influence">Влияние: </label>
                             <select name="risk_influence" id="risk_influence-select">
@@ -144,7 +152,6 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <div class="form-group mb-3">
                             <label for="risk_mark">Отметка о реализации мероприятий в отношении рисков:</label>
                             <select name="risk_mark" id="risk_mark-select">
@@ -154,13 +161,11 @@
                                     {{ $item->risk_mark == 'Не выполнено' ? 'selected' : '' }}>Не выполнено</option>
                             </select>
                         </div>
-
                         <div class="form-group mb-3">
                             <label for="risk_resp">Ответственный за выполнение мероприятий:</label>
                             <input type="text" class="form-control" name="risk_responsible" id="risk_resp"
                                 placeholder="Введите ответственного" value="{{ $item->risk_responsible }}">
                         </div>
-
                         <div class="form-group mb-3">
                             <label for="risk_endTerm">Срок:</label>
                             <input type="text" class="form-control" name="risk_endTerm" id="risk_endTerm"
@@ -314,6 +319,199 @@
 <script>
     // таблица DataTable
     $(document).ready(function() {
+
+        $(function () {
+            var $table = $('#risksTable');
+
+            // инициализация таблицы и ее настроек
+            function initTable($table) {
+                $table.bootstrapTable({
+                    locale: $('#locale').val(),
+                    pagination: true,
+                    pageNumber: 1,
+                    pageSize: 5,
+                    pageList: [5, 15, 50, 'all'],
+                    columns:
+                        [
+                            {
+                                field: 'id',
+                                title: '№',
+                                valign: 'middle',
+                                sortable: true,
+                            },
+                            {
+                                field: 'nameRisk',
+                                title: 'Наименование риска',
+                                valign: 'middle',
+                                sortable: true,
+                            },
+                            {
+                                field: 'reasonRisk',
+                                title: 'Причина риска',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'conseqRiskOnset',
+                                title: 'Последствия наступления риска',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_probability',
+                                title: 'Вероятность',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_influence',
+                                title: 'Влияние',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_estimate',
+                                title: 'Оценка',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_strategy',
+                                title: 'Стратегия',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'counteringRisk',
+                                title: 'Противодействие риску',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_term',
+                                title: 'Срок',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_mark',
+                                title: 'Отметка о реализации мероприятий в отношении рисков',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'riskManagMeasures',
+                                title: 'Мероприятия при осуществлении риска',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_responsible',
+                                title: 'Ответственный за выполнение мероприятий',
+                                valign: 'middle',
+                                sortable: true
+                            },
+                            {
+                                field: 'risk_endTerm',
+                                title: 'Срок',
+                                valign: 'middle',
+                                sortable: true
+                            }
+                        ]
+                });
+
+                // привязываем обработчик событий к родительскому элементу таблицы
+                $table.on('click', '.editProduct', function (event) {
+                    event.preventDefault();
+                    var itemId = $(this).closest('tr').data('id');
+                    var nameRiskToEdit = $(this).closest('tr').find('[data-label="nameRisk"]').text();
+                    // console.log(nameRiskToEdit);
+                    // console.log(itemId);
+                    let modal = $('#editBase');
+                    modal.find('.modal-title').text(`Редактирование риска "${nameRiskToEdit}"`);
+                    modal.data('nameRisk',
+                        nameRiskToEdit); // Добавляем атрибут data-nameRisk к модальному окну
+                    modal.find('#editItemId').val(itemId);
+                    fillEditModal(itemId);
+                    modal.modal('show');
+                });
+            }
+
+            // Функция для заполнения модального окна данными
+            function fillEditModal(itemId) {
+                var modalIdRisks = '#editBase';
+                var formActionRisks = '{{ route('baseRisks-update', ['id' => ':id']) }}'.replace(':id', itemId);
+
+                $(modalIdRisks + ' #editItemId').val(itemId);
+                $(modalIdRisks + ' #editBaseForm').attr('action', formActionRisks);
+
+                // Отправляем AJAX-запрос для получения данных из базы данных
+                $.ajax({
+                    url: '/get-base-risk/' + itemId,
+                    type: 'GET',
+                    success: function (response) {
+                        // console.log(response)
+                        $(modalIdRisks + ' #nameRiskEdit').val(response.nameRisk);
+                        $(modalIdRisks + ' #term_Edit').val(response.term);
+
+                        // Преобразуем строки JSON в массивы объектов для каждого поля
+                        var reasonRiskData = JSON.parse(response.reasonRisk);
+                        var conseqRiskData = JSON.parse(response.conseqRiskOnset);
+                        var counteringRiskData = JSON.parse(response.counteringRisk);
+                        var measuresRiskData = JSON.parse(response.riskManagMeasures);
+
+                        // Добавляем причины риска
+                        var reasonRiskInputs = '';
+                        $.each(reasonRiskData, function (index, reason) {
+                            reasonRiskInputs +=
+                                '<input type="text" class="form-control mb-2" name="reason_risk_edit[]" value="' +
+                                reason.reasonRisk +
+                                '" placeholder="Введите причину риска">';
+                        });
+                        $(modalIdRisks + ' #reasonRiskEdit').html(reasonRiskInputs);
+
+                        // Добавляем последствия наступления риска
+                        var conseqRiskInputs = '';
+                        $.each(conseqRiskData, function (index, conseq) {
+                            conseqRiskInputs +=
+                                '<input type="text" class="form-control mb-2" name="conseq_risk_edit[]" value="' +
+                                conseq.conseqRiskOnset +
+                                '" placeholder="Введите последствия наступления риска">';
+                        });
+                        $(modalIdRisks + ' #conseqRiskOnsetEdit').html(conseqRiskInputs);
+
+                        // Добавляем противодействие риску
+                        var counteringRiskInputs = '';
+                        $.each(counteringRiskData, function (index, countering) {
+                            counteringRiskInputs +=
+                                '<input type="text" class="form-control mb-2" name="countering_risk_edit[]" value="' +
+                                countering.counteringRisk +
+                                '" placeholder="Введите противодействие риску">';
+                        });
+                        $(modalIdRisks + ' #counteringRiskEdit').html(counteringRiskInputs);
+
+                        // Добавляем мероприятия при осуществлении риска
+                        var measuresRiskInputs = '';
+                        $.each(measuresRiskData, function (index, measure) {
+                            measuresRiskInputs +=
+                                '<input type="text" class="form-control mb-2" name="measures_risk_edit[]" value="' +
+                                measure.riskManagMeasures +
+                                '" placeholder="Введите мероприятия при осуществлении риска">';
+                        });
+                        $(modalIdRisks + ' #riskManagMeasuresEdit').html(measuresRiskInputs);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+
+            // Инициализация таблицы при загрузке страницы
+            initTable($table);
+        });
+
+
+
 
         // Обработчик изменений в поле выбора "Наименование риска"
         $('#risk_name').change(function() {
