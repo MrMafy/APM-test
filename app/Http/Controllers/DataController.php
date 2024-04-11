@@ -13,38 +13,42 @@ class DataController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $RegSInteg = [];
-        $RegEOB = [];
-        $RegNHRS = [];
-        $RegOther = [];
+//        $RegSInteg = [];
+//        $RegEOB = [];
+//        $RegNHRS = [];
+//        $RegOther = [];
+        $RegSInteg = RegSInteg::all();
+        $RegEOB = RegEOB::all();
+        $RegNHRS = RegNHRS::all();
+        $RegOther = RegOther::all();
 
         // Проверка роли пользователя и его группы
-        if ($user->role === 'admin') {
-            $RegSInteg = RegSInteg::all();
-            $RegEOB = RegEOB::all();
-            $RegNHRS = RegNHRS::all();
-            $RegOther = RegOther::all();
-        } elseif ($user->role === 'proj_manager') {
-            if ($user->group_num === 'Группа 1') {
-                $RegSInteg = RegSInteg::where('projectManager', $user->name)->get();
-            } elseif ($user->group_num === 'Группа 2') {
-                $RegEOB = RegEOB::where('projectManager', $user->name)->get();
-            } elseif ($user->group_num === 'Группа 3') {
-                $RegNHRS = RegNHRS::where('projectManager', $user->name)->get();
-            } elseif ($user->group_num === 'Группа 4') {
-                $RegOther = RegOther::where('projectManager', $user->name)->get();
-            }
-        } elseif ($user->role === 'responsible') {
-            if ($user->group_num === 'Группа 1') {
-                $RegSInteg = RegSInteg::all();
-            } elseif ($user->group_num === 'Группа 2') {
-                $RegEOB = RegEOB::all();
-            } elseif ($user->group_num === 'Группа 3') {
-                $RegNHRS = RegNHRS::all();
-            } elseif ($user->group_num === 'Группа 4') {
-                $RegOther = RegOther::all();
-            }
-        }
+//        if ($user->role === 'admin') {
+//            $RegSInteg = RegSInteg::all();
+//            $RegEOB = RegEOB::all();
+//            $RegNHRS = RegNHRS::all();
+//            $RegOther = RegOther::all();
+//        } elseif ($user->role === 'proj_manager') {
+//            if ($user->group_num === 'Группа 1') {
+//                $RegSInteg = RegSInteg::where('projectManager', $user->name)->get();
+//            } elseif ($user->group_num === 'Группа 2') {
+//                $RegEOB = RegEOB::where('projectManager', $user->name)->get();
+//            } elseif ($user->group_num === 'Группа 3') {
+//                $RegNHRS = RegNHRS::where('projectManager', $user->name)->get();
+//            } elseif ($user->group_num === 'Группа 4') {
+//                $RegOther = RegOther::where('projectManager', $user->name)->get();
+//            }
+//        } elseif ($user->role === 'responsible') {
+//            if ($user->group_num === 'Группа 1') {
+//                $RegSInteg = RegSInteg::all();
+//            } elseif ($user->group_num === 'Группа 2') {
+//                $RegEOB = RegEOB::all();
+//            } elseif ($user->group_num === 'Группа 3') {
+//                $RegNHRS = RegNHRS::all();
+//            } elseif ($user->group_num === 'Группа 4') {
+//                $RegOther = RegOther::all();
+//            }
+//        }
 
         return view('home', compact('RegSInteg', 'RegEOB', 'RegNHRS', 'RegOther'))->with('user', $user);
     }
