@@ -453,7 +453,7 @@
 @else
     <div class="d-flex justify-content-between align-items-center">
         <div class="btns d-flex align-items-center gap-4 mb-4">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#redirectModal" class="btn btn-lg btn-danger">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#addContinueModal" class="btn btn-lg btn-danger">
                 Продолжить заполнение расчета
             </a>
             <a href="#" data-bs-toggle="modal" data-bs-target="#offerModal" class="btn btn-lg btn-primary">

@@ -38,20 +38,21 @@
                         <span class="fonts bg-secondary p-1 px-4 rounded text-white">
                             Группы:
                             @if(isset($groups) && count($groups) > 0)
-                                                        @foreach($groups as $group)
-                                                            {{ $group->name }}
-                                                            @if(!$loop->last)
-                                                                , <!-- добавляем запятую после каждой группы, кроме последней -->
-                                                            @endif
-                                                        @endforeach
-                                                    @else
-                                                        Не определено
-                                                    @endif
+                                @foreach($groups as $group)
+                                    {{ $group->name }}
+                                    @if(!$loop->last)
+                                        , <!-- добавляем запятую после каждой группы, кроме последней -->
+                                    @endif
+                                @endforeach
+                            @else
+                                Не определено
+                            @endif
                         </span>
-                        <h5 class="mt-4 mb-4 text-start"><strong class="me-4">ФИО:</strong> {{ Auth::user()->name }}</h5>
+                        <h5 class="mt-4 mb-4 text-start"><strong class="me-4">ФИО:</strong> {{ Auth::user()->name }}
+                        </h5>
                         <h5 class="mt-2 mb-5 text-start"><strong class="me-4">Почта:</strong> {{ Auth::user()->email }}
                         </h5>
-                        <div class="buttons d-flex gap-3 justify-content-center">
+                        <div class="buttons mb-5 d-flex gap-3 justify-content-center">
                             <div class="buttons d-flex gap-3 justify-content-center">
                                 <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
                                         data-bs-target="#editProfileModal">Изменить данные
@@ -61,12 +62,107 @@
                                 </button>
                             </div>
                         </div>
+
+                        <div class="alert alert-secondary  mb-3">
+                            <div class="accordion" id="usersAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#userList" aria-expanded="true"
+                                                aria-controls="userList">
+                                            Список руководителей проектов
+                                        </button>
+                                    </h2>
+                                    <div id="userList" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                         data-bs-parent="#usersAccordion">
+                                        <div class="accordion-body">
+                                            <table>
+                                                <thead>
+                                                <tr>
+                                                    <th>ФИО</th>
+                                                    <th>Группа</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach($users as $user)
+                                                    <tr>
+                                                        <td>{{ $user->name }}</td>
+                                                        <td>
+                                                            @foreach($user->groups as $group)
+                                                                {{ $group->name }}
+                                                            @endforeach
+                                                        </td>
+                                                        <td>
+                                                            <a class="editUser btn btn-xs btn-info" href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#editUser">
+                                                                <i class="fa-solid fa-edit"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-secondary">
+                            <div class="accordion" id="groupsAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingGroups">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#groupList" aria-expanded="true"
+                                                aria-controls="groupList">
+                                            Список групп
+                                        </button>
+                                    </h2>
+                                    <div id="groupList" class="accordion-collapse collapse"
+                                         aria-labelledby="headingGroups" data-bs-parent="#groupsAccordion">
+                                        <div class="accordion-body">
+                                            <table>
+                                                <thead>
+                                                <tr>
+                                                    <th>Название группы</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach(App\Models\Group::all() as $group)
+                                                    <tr>
+                                                        <td>{{ $group->name }}</td>
+                                                        <td><a class="editGroup btn btn-xs btn-info" href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#editGroup">
+                                                                <i class="fa-solid fa-edit"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td><a class="deleteGroup btn btn-xs btn-danger" href="#"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#deleteGroup">
+                                                                <i class="fa-solid fa-trash-can"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-{{--                    <div class="text-center mt-5">--}}
-{{--                        <button type="button" class="btn btn-secondary px-4" data-bs-toggle="modal"--}}
-{{--                                data-bs-target="#pmAddModal">Редактировать список руководителей проектов--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
+                    {{--                    <div class="text-center mt-5">--}}
+                    {{--                        <button type="button" class="btn btn-secondary px-4" data-bs-toggle="modal"--}}
+                    {{--                                data-bs-target="#pmAddModal">Редактировать список руководителей проектов--}}
+                    {{--                        </button>--}}
+                    {{--                    </div>--}}
                 </div>
             </div>
         </div>
@@ -297,7 +393,6 @@
             // Показываем скрытую форму для редактирования
             $('#editPmForm').show();
         });
-
 
 
         // Обработчик кнопки "Обновить" в форме редактирования

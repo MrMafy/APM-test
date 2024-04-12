@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\ProjectManager;
-
+use App\Models\User;
 class HomeController extends Controller
 {
     /**
@@ -38,8 +38,9 @@ class HomeController extends Controller
     public function profile()
     {
         $user = Auth::user();
+        $users = User::with('groups')->get(); // Получаем всех пользователей с их группами
         $groups = $user->groups()->get(); // Получаем все группы пользователя
-        return view('profile', compact('groups'));
+        return view('profile', compact('groups', 'users'));
     }
 
 
