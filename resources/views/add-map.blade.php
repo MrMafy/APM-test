@@ -52,8 +52,13 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="objectName">Наименование объекта:</label>
+                        <input type="text" class="form-control" name="proj_note" id="proj_note"
+                            placeholder="Введите хэштэг проекта">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="objectName">Хэштэг:</label>
                         <input type="text" class="form-control" name="objectName" id="objectName"
-                            placeholder="Введите наименование объекта" required>
+                               placeholder="Введите наименование объекта" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="endCustomer">Конечный заказчик:</label>

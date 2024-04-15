@@ -258,6 +258,7 @@ class ProjectController extends Controller
         $project->projNumSuf = $group;
 
         $project->projManager = $request->projManager;
+        $project->proj_note = $request->proj_note;
         $project->objectName = $request->objectName;
         $project->endCustomer = $request->endCustomer;
         $project->contractor = $request->contractor;
@@ -823,7 +824,7 @@ class ProjectController extends Controller
             'smr' => $project->cmr,
             'purchaseOrg' => $project->contractor,
             'endUser' => $project->endCustomer,
-            'object' => $project->objectName,
+            'object' => $project->proj_note,
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
@@ -849,7 +850,7 @@ class ProjectController extends Controller
             'smr' => $project->cmr,
             'purchaseOrg' => $project->contractor,
             'endUser' => $project->endCustomer,
-            'object' => $project->objectName,
+            'object' => $project->proj_note,
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
@@ -875,7 +876,7 @@ class ProjectController extends Controller
             'smr' => $project->cmr,
             'purchaseOrg' => $project->contractor,
             'endUser' => $project->endCustomer,
-            'object' => $project->objectName,
+            'object' => $project->proj_note,
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
@@ -906,7 +907,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->objectName,
+                'object' => $project->proj_note,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
@@ -937,7 +938,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->objectName,
+                'object' => $project->proj_note,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
@@ -968,7 +969,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->objectName,
+                'object' => $project->proj_note,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
@@ -999,7 +1000,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->objectName,
+                'object' => $project->proj_note,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
