@@ -91,12 +91,18 @@
                                                         <td>
                                                             @foreach($user->groups as $group)
                                                                 {{ $group->name }}
+                                                                @if(!$loop->last)
+                                                                    ,
+                                                                    <!-- добавляем запятую после каждой группы, кроме последней -->
+                                                                @endif
                                                             @endforeach
                                                         </td>
                                                         <td>
                                                             <a class="editUser btn btn-xs btn-info" href="#"
-                                                               data-bs-toggle="modal"
-                                                               data-bs-target="#editUser">
+                                                               data-bs-toggle="modal" data-name="{{ $user->name }}"
+                                                               data-group="@foreach($user->groups as $group){{ $group->name }}@if(!$loop->last),@endif @endforeach"
+                                                               data-group-id="@foreach($user->groups as $group){{ $group->id }}@if(!$loop->last),@endif @endforeach"
+                                                               data-bs-target="#editUserModal">
                                                                 <i class="fa-solid fa-edit"></i>
                                                             </a>
                                                         </td>
@@ -123,10 +129,11 @@
                                     <div id="groupList" class="accordion-collapse collapse"
                                          aria-labelledby="headingGroups" data-bs-parent="#groupsAccordion">
                                         <div class="accordion-body">
-                                            <table>
+                                            <table class="table">
                                                 <thead>
                                                 <tr>
                                                     <th>Название группы</th>
+                                                    <th>Пользователи</th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -135,13 +142,22 @@
                                                 @foreach(App\Models\Group::all() as $group)
                                                     <tr>
                                                         <td>{{ $group->name }}</td>
-                                                        <td><a class="editGroup btn btn-xs btn-info" href="#"
+                                                        <td>
+                                                            <ol>
+                                                                @foreach($group->users as $user)
+                                                                    <li>{{ $user->name }}</li>
+                                                                @endforeach
+                                                            </ol>
+                                                        </td>
+                                                        <td>
+                                                            <a class="editGroup btn btn-xs btn-info" href="#"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#editGroup">
                                                                 <i class="fa-solid fa-edit"></i>
                                                             </a>
                                                         </td>
-                                                        <td><a class="deleteGroup btn btn-xs btn-danger" href="#"
+                                                        <td>
+                                                            <a class="deleteGroup btn btn-xs btn-danger" href="#"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#deleteGroup">
                                                                 <i class="fa-solid fa-trash-can"></i>
@@ -151,6 +167,11 @@
                                                 @endforeach
                                                 </tbody>
                                             </table>
+                                            <a class="addGroup btn btn-xs btn-info" href="#"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#addGroup">
+                                                Добавить группу
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -158,19 +179,15 @@
                         </div>
 
                     </div>
-                    {{--                    <div class="text-center mt-5">--}}
-                    {{--                        <button type="button" class="btn btn-secondary px-4" data-bs-toggle="modal"--}}
-                    {{--                                data-bs-target="#pmAddModal">Редактировать список руководителей проектов--}}
-                    {{--                        </button>--}}
-                    {{--                    </div>--}}
                 </div>
             </div>
         </div>
     </div>
 
+    {{--------------------- Редактирование данных пользователя ---------------------}}
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog w-25">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileModalLabel">Редактирование профиля</h5>
@@ -199,10 +216,10 @@
             </div>
         </div>
     </div>
-
+    {{--------------------- Смена пароля ---------------------}}
     <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog w-25">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="changePasswordModalLabel">Смена пароля</h5>
@@ -231,229 +248,109 @@
         </div>
     </div>
 
-    <div class="modal fade" id="pmAddModal" tabindex="-1" aria-labelledby="pmAddModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    {{--------------------- Редактирование список рук.проектов ---------------------}}
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog w-25">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="pmAddModalLabel">Редактирование списка руководителей проектов</h5>
+                    <h5 class="modal-title" id="editUserModalLabel">Редактировать пользователя </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('profile.editPM') }}" method="POST" id="pmForm">
+                <form class="edit_user" action="{{ route('profile.change-user') }}" method="POST">
                     @csrf
                     @method('PUT')
+
                     <div class="modal-body">
-                        <!-- Таблица с руководителями проектов -->
-                        <table class="projManagers table mb-4">
-                            <thead>
-                            <tr>
-                                <th scope="col">№</th>
-                                <th scope="col">ФИО</th>
-                                <th scope="col">Номер группы</th>
-                                <th scope="col">Действия</th>
-                            </tr>
-                            </thead>
-                            <tbody id="pmTableBody">
-                            <!-- Сюда будут добавляться строки с руководителями проектов -->
-                            </tbody>
-                        </table>
-                        <button type="button" class="btn btn-dark mb-5" id="addPmBtn">Добавить руководителя проектов
-                        </button>
-
-                        <!-- Скрытая форма для редактирования руководителя проекта -->
-                        <div id="editPmForm" style="display: none;">
-                            <input type="hidden" id="editPmId">
-                            <input type="text" id="editPmFio" placeholder="ФИО">
-                            <input type="text" id="editPmGroupNum" placeholder="Номер группы">
-                            <button type="button" class="btn btn-info" id="updatePmBtn">Обновить</button>
-                            <button type="button" class="btn btn-secondary cancelEditPmBtn">Отмена</button>
+                        <div class="mb-3">
+                            <label for="user_name" class="form-label">ФИО</label>
+                            <input type="text" class="form-control userName" id="user_name" name="user_name" value="">
                         </div>
+                        <div class="mb-3">
+                            <label for="group" class="form-label">Группы:</label>
+                            <div class="user_groups d-flex flex-column gap-1">
+                                {{-- список групп пользователя --}}
+                            </div>
+                            <hr>
+                            <input type="hidden" name="deleted_group" value="">
 
-                        <!-- Форма для добавления нового руководителя проекта -->
-                        <div id="addPmForm" style="display: none;">
-                            <input type="text" id="pmFio" placeholder="ФИО">
-                            <input type="text" id="pmGroupNum" placeholder="Номер группы">
-                            <button type="button" class="btn btn-success" id="savePmBtn">Добавить</button>
+                            <button class="btn add_group">+ добавить группу</button>
                         </div>
-
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Скрипт для взаимодействия с сервером и обработки AJAX-запросов -->
     <script>
-        $('#pmAddModal').on('show.bs.modal', function () {
-            updatePmTable();
-        });
+        $(function () {
 
-        // Функция для обновления таблицы с руководителями проектов
-        function updatePmTable() {
-            // Очистить таблицу перед обновлением
-            $('#pmTableBody').empty();
+            // редактирование пользователя (передача данных в модалку)
+            $(".editUser").click(function () {
+                event.preventDefault();
+                var userName = $(this).data('name');
+                $('.userName').val(userName);
 
-            // Отправить AJAX-запрос на сервер для получения списка руководителей проектов
-            $.ajax({
-                url: '/get-project-managers',
-                type: 'GET',
-                success: function (response) {
-                    // Обработка успешного ответа от сервера
-                    // В response содержится список руководителей проектов
-
-                    // Примерный формат данных, полученных с сервера
-                    let pmList = response;
-
-                    // Добавить строки с руководителями проектов в таблицу
-                    pmList.forEach(function (pm, index) {
-                        let row = '<tr>' +
-                            '<td>' + (index + 1) + '</td>' +
-                            '<td>' + pm.fio + '</td>' +
-                            '<td>' + pm.groupNum + '</td>' +
-                            '<td>' +
-                            '<button type="button" class="btn btn-sm btn-info editPmBtn" data-id="' + pm.id + '">Редактировать</button>' +
-                            '<button type="button" class="btn btn-sm btn-danger deletePmBtn" data-id="' + pm.id + '">Удалить</button>' +
-                            '</td>' +
-                            '</tr>';
-                        $('#pmTableBody').append(row);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    // Обработка ошибки AJAX-запроса
-                    console.error(error);
-                }
+                $('.user_groups').empty();
+                var groupsData = $(this).data('group'); // Получаем данные о группах пользователя
+                var groupIds = $(this).data('group-id').split(','); // Получаем идентификаторы групп
+                var groups = groupsData.split(','); // Разбиваем данные о группах на массив
+                groups.forEach(function (groupName, index) {
+                    var groupId = groupIds[index]; // Получаем идентификатор группы
+                    var groupInput = '<div class="d-flex gap-2 align-items-center">' +
+                        '<input type="text" class="form-control" value="' + groupName + '" readonly>' + // Текстовое поле для названия группы
+                        '<input type="hidden" name="user_group[]" value="' + groupId + '">' + // Скрытое поле для id группы
+                        '<div class="remove_group"><i class="fa fa-minus-square" aria-hidden="true"></i></div></div>';
+                    $('.user_groups').append(groupInput);
+                });
             });
-        }
 
-        // Функция для добавления нового руководителя проекта
-        function addProjectManager() {
-            var fio = $('#pmFio').val();
-            var groupNum = $('#pmGroupNum').val();
-
-            // Отправить AJAX-запрос на сервер для добавления нового руководителя проекта
-            $.ajax({
-                url: '/add-project-manager',
-                type: 'POST',
-                data: {fio: fio, groupNum: groupNum, _token: '{{ csrf_token() }}'},
-                success: function (response) {
-                    // Обновить таблицу с руководителями проектов и скрыть форму добавления
-                    updatePmTable();
-                    $('#addPmForm').hide();
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                }
+            // Уникальный счетчик для идентификаторов селектов
+            var selectCounter = 1;
+            // добавление группы (добавление поля с выбором в форму)
+            $(".add_group").click(function() {
+                event.preventDefault();
+                // Генерируем уникальный идентификатор для селекта
+                var selectId = 'select_group_' + selectCounter;
+                // Генерируем HTML для селекта с вариантами выбора группы
+                var selectHtml = '<div class="d-flex gap-2 align-items-center">' +
+                    '<select class="form-select user_group" name="user_group[]" id="' + selectId + '" required>' +
+                    '<option value="" disabled selected>Выберите группу</option>';
+                // Добавляем варианты выбора группы из базы данных
+                @foreach(App\Models\Group::all() as $group)
+                    selectHtml += '<option value="{{ $group->id }}">{{ $group->name }}</option>';
+                @endforeach
+                    selectHtml += '</select>' +
+                    '<i class="fa fa-minus-square remove_group" aria-hidden="true"></i></div>';
+                // Заменяем кнопку "Добавить группу" на селект
+                $('.user_groups').append(selectHtml);
+                // Увеличиваем счетчик
+                selectCounter++;
             });
-        }
-
-        // Обработчик кнопки "Добавить руководителя проектов"
-        $('#addPmBtn').click(function () {
-            // Показать форму для добавления руководителя проекта и скрыть другие элементы
-            $('#addPmForm').show();
-            $('#editPmForm').hide();
-            $('.editPmBtn, .deletePmBtn').hide();
-        });
-
-        // Обработчик кнопки "Удалить"
-        $(document).on('click', '.deletePmBtn', function () {
-            var pmId = $(this).data('id');
-
-            // Удалить строку из таблицы
-            $(this).closest('tr').remove();
-        });
-
-        // Обработчик кнопки "Редактировать" для редактирования руководителя проекта
-        $(document).on('click', '.editPmBtn', function () {
-            // Находим строку, которую нужно редактировать
-            var row = $(this).closest('tr');
-
-            // Получаем ID редактируемого руководителя проекта
-            var editPmId = $(this).data('id');
-
-            // Заполняем скрытый input с ID редактируемого руководителя проекта
-            $('#editPmId').val(editPmId);
-
-            // Получаем значения ФИО и номера группы из ячеек строки таблицы
-            var fio = row.find('td:eq(1)').text().trim();
-            var groupNum = row.find('td:eq(2)').text().trim();
-
-            // Заполняем текстовые поля в скрытой форме значениями ФИО и номера группы
-            $('#editPmFio').val(fio);
-            $('#editPmGroupNum').val(groupNum);
-
-            // Показываем кнопки "Обновить" и "Отмена"
-            row.find('.updatePmBtn, .cancelEditPmBtn').show();
-
-            // Скрываем кнопки "Редактировать" и "Удалить"
-            row.find('.editPmBtn, .deletePmBtn').hide();
-
-            // Показываем скрытую форму для редактирования
-            $('#editPmForm').show();
-        });
 
 
-        // Обработчик кнопки "Обновить" в форме редактирования
-        $('#updatePmBtn').click(function () {
-            var fio = $('#editPmFio').val();
-            var groupNum = $('#editPmGroupNum').val();
+            // Массив для хранения идентификаторов групп, которые нужно удалить
+            var groupsToDelete = [];
 
-            // Обновить данные в таблице
-            var row = $('.editPmBtn').closest('tr');
-            row.find('td:eq(1)').text(fio);
-            row.find('td:eq(2)').text(groupNum);
-
-            // Скрыть форму редактирования и показать другие элементы
-            $('#editPmForm').hide();
-            $('.editPmBtn, .deletePmBtn').show();
-        });
-
-        // Обработчик кнопки "Отмена" после редактирования
-        $('.cancelEditPmBtn').click(function () {
-            // Скрыть форму редактирования и показать другие элементы
-            $('#editPmForm').hide();
-            $('.editPmBtn, .deletePmBtn').show();
-        });
-
-        // Обработчик кнопки "Добавить" для добавления нового руководителя проекта
-        $('#savePmBtn').click(function () {
-            addProjectManager();
-        });
-
-        // Обработчик кнопки "Отмена" после добавления нового руководителя проекта
-        $('.cancelAddPmBtn').click(function () {
-            // Скрыть форму добавления и показать другие элементы
-            $('#addPmForm').hide();
-            $('.editPmBtn, .deletePmBtn').show();
-        });
-
-        // Обработчик кнопки "Сохранить изменения" после редактирования списка руководителей проектов
-        $('#pmForm').submit(function (e) {
-            e.preventDefault();
-
-            // Отправляем AJAX-запрос на сервер для сохранения изменений
-            $.ajax({
-                url: $(this).attr('action'),
-                type: $(this).attr('method'),
-                data: {
-                    editPmId: $('#editPmId').val(), // Добавляем editPmId в данные запроса
-                    fio: $('#editPmFio').val(), // Получаем ФИО из поля ввода
-                    groupNum: $('#editPmGroupNum').val(), // Получаем номер группы из поля ввода
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    // Обновляем таблицу и скрываем модальное окно
-                    updatePmTable();
-                    $('#pmAddModal').modal('hide');
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
+            // При клике на иконку минус у группы удалять
+            $(document).on('click', '.remove_group', function() {
+                console.log("Remove group button clicked");
+                var selectValue = $(this).prev('input[type="hidden"]').val(); // Получаем значение скрытого поля
+                console.log("Removed group id:", selectValue); // Добавьте эту строку для отладки
+                if (selectValue !== "") {
+                    groupsToDelete.push(selectValue);
+                    console.log("Groups to delete:", groupsToDelete); // Добавьте эту строку для отладки
                 }
+                $(this).closest('.d-flex').remove(); // Удаляем родительский элемент после получения значения скрытого поля
+                $('#deleted_group').val(groupsToDelete.join(','));
             });
-        });
 
+        });
     </script>
 
 @endsection

@@ -19,8 +19,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-color: #005aa50f !important;
-  //background-image: url(/storage/apm_back.jpg);
-     background-image: url(http://apmtest.kst-energo.ru/storage/apm_back.jpg);
+  background-image: url(/storage/apm_back.jpg);
+    //   background-image: url(http://apmtest.kst-energo.ru/storage/apm_back.jpg);
 }
 
 .navbar.bg-white {
@@ -438,9 +438,14 @@ tbody#changes-inputs td {
   }
 }
 
-input[readonly] {
+input {
   cursor: auto;
   background: rgb(16 45 75 / 24%) !important;
+}
+
+input[readonly] {
+    cursor: auto;
+    background: transparent!important;
 }
 .input-field {
   .input_editable {
@@ -612,3 +617,18 @@ td.red-cell {
 .userName:hover .userName_info {
     display: block;
 }
+
+#editUserModal{
+    select {
+        /* for Firefox */
+        -moz-appearance: none;
+        /* for Chrome */
+        -webkit-appearance: none;
+        padding: 8px;
+        &::-ms-expand {
+            /* IE */
+            display: none;
+        }
+    }
+}
+
