@@ -65,7 +65,7 @@
 						<td class="gray">{{ $item->expenseDirectFact }}</td>
 					</tr>
 					<tr>
-						<th class="expenseMaterial green">Затраты на материалы (голан):</th>
+						<th class="expenseMaterial green">Затраты на материалы:</th>
 						<td>{{ $item->expenseMaterialPlan }}</td>
 						<td>{{ $item->expenseMaterialFact }}</td>
 					</tr>
@@ -122,7 +122,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="d-flex flex-column gap-2">
+		<div class="d-flex flex-column gap-2 d-none">
 			<div class="d-flex gap-3">
 				<span>Руководитель проекта</span>
 				<hr style="width:200px;text-align:left;margin-left:0">
@@ -220,7 +220,7 @@
 				</tr>
 			</tfoot>
 		</table>
-		<div class="d-flex flex-column gap-2">
+		<div class="d-flex flex-column gap-2 d-none">
 			<div class="d-flex gap-3">
 				<span>Руководитель проекта</span>
 				<hr style="width:200px;text-align:left;margin-left:0">
@@ -301,7 +301,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="d-flex flex-column gap-2">
+		<div class="d-flex flex-column gap-2 d-none">
 			<div class="d-flex gap-3">
 				<span>Руководитель проекта</span>
 				<hr style="width:200px;text-align:left;margin-left:0">
@@ -412,15 +412,15 @@
 													value="{{ $item->expenseDirectFact }}" readonly></td>
 										</tr>
 										<tr>
-											<th class="expenseMaterial green">Затраты на материалы (голан):</th>
+											<th class="expenseMaterial green">Затраты на материалы:</th>
 											<td><input type="text" class="form-control" name="expenseMaterialPlan"
 													id="expenseMaterialPlan_change"
-													placeholder="Введите затраты на материалы (голан)"
+													placeholder="Введите затраты на материалы"
 													value="{{ $item->expenseMaterialPlan }}">
 											</td>
 											<td><input type="text" class="form-control" name="expenseMaterialFact"
 													id="expenseMaterialFact_change"
-													placeholder="Введите затраты на материалы (голан)"
+													placeholder="Введите затраты на материалы"
 													value="{{ $item->expenseMaterialFact }}">
 											</td>
 										</tr>
@@ -523,7 +523,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="d-flex flex-column gap-2">
+							<div class="d-flex flex-column gap-2 d-none">
 								<div class="d-flex gap-3">
 									<span>Руководитель проекта</span>
 									<hr style="width:200px;text-align:left;margin-left:0">
@@ -650,7 +650,7 @@
 									</tr>
 								</tfoot>
 							</table>
-							<div class="d-flex flex-column gap-2">
+							<div class="d-flex flex-column gap-2 d-none">
 								<div class="d-flex gap-3">
 									<span>Руководитель проекта</span>
 									<hr style="width:200px;text-align:left;margin-left:0">
@@ -760,7 +760,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="d-flex flex-column gap-2">
+							<div class="d-flex flex-column gap-2 d-none">
 								<div class="d-flex gap-3">
 									<span>Руководитель проекта</span>
 									<hr style="width:200px;text-align:left;margin-left:0">
@@ -1004,14 +1004,14 @@
 												name="expenseDirectFact" id="expenseDirectFact" readonly></td>
 									</tr>
 									<tr>
-										<th class="expenseMaterial green">Затраты на материалы (голан):</th>
+										<th class="expenseMaterial green">Затраты на материалы:</th>
 										<td><input type="text" class="form-control" name="expenseMaterialPlan"
 												id="expenseMaterialPlan"
-												placeholder="Введите затраты на материалы (голан)">
+												placeholder="Введите затраты на материалы">
 										</td>
 										<td><input type="text" class="form-control" name="expenseMaterialFact"
 												id="expenseMaterialFact"
-												placeholder="Введите затраты на материалы (голан)">
+												placeholder="Введите затраты на материалы">
 										</td>
 									</tr>
 									<tr>
@@ -1083,7 +1083,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="d-flex flex-column gap-2">
+							<div class="d-flex flex-column gap-2 d-none">
 								<div class="d-flex gap-3">
 									<span>Руководитель проекта</span>
 									<hr style="width:200px;text-align:left;margin-left:0">
@@ -1184,7 +1184,7 @@
 									</tr>
 								</tfoot>
 							</table>
-							<div class="d-flex flex-column gap-2">
+							<div class="d-flex flex-column gap-2 d-none">
 								<div class="d-flex gap-3">
 									<span>Руководитель проекта</span>
 									<hr style="width:200px;text-align:left;margin-left:0">
@@ -1278,7 +1278,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="d-flex flex-column gap-2">
+							<div class="d-flex flex-column gap-2 d-none">
 								<div class="d-flex gap-3">
 									<span>Руководитель проекта</span>
 									<hr style="width:200px;text-align:left;margin-left:0">

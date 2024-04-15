@@ -7,11 +7,7 @@
         <h1 class="mb-5">Редактирование реализации для карты проекта {{ $project->projNum }}</h1>
 
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-realization-tab" data-bs-toggle="pill" data-bs-target="#pills-realization"
-                    type="button" role="tab" aria-controls="pills-realization"
-                    aria-selected="false">Реализация</button>
-            </li>
+            <a href="{{ url()->previous() }}" class="btn btn-light">Назад</a>
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <form action="{{ route('realization-update-submit', $project->id) }}" method="post">

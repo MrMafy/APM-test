@@ -62,7 +62,7 @@
                                 </button>
                             </div>
                         </div>
-
+                        @if(Auth::user()->role == 'admin')
                         <div class="alert alert-secondary  mb-3">
                             <div class="accordion" id="usersAccordion">
                                 <div class="accordion-item">
@@ -180,7 +180,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        @else
+                        @endif
                     </div>
                 </div>
             </div>
