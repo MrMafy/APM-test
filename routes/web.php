@@ -146,7 +146,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/project-continue/{id}', 'App\Http\Controllers\ProjectController@projectСontinue')->name('project-continue');
     Route::get('/download-equipment-file/{id}', 'App\Http\Controllers\ProjectController@downloadEquipmentFile')->name('download-equipment-file');
 
-
+    // ---------------- ПЕРЕНАЗНАЧЕНИЕ ПРОЕКТА -----------------
+    Route::post('/project-redirect/{id}', 'App\Http\Controllers\ProjectController@projectRedirect')->name('project-redirect');
+    Route::post('/project-redirect/update-remap-projM/{name}', 'App\Http\Controllers\ProjectController@updateRemapProjM')->name('update-remap-projM');
 
     // ---------------- ДОБАВЛЕНИЕ ОБОРУДОВАНИЯ -----------------
     Route::post('/add-equipment/{id}', 'App\Http\Controllers\ProjectController@addEquipment')->name('addEquipment');

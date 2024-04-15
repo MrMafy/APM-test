@@ -12,7 +12,7 @@
                     <ul class="nav nav-mytabs" id="myTab" role="tablist">
                         <!-- Первая вкладка (активная) -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 1')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 1')))
+                          ($RegSInteg->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 1')))
                             <li class="nav-item flex-sm-fill">
                                 <a class="nav-link border-0 text-uppercase font-weight-bold active" id="SInteg-tab"
                                    data-bs-toggle="tab" href="#SInteg" role="tab" data-toggle="tab" aria-controls="SInteg"
@@ -21,7 +21,7 @@
                         @endif
                         <!-- Вторая вкладка -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 2')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
+                          ($RegEOB->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
                             <li class="nav-item flex-sm-fill">
                                 <a class="nav-link border-0 text-uppercase font-weight-bold" id="EOB-tab" data-bs-toggle="tab"
                                    href="#EOB" role="tab" data-toggle="tab" aria-controls="EOB"
@@ -30,7 +30,7 @@
                         @endif
                         <!-- Третья вкладка -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 3')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 3')))
+                          ($RegNHRS->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 3')))
                             <li class="nav-item flex-sm-fill">
                                 <a class="nav-link border-0 text-uppercase font-weight-bold" id="NHRS-tab" data-bs-toggle="tab"
                                    href="#NHRS" role="tab" data-toggle="tab" aria-controls="NHRS"
@@ -39,7 +39,7 @@
                         @endif
                         <!-- Четвёртая вкладка -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 4')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 4')))
+                          ($RegOther->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 4')))
                             <li class="nav-item flex-sm-fill">
                                 <a class="nav-link border-0 text-uppercase font-weight-bold" id="Other-tab" data-bs-toggle="tab"
                                    href="#Other" role="tab" data-toggle="tab" aria-controls="Other"
@@ -56,7 +56,7 @@
                         </div>
                         <!-- Содержимое первой вкладки -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 1')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 1')))
+                         ($RegSInteg->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 1')))
                             <div class="tab-pane fade show active" id="SInteg" role="tabpanel" aria-labelledby="SInteg-tab">
                                 <div class="card-body">
                                     <table id="table" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
@@ -71,7 +71,7 @@
                         @endif
                         <!-- Содержимое второй вкладки -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 2')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
+                         ($RegSEOB->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
                             <div class="tab-pane fade" id="EOB" role="tabpanel" aria-labelledby="EOB-tab">
                                 <div class="card-body">
                                     <table id="table_eob" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
@@ -86,7 +86,7 @@
                         @endif
                         <!-- Содержимое третьей вкладки -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 3')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 3')))
+                         ($RegNHRS->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 3')))
                             <div class="tab-pane fade" id="NHRS" role="tabpanel" aria-labelledby="NHRS-tab">
                                 <div class="card-body">
                                     <table id="table_nhrs" data-toolbar="#toolbar" data-search="true"
@@ -102,7 +102,7 @@
                         @endif
                         <!-- Содержимое четвёртой вкладки -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 4')) ||
-                            ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 4')))
+                         ($RegOther->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 4')))
                             <div class="tab-pane fade" id="Other" role="tabpanel" aria-labelledby="Other-tab">
                                 <div class="card-body">
                                     <table id="table_other" data-toolbar="#toolbar" data-search="true"
