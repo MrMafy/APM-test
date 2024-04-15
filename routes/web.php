@@ -76,6 +76,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update-proj-note/{id}', 'App\Http\Controllers\ProjectController@updateNote')->name('update-proj-note');
 
 
+//    --------------- копия карты проекта ------------------------------
+    Route::post('/copy-project/{id}', 'App\Http\Controllers\ProjectController@copyProject')->name('copy-project');
+
     // обновление (редактирование) карты проекта -> РАСЧЕТ
     Route::get('/project-maps/all/{id}/{tab}/update-calculation', 'App\Http\Controllers\ProjectController@updateCalculation')->name('project-map-update');
     Route::post('/project-maps/all/{id}/calculation-update', 'App\Http\Controllers\ProjectController@updateCalculationSubmit')->name('project-map-update-submit');

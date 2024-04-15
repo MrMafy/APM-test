@@ -1336,4 +1336,76 @@ class ProjectController extends Controller
         return response()->download($filePath, $equipment->equipment_fileName);
     }
 
+    // ------------------------ КОПИЯ КАРТЫ ПРОЕКТА -------------
+    public function copyProject($id)
+    {
+        // Найти оригинальный проект
+        $originalProject = Projects::findOrFail($id);
+        // Определить группу и год оригинального проекта
+        $group = $originalProject->projNumSuf;
+        $year = $originalProject->projNumPre;
+        // Посчитать количество копий в группе
+        $lastCopyNumber = Projects::where('projNumSuf', $group)
+            ->where('projNumPre', $year)
+            ->count();
+
+        $copyNumber = $lastCopyNumber + 1;
+        // Создать новый проект
+        $newProject = new Projects;
+        $newProject->projNumPre = $originalProject->projNumPre;
+        $newProject->projNum = $copyNumber-1 . '-' . $originalProject->projNum;
+        $newProject->projNumSuf = $group;
+        $newProject->projManager = $originalProject->projManager;
+        $newProject->objectName = $originalProject->objectName;
+        $newProject->endCustomer = $originalProject->endCustomer;
+        $newProject->contractor = $originalProject->contractor;
+        $newProject->date_application = $originalProject->date_application;
+
+        // Копировать флаги работ
+        $newProject->delivery = $originalProject->delivery;
+        $newProject->pir = $originalProject->pir;
+        $newProject->kd = $originalProject->kd;
+        $newProject->production = $originalProject->production;
+        $newProject->smr = $originalProject->smr;
+        $newProject->pnr = $originalProject->pnr;
+        $newProject->po = $originalProject->po;
+        $newProject->cmr = $originalProject->cmr;
+
+        $newProject->save();
+
+        // Добавить новый проект в соответствующий реестр
+        switch ($originalProject->projNumSuf) {
+            case 'Группа 1':
+                $this->addToRegistrySinteg($newProject);
+                break;
+            case 'Группа 2':
+                $this->addToRegistryEob($newProject);
+                break;
+            case 'Группа 3':
+                $this->addToRegistryNhrs($newProject);
+                break;
+            case 'Группа 4':
+                $this->addToRegistryOther($newProject);
+                break;
+            default:
+                // Обработка, если тип не определен
+                break;
+        }
+        // Копировать контакты оригинального проекта
+        foreach ($originalProject->contacts as $contact) {
+            $newContact = new Contacts;
+            $newContact->project_num = $newProject->projNum;
+            $newContact->fio = $contact->fio;
+            $newContact->post = $contact->post;
+            $newContact->organization = $contact->organization;
+            $newContact->responsibility = $contact->responsibility;
+            $newContact->phone = $contact->phone;
+            $newContact->email = $contact->email;
+            $newContact->save();
+        }
+
+        return redirect()->route('project-maps');
+    }
+
+
 }

@@ -6,7 +6,13 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-18">
-                <h1 class="mb-5">Карта проекта Вн. Номер: {{ $project->projNum }}</h1>
+                <div class="d-flex gap-5 align-items-center pb-3">
+                    <h1>Карта проекта Вн. Номер: {{ $project->projNum }}</h1>
+                    <form action="{{ route('copy-project', ['id' => $project->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-secondary copy_project">Скопировать проект</button>
+                    </form>
+                </div>
 
                 <ul class="nav nav-mytabs" id="myTab" role="tablist">
                     <li class="nav-item">
