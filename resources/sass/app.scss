@@ -97,7 +97,7 @@ main {
 }
 
 
-.login__page {
+.login__page, .register__page{
   // background-image: url(/storage/apm_back.jpg);
   backdrop-filter: brightness(0.5);
   .card {
@@ -113,6 +113,7 @@ main {
     height: 100vh;
   }
 }
+
 /* Rounded tabs */
 
 @media (min-width: 576px) {
@@ -438,9 +439,9 @@ tbody#changes-inputs td {
   }
 }
 
-input {
+input, select {
   cursor: auto;
-  background: rgb(16 45 75 / 24%) !important;
+  background: rgb(16 45 75 / 10%) !important;
 }
 
 input[readonly] {

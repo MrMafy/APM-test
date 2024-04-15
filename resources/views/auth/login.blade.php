@@ -42,7 +42,7 @@
     <div id="app">
         <div class="login__page-block d-flex align-items-center justify-content-center">
             <div class="col-md-3">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="login__page-logo pb-3"><img src="{{ asset('/storage/apm_apm.png') }}"></div>
                     <h3 class="login__page-header text-center pt-5 pb-2">{{ __('Вход в APM') }}</h3>
                     <div class="card-body">
@@ -104,16 +104,17 @@
                                         {{ __('Вход') }}
                                     </button>
 
-                                    {{-- @if (Route::has('password.request'))
-                                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                    {{ __('Забыли пароль?') }}
-                                                </a>
-                                            @endif --}}
+{{--                                     @if (Route::has('password.request'))--}}
+{{--                                                <a class="btn btn-link" href="{{ route('password.request') }}">--}}
+{{--                                                    {{ __('Забыли пароль?') }}--}}
+{{--                                                </a>--}}
+{{--                                            @endif--}}
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
+                <a href="/register" class="btn btn-sm btn-secondary"> ЗАРЕГИСТРИРОВАТЬСЯ </a>
             </div>
         </div>
     </div>

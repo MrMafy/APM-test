@@ -174,7 +174,7 @@
         function detailFormatter(index, row) {
             let fieldNames = {
                 'vnNum': 'Вн. Номер',
-                'purchaseName': 'Наим. закупки',
+                'purchaseName': 'Хэштэг',
                 'delivery': 'Поставка',
                 'pir': 'ПИР',
                 'kd': 'КД',
@@ -184,10 +184,10 @@
                 'po': 'ПО',
                 'smr': 'СМР',
                 'purchaseOrg': 'Наим. орг. закупки',
-                'endUser': 'Головная компания',
+                // 'endUser': 'Головная компания',
                 'object': 'объект',
-                'receiptDate': 'Дата поступления заявки',
-                'submissionDate': 'Дата подачи предложения',
+                // 'receiptDate': 'Дата поступления заявки',
+                // 'submissionDate': 'Дата подачи предложения',
                 'projectManager': 'Руководитель проекта',
             };
             let html = [];
@@ -242,58 +242,64 @@
                         }
                     }, {
                         field: 'purchaseName',
-                        title: 'Наим. закупки',
+                        title: 'Хэштэг',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true
-                    }, {
-                        title: 'Виды работ',
-                        colspan: 8,
-                        align: 'center'
-                    }, {
+                    },  {
                         title: 'Наим. орг. закупки',
                         field: 'purchaseOrg',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true
-                    }, {
-                        title: 'Головная компания',
-                        field: 'endUser',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    }, {
+                    },
+                    //     {
+                    //     title: 'Головная компания',
+                    //     field: 'endUser',
+                    //     rowspan: 2,
+                    //     align: 'center',
+                    //     valign: 'middle',
+                    //     sortable: true
+                    // },
+                        {
                         title: 'Объект',
                         field: 'object',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true
-                    }, {
-                        title: 'Дата поступления заявки',
-                        field: 'receiptDate',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    }, {
-                        title: 'Дата подачи предложения',
-                        field: 'submissionDate',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    }, {
+                    },
+                    //     {
+                    //     title: 'Дата поступления заявки',
+                    //     field: 'receiptDate',
+                    //     rowspan: 2,
+                    //     align: 'center',
+                    //     valign: 'middle',
+                    //     sortable: true
+                    // },
+                    //     {
+                    //     title: 'Дата подачи предложения',
+                    //     field: 'submissionDate',
+                    //     rowspan: 2,
+                    //     align: 'center',
+                    //     valign: 'middle',
+                    //     sortable: true
+                    // },
+                        {
                         title: 'Руководитель проекта',
                         field: 'projectManager',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true
-                    }],
+                    },
+                        {
+                            title: 'Виды работ',
+                            colspan: 8,
+                            align: 'center'
+                        }],
                     [{
                         field: 'delivery',
                         title: 'Поставка',
