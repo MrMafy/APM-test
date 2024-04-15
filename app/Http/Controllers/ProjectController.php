@@ -399,7 +399,7 @@ class ProjectController extends Controller
             $project->projNumPre =$req->input('projNumPre');
         }
 
-        //ВЫТАСКИВАНИЕ ГОДА ИЗ НОМЕРА ПРОЕКТА (projNum)
+      //ВЫТАСКИВАНИЕ ГОДА ИЗ НОМЕРА ПРОЕКТА (projNum)
         // Пример строки проекта
         $projNum = $req->input('projNum');
         // Разбиение строки по пробелу
@@ -1180,6 +1180,50 @@ class ProjectController extends Controller
 
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#calculation'])->with('success', 'Project data successfully added');
     }
+
+    // ------------------------ ПЕРЕНАЗНАЧЕНИЕ ПРОЕКТА ---------------------------
+    public function projectRedirect ($id, Request $request){
+        $user = Auth::user();
+        $users = User::with('groups')->get(); // Получаем всех пользователей с их группами
+        $groups = $user->groups()->get(); // Получаем все группы пользователя
+
+        $project = Projects::find($id);
+        // Получаем старое значение projectManager
+        $num = $project->getOriginal('projNum');
+        // Обновление руководителя проекта
+        $project->projManager = $request->input('users');
+
+        switch ($project->projNumSuf) {
+            case 'Группа 1':
+                RegSInteg::where('vnNum', $num)->update(['projectManager' => $request->input('users')]);
+                break;
+            case 'Группа 2':
+                RegEOB::where('vnNum', $num)->update(['projectManager' => $request->input('users')]);
+                break;
+            case 'Группа 3':
+                RegNHRS::where('vnNum', $num)->update(['projectManager' => $request->input('users')]);
+                break;
+            case 'Группа 4':
+                RegOther::where('vnNum', $num)->update(['projectManager' => $request->input('users')]);
+                break;
+            default:
+                // Обработка, если тип не определен
+                break;
+        }
+
+        BasicReference::where('project_num', $num)->update(['projManager' => $request->input('users')]);
+        Change::where('project_num', $num)->update(['responsible' => $request->input('users')]);
+        RegReestrKP::where('project_num', $num)->update(['sender' => $request->input('users')]);
+
+        $project->save();
+
+
+//        return view('project-redirect', compact('groups', 'users', 'project'));
+        return redirect()->back()->with('success', 'Руководитель проекта успешно обновлен!');
+    }
+
+
+
 
 
     // ------------------------ ПРОДОЛЖЕНИЕ ЗАПОЛНЕНИЯ КАРТЫ ПРОЕКТА -------------

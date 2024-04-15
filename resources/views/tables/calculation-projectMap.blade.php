@@ -19,7 +19,9 @@
                 {{-- <a href="{{ route('project-map-delete', $project->id) }}"><button class="btn btn-danger">Удалить</button></a> --}}
             </div>
         </div>
-        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#redirectModal">Переназначить проект </button>
+        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#redirectModal">Переназначить
+            проект
+        </button>
     </div>
 
     <div class="accordion calculation" id="accordionCalculation">
@@ -464,7 +466,9 @@
                 <input id="proj_note" class="form-control" value="{{$project->proj_note}}" readonly>
             </div>
         </div>
-        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#redirectModal">Переназначить проект </button>
+        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#redirectModal">Переназначить
+            проект
+        </button>
     </div>
 
     <div class="accordion calculation" id="accordionCalculation">
@@ -917,12 +921,13 @@
             $(`[data-target=${target}][data-index=${index}]`).remove();
         });
     </script>
+
 @endif
 
 <div class="modal fade" id="redirectModal" tabindex="-1" aria-labelledby="redirectModalLabel"
      aria-hidden="true">
     <div class="modal-dialog w-50">
-        <form  action="{{ route('project-continue', $project->id) }}" method="post" enctype="multipart/form-data">
+        <form id="remapForm" method="post" enctype="multipart/form-data" action="{{ route('project-redirect', ['id' => $project->id]) }}">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -934,13 +939,20 @@
                 <div class="modal-body">
                     <p class="mb-5">Текущий руководитель проекта: {{ $project->projManager }}</p>
                     <span>Выберите нового руководителя проекта:</span>
-                    <select>
-
+                    <select name="users">
+                        @foreach($users as $user)
+                            @foreach($user->groups->sortBy('name') as $group)
+                                <option value="{{ $user->name }}" {{ $user->name == $project->projManager ? 'selected' : '' }}>
+                                    {{ $group->name }} - {{ $user->name }}
+                                </option>
+                            @endforeach
+                        @endforeach
                     </select>
+
                 </div>
                 {{-- Кнопки --}}
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Переназначить</button>
+                    <button type="submit" class="btn btn-primary remap-btn">Переназначить</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
