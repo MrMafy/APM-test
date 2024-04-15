@@ -119,7 +119,7 @@
                     </form>
                 </div>
             </div>
-        <a href="/register" target="_blank"> ВОЙТИ </a>
+        <a href="/"> ВОЙТИ </a>
     </div>
 </div>
 </body>
