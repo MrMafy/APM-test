@@ -23,16 +23,15 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/home/profile/update', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('profile.update');
     // изменение пароля профиля
     Route::put('/home/profile/change-password', [App\Http\Controllers\HomeController::class, 'changePassword'])->name('profile.change-password');
-    // добавление руководителей проекта в список
-    Route::post('/home/profile/edit-pm', [App\Http\Controllers\HomeController::class, 'editPM'])->name('profile.editPM');
-    // Маршрут для получения списка руководителей проектов
-    Route::get('/get-project-managers', [App\Http\Controllers\HomeController::class, 'getProjectManagers']);
-    // Маршрут для удаления руководителя проекта
-    Route::delete('/delete-project-manager/{id}', [App\Http\Controllers\HomeController::class, 'deleteProjectManager']);
-    // Маршрут для сохранения изменений в руководителе проекта
-    Route::post('/save-project-manager', [App\Http\Controllers\HomeController::class, 'saveProjectManager']);
-    // Маршрут для добавления нового руководителя проекта
-    Route::post('/add-project-manager', [App\Http\Controllers\HomeController::class, 'addProjectManager']);
+
+    // редактирование список рук.проектов
+    Route::put('/home/profile/change-user', [App\Http\Controllers\HomeController::class, 'changeUser'])->name('profile.change-user');
+    // редактирование список групп
+    Route::put('/home/profile/change-group', [App\Http\Controllers\HomeController::class, 'changeGroup'])->name('profile.change-group');
+    // создание новой группы
+    Route::post('/home/profile/add-group', [App\Http\Controllers\HomeController::class, 'addGroup'])->name('profile.add-group');
+    // удаление группы
+    Route::DELETE('/home/profile/delete-group', [App\Http\Controllers\HomeController::class, 'deleteGroup'])->name('profile.delete-group');
 
     // ----------------------------------------------------------------------------------------------------------------
 

@@ -5,36 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
-use App\Models\ProjectManager;
 use App\Models\User;
+use App\Models\Group;
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
         return view('home');
     }
 
-    /**
-     * Show user's profile.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function profile()
     {
         $user = Auth::user();
@@ -43,13 +28,6 @@ class HomeController extends Controller
         return view('profile', compact('groups', 'users'));
     }
 
-
-    /**
-     * Update user's profile data.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -67,13 +45,6 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
-
-    /**
-     * Change user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function changePassword(Request $request)
     {
         // Validate incoming data
@@ -90,75 +61,88 @@ class HomeController extends Controller
     }
 
 
-
-    // Метод для получения списка руководителей проектов
-    public function getProjectManagers()
+    public function changeUser(Request $request)
     {
-        $projectManagers = ProjectManager::all();
-        return response()->json($projectManagers);
+//        dd($request->all());
+        $user = Auth::user();
+
+        // Обновление имени пользователя
+        $user->name = $request->input('user_name');
+        $user->save();
+
+        // Обработка групп пользователя
+        if ($request->has('user_group')) {
+            $groupIds = $request->input('user_group');
+            $user->groups()->sync($groupIds);
+        }
+
+        // Удаление групп пользователя, если были выбраны опции удаления
+        if ($request->has('deleted_group')) {
+            $groupIdsToDelete = explode(',', $request->input('deleted_group'));
+            if (!empty($groupIdsToDelete)) { // Проверяем, что массив не пустой
+                $user->groups()->detach($groupIdsToDelete);
+            }
+        }
+
+        // После обновления перенаправьте пользователя на нужную страницу или верните ответ JSON
+        return redirect()->back()->with('success', 'Профиль пользователя успешно обновлен!');
     }
 
-    // Метод для удаления руководителя проекта
-    public function deleteProjectManager($id)
+    public function changeGroup(Request $request)
     {
-        $projectManager = ProjectManager::findOrFail($id);
-        $projectManager->delete();
-        return response()->json(['message' => 'Project manager deleted successfully']);
+        //dd($request->all());
+        $group = Auth::user()->groups()->findOrFail($request->input('group_id'));
+
+        // Обновление названия группы
+        $group->name = $request->input('group_name');
+        $group->save();
+
+        // Обработка состава группы
+        if ($request->has('group_member')) {
+            $memberIds = $request->input('group_member');
+            $group->users()->sync($memberIds);
+        }
+
+        // Удаление пользователей из группы, если были выбраны опции удаления
+        if ($request->has('deleted_member')) {
+            $memberIdsToDelete = explode(',', $request->input('deleted_member'));
+            if (!empty($memberIdsToDelete)) { // Проверяем, что массив не пустой
+                $group->users()->detach($memberIdsToDelete);
+            }
+        }
+
+        // После обновления перенаправьте пользователя на нужную страницу или верните ответ JSON
+        return redirect()->back()->with('success', 'Группа успешно обновлена!');
     }
 
-// Метод для сохранения изменений в руководителе проекта
-    public function saveProjectManager(Request $request)
+    public function addGroup(Request $request)
     {
-        // Получаем данные из запроса
-        $data = $request->all();
+        // Создание новой группы
+        $group = new Group();
+        $group->name = $request->input('Newgroup_name');
+        $group->save();
 
-        // Находим руководителя проекта по ID
-        $projectManager = ProjectManager::findOrFail($data['id']);
+        // Обработка состава группы
+        if ($request->has('Newgroup_member')) {
+            $memberIds = $request->input('Newgroup_member');
+            foreach ($memberIds as $userId) {
+                // Добавляем каждого выбранного пользователя в группу
+                $group->users()->attach($userId);
+            }
+        }
 
-        // Обновляем данные руководителя проекта
-        $projectManager->fio = $data['fio'];
-        $projectManager->groupNum = $data['groupNum'];
-
-        // Сохраняем изменения
-        $projectManager->save();
-
-        // Возвращаем успешный ответ
-        return response()->json(['message' => 'Project manager updated successfully']);
-    }
-// Метод для добавления нового руководителя проекта
-    public function addProjectManager(Request $request)
-    {
-        // Получаем данные из запроса
-        $data = $request->all();
-
-        // Создаем нового руководителя проекта
-        $projectManager = new ProjectManager();
-        $projectManager->fio = $data['fio'];
-        $projectManager->groupNum = $data['groupNum'];
-        $projectManager->save();
-
-        // Возвращаем успешный ответ
-        return response()->json(['message' => 'Project manager added successfully']);
+        // После создания перенаправьте пользователя на нужную страницу или верните ответ JSON
+        return redirect()->back()->with('success', 'Группа успешно создана!');
     }
 
-// Метод для обновления руководителя проекта
-    public function editPM(Request $request)
+    public function deleteGroup(Request $request)
     {
-        // Получаем данные из запроса
-        $data = $request->all();
+        $groupId = $request->input('group_id_to_delete');
+        $group = Group::findOrFail($groupId);
+        $group->delete();
 
-        // Находим руководителя проекта по ID
-        $projectManager = ProjectManager::findOrFail($data['editPmId']);
-
-        // Обновляем данные руководителя проекта
-        $projectManager->fio = $data['fio'];
-        $projectManager->groupNum = $data['groupNum'];
-        $projectManager->save();
-
-        // Возвращаем успешный ответ
-        return response()->json(['message' => 'Project manager updated successfully']);
+        return redirect()->back()->with('success', 'Группа успешно удалена!');
     }
-
 
 
 }

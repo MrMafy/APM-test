@@ -6,12 +6,8 @@
     <div class="container updateProject">
         <h1 class="mb-5">Редактирование расчета для карты проекта {{ $project->projNum }}</h1>
 
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-calculation-tab" data-bs-toggle="pill"
-                    data-bs-target="#pills-calculation" type="button" role="tab" aria-controls="pills-home"
-                    aria-selected="true">Расчет</button>
-            </li>
+        <ul class="nav nav-pills mb-3 d-flex gap-5" id="pills-tab" role="tablist">
+            <a href="{{ url()->previous() }}" class="btn btn-light">Назад</a>
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <form action="{{ route('project-map-update-submit', $project->id) }}" method="post">
@@ -124,46 +120,46 @@
                                         <div class="d-flex gap-5">
                                             <div class="d-flex flex-column">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="delivery"
+                                                    <input  type="checkbox" name="delivery"
                                                         id="delivery" {{ $project->delivery ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="delivery">Поставка</label>
+                                                    <label  for="delivery">Поставка</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="pir"
+                                                    <input  type="checkbox" name="pir"
                                                         id="pir" {{ $project->pir ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="pir">ПИР</label>
+                                                    <label for="pir">ПИР</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="kd"
+                                                    <input  type="checkbox" name="kd"
                                                         id="kd" {{ $project->kd ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="kd">КД</label>
+                                                    <label  for="kd">КД</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="production"
+                                                    <input  type="checkbox" name="production"
                                                         id="production" {{ $project->production ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="production">Производство</label>
+                                                    <label  for="production">Производство</label>
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="smr"
+                                                    <input  type="checkbox" name="smr"
                                                         id="smr" {{ $project->smr ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="smr">ШМР</label>
+                                                    <label for="smr">ШМР</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="pnr"
+                                                    <input  type="checkbox" name="pnr"
                                                         id="pnr" {{ $project->pnr ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="pnr">ПНР</label>
+                                                    <label  for="pnr">ПНР</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="po"
+                                                    <input  type="checkbox" name="po"
                                                         id="po" {{ $project->po ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="po">ПО</label>
+                                                    <label  for="po">ПО</label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="cmr"
+                                                    <input  type="checkbox" name="cmr"
                                                         id="cmr" {{ $project->cmr ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="cmr">СМР</label>
+                                                    <label for="cmr">СМР</label>
                                                 </div>
                                             </div>
                                         </div>
