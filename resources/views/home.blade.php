@@ -255,14 +255,6 @@
                         valign: 'middle',
                         sortable: true
                     },
-                    //     {
-                    //     title: 'Головная компания',
-                    //     field: 'endUser',
-                    //     rowspan: 2,
-                    //     align: 'center',
-                    //     valign: 'middle',
-                    //     sortable: true
-                    // },
                         {
                         title: 'Объект',
                         field: 'object',
@@ -271,22 +263,6 @@
                         valign: 'middle',
                         sortable: true
                     },
-                    //     {
-                    //     title: 'Дата поступления заявки',
-                    //     field: 'receiptDate',
-                    //     rowspan: 2,
-                    //     align: 'center',
-                    //     valign: 'middle',
-                    //     sortable: true
-                    // },
-                    //     {
-                    //     title: 'Дата подачи предложения',
-                    //     field: 'submissionDate',
-                    //     rowspan: 2,
-                    //     align: 'center',
-                    //     valign: 'middle',
-                    //     sortable: true
-                    // },
                         {
                         title: 'Руководитель проекта',
                         field: 'projectManager',
