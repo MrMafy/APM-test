@@ -184,11 +184,14 @@
                 'po': 'ПО',
                 'smr': 'СМР',
                 'purchaseOrg': 'Наим. орг. закупки',
-                // 'endUser': 'Головная компания',
                 'object': 'объект',
-                // 'receiptDate': 'Дата поступления заявки',
-                // 'submissionDate': 'Дата подачи предложения',
-                'projectManager': 'Руководитель проекта',
+
+                'proj_cost': 'Цена проекта',
+                'profit': 'Прибыль',
+                'marginality': 'Маржинальность',
+                'remark': 'Примечание',
+                'date_start': 'Дата начала',
+                'date_end': 'Дата окончания',
             };
             let html = [];
             $.each(row, function(key, value) {
@@ -247,7 +250,35 @@
                         align: 'center',
                         valign: 'middle',
                         sortable: true
-                    },  {
+                    },{
+                        field: 'proj_cost',
+                        title: 'Цена проекта',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    }, {
+                        field: 'profit',
+                        title: 'Прибыль',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    }, {
+                        field: 'marginality',
+                        title: 'Маржинальность %',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    },{
+                        field: 'remark',
+                        title: 'Примечание',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    },    {
                         title: 'Наим. орг. закупки',
                         field: 'purchaseOrg',
                         rowspan: 2,
@@ -275,7 +306,21 @@
                             title: 'Виды работ',
                             colspan: 8,
                             align: 'center'
-                        }],
+                        } ,{
+                        field: 'date_start',
+                        title: 'Дата начала',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    },{
+                        field: 'date_end',
+                        title: 'Дата окончания',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    }],
                     [{
                         field: 'delivery',
                         title: 'Поставка',

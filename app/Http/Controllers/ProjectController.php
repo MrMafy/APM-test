@@ -648,6 +648,8 @@ class ProjectController extends Controller
     public function updateRealizationSubmit($id, Request $req)
     {
         $project = Projects::find($id);
+
+
         // --------------РЕАЛИЗАЦИЯ----------------//
         // базовая справка
         $BasicReference = BasicReference::where('project_num', $project->projNum)->first();
