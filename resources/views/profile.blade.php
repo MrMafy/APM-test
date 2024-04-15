@@ -151,15 +151,18 @@
                                                         </td>
                                                         <td>
                                                             <a class="editGroup btn btn-xs btn-info" href="#"
+                                                               data-name="{{ $group->name }}"
+                                                               data-id="{{ $group->id }}"
+                                                               data-members="@foreach($group->users as $user){{ $user->name }}@if(!$loop->last),@endif @endforeach"
+                                                               data-members-id="@foreach($group->users as $user){{ $user->id }}@if(!$loop->last),@endif @endforeach"
                                                                data-bs-toggle="modal"
-                                                               data-bs-target="#editGroup">
+                                                               data-bs-target="#editGroupModal">
                                                                 <i class="fa-solid fa-edit"></i>
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a class="deleteGroup btn btn-xs btn-danger" href="#"
-                                                               data-bs-toggle="modal"
-                                                               data-bs-target="#deleteGroup">
+                                                            <a class="deleteGroup btn btn-xs btn-danger" href="#" data-bs-toggle="modal"
+                                                               data-bs-target="#deleteGroupModal" data-group-id="{{ $group->id }}">
                                                                 <i class="fa-solid fa-trash-can"></i>
                                                             </a>
                                                         </td>
@@ -169,8 +172,8 @@
                                             </table>
                                             <a class="addGroup btn btn-xs btn-info" href="#"
                                                data-bs-toggle="modal"
-                                               data-bs-target="#addGroup">
-                                                Добавить группу
+                                               data-bs-target="#addGroupModal">
+                                                Создать новую группу
                                             </a>
                                         </div>
                                     </div>
@@ -287,9 +290,110 @@
         </div>
     </div>
 
+    {{--------------------- Редактирование список групп ---------------------}}
+    <div class="modal fade" id="editGroupModal" tabindex="-1" aria-labelledby="editGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog w-25">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editGroupModalLabel">Редактировать группу</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="edit_group" action="{{ route('profile.change-group') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="group_name" class="form-label">Название группы</label>
+                            <input type="text" class="form-control groupName" id="group_name" name="group_name" value="">
+                            <input type="hidden" name="group_id" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="members" class="form-label">Состав группы:</label>
+                            <div class="group_members d-flex flex-column gap-1">
+                                {{-- список групп пользователя --}}
+                            </div>
+                            <hr>
+                            <input type="hidden" name="deleted_member" value="">
+                            <input type="hidden" name="group_id" value="">
+
+                            <button class="btn add_member">+ добавить пользователя</button>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{--------------------- Создание новой группы ---------------------}}
+    <div class="modal fade" id="addGroupModal" tabindex="-1" aria-labelledby="addGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog w-25">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addGroupModalLabel">Создать новую группу</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="add_Newgroup" action="{{ route('profile.add-group') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="Newgroup_name" class="form-label">Название группы</label>
+                            <input type="text" class="form-control" id="Newgroup_name" name="Newgroup_name" placeholder="Введите название группы" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label>Выберите участников группы:</label>
+                            @foreach($users as $user)
+                                <div>
+                                    <input type="checkbox" name="Newgroup_member[]" id="user_{{ $user->id }}" value="{{ $user->id }}">
+                                    <label for="user_{{ $user->id }}">
+                                        {{ $user->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{--------------------- Удаление группы ---------------------}}
+    <div class="modal fade" id="deleteGroupModal" tabindex="-1" aria-labelledby="deleteGroupModalLabel" aria-hidden="true">
+        <div class="modal-dialog w-25">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteGroupModalLabel">Удаление группы</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить эту группу?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form id="deleteGroupForm" action="{{ route('profile.delete-group') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="group_id_to_delete" id="group_id_to_delete">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- ------ редактирование списка руководителей проектов ------ --}}
     <script>
         $(function () {
-
             // редактирование пользователя (передача данных в модалку)
             $(".editUser").click(function () {
                 event.preventDefault();
@@ -309,7 +413,6 @@
                     $('.user_groups').append(groupInput);
                 });
             });
-
             // Уникальный счетчик для идентификаторов селектов
             var selectCounter = 1;
             // добавление группы (добавление поля с выбором в форму)
@@ -333,10 +436,8 @@
                 selectCounter++;
             });
 
-
             // Массив для хранения идентификаторов групп, которые нужно удалить
             var groupsToDelete = [];
-
             // При клике на иконку минус у группы удалять
             $(document).on('click', '.remove_group', function() {
                 console.log("Remove group button clicked");
@@ -349,7 +450,69 @@
                 $(this).closest('.d-flex').remove(); // Удаляем родительский элемент после получения значения скрытого поля
                 $('#deleted_group').val(groupsToDelete.join(','));
             });
+        });
+    </script>
+    {{-- ------ редактирование групп ------ --}}
+    <script>
+        $(function () {
+            $(".editGroup").click(function () {
+                event.preventDefault();
+                var groupName = $(this).data('name');
+                var groupId = $(this).data('id');
+                $('.groupName').val(groupName);
+                $('input[name="group_id"]').val(groupId);
 
+                $('.group_members').empty();
+                var membersData = $(this).data('members'); // Получаем данные о группах пользователя
+                var memberIds = $(this).data('members-id').split(','); // Получаем идентификаторы групп
+                var members = membersData.split(','); // Разбиваем данные о группах на массив
+                members.forEach(function (memberName, index) {
+                    var memberId = memberIds[index]; // Получаем идентификатор группы
+                    var memberInput = '<div class="d-flex gap-2 align-items-center">' +
+                        '<input type="text" class="form-control" value="' + memberName + '" readonly>' + // Текстовое поле для названия группы
+                        '<input type="hidden" name="group_member[]" value="' + memberId + '">' + // Скрытое поле для id группы
+                        '<div class="remove_member"><i class="fa fa-minus-square" aria-hidden="true"></i></div></div>';
+                    $('.group_members').append(memberInput);
+                });
+            });
+
+            var selectCounter2 = 1;
+            $(".add_member").click(function() {
+                event.preventDefault();
+                var selectId = 'select_member_' + selectCounter2;
+                var selectHtml = '<div class="d-flex gap-2 align-items-center">' +
+                    '<select class="form-select group_member" name="group_member[]" id="' + selectId + '" required>' +
+                    '<option value="" disabled selected>Выберите пользователя</option>';
+                @foreach(App\Models\User::all() as $user)
+                    selectHtml += '<option value="{{ $user->id }}">{{ $user->name }}</option>';
+                @endforeach
+                    selectHtml += '</select>' +
+                    '<i class="fa fa-minus-square remove_member" aria-hidden="true"></i></div>';
+                $('.group_members').append(selectHtml);
+                selectCounter2++;
+            });
+
+            var membersToDelete = [];
+            $(document).on('click', '.remove_member', function() {
+                var selectValue = $(this).prev('input[type="hidden"]').val();
+                console.log("Removed member id:", selectValue);
+                if (selectValue !== "") {
+                    membersToDelete.push(selectValue);
+                    console.log("Members to delete:", membersToDelete);
+                }
+                $(this).closest('.d-flex').remove();
+                $('input[name="deleted_member"]').val(membersToDelete.join(','));
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.deleteGroup').click(function() {
+                var groupId = $(this).data('group-id');
+                $('#group_id_to_delete').val(groupId);
+            });
         });
     </script>
 
