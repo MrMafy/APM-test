@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RegEOB;
+use App\Models\RegNHRS;
+use App\Models\RegOther;
+use App\Models\RegSInteg;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Projects;
@@ -33,6 +37,8 @@ class realizationController extends Controller
     {
         // поиск связанной карты проекта
         $project = Projects::find($id);
+        $num = $project->getOriginal('projNum');
+
         // базовая справка
         $BasicReference = new BasicReference;
             $BasicReference->project_num = $project->projNum;
@@ -83,6 +89,28 @@ class realizationController extends Controller
             $workGroup->logistics = $request->logistics;
             $workGroup->save();
 
+
+        switch ($project->projNumSuf) {
+            case 'Группа 1':
+                RegSInteg::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                break;
+            case 'Группа 2':
+                RegEOB::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                break;
+            case 'Группа 3':
+                RegNHRS::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                break;
+            case 'Группа 4':
+                RegOther::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                break;
+            default:
+                // Обработка, если тип не определен
+                break;
+        }
 
         return redirect()->route('project-data-one', $id)->with('success');
         }

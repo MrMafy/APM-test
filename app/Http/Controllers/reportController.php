@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RegEOB;
+use App\Models\RegNHRS;
+use App\Models\RegOther;
+use App\Models\RegSInteg;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Projects;
@@ -28,6 +32,7 @@ class reportController extends Controller
     {
         // поиск связанной карты проекта
         $project = Projects::find($id);
+        $num = $project->getOriginal('projNum');
         // отчет
         $Report = new Report;
         $Report->project_num = $project->projNum;
@@ -91,6 +96,24 @@ class reportController extends Controller
         $ReportNotes->resume = $request->resume;
         $ReportNotes->save();
 
+        switch ($project->projNumSuf) {
+            case 'Группа 1':
+                RegSInteg::where('vnNum', $num)->update(['marginality' => $request->marginalityFact]);
+                break;
+            case 'Группа 2':
+                RegEOB::where('vnNum', $num)->update(['marginality' => $request->marginalityFact]);
+                break;
+            case 'Группа 3':
+                RegNHRS::where('vnNum', $num)->update(['marginality' => $request->marginalityFact]);
+                break;
+            case 'Группа 4':
+                RegOther::where('vnNum', $num)->update(['marginality' => $request->marginalityFact]);
+                break;
+            default:
+                // Обработка, если тип не определен
+                break;
+        }
+
         return redirect()->route('project-data-one', ['id' => $id]);
     }
 
@@ -99,6 +122,7 @@ class reportController extends Controller
     {
         // Обновление отчет
         $project = Projects::find($id);
+        $num = $project->getOriginal('projNum');
         // общая информация
         $report = Report::where('project_num', $project->projNum)->first();
         if (!$report) {
@@ -168,11 +192,30 @@ class reportController extends Controller
         $ReportNotes->teamNotes = $req->teamNotes;
         $ReportNotes->resume = $req->resume;
         $ReportNotes->save();
+
+        switch ($project->projNumSuf) {
+            case 'Группа 1':
+                RegSInteg::where('vnNum', $num)->update(['marginality' => $req->marginalityFact]);
+                break;
+            case 'Группа 2':
+                RegEOB::where('vnNum', $num)->update(['marginality' => $req->marginalityFact]);
+                break;
+            case 'Группа 3':
+                RegNHRS::where('vnNum', $num)->update(['marginality' => $req->marginalityFact]);
+                break;
+            case 'Группа 4':
+                RegOther::where('vnNum', $num)->update(['marginality' => $req->marginalityFact]);
+                break;
+            default:
+                // Обработка, если тип не определен
+                break;
+        }
+
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => 'report'])->with('success', 'Changes successfully updated');
     }
 
 
-    // удаление отчета 
+    // удаление отчета
     public function deleteMessage($id)
     {
         $project = Projects::find($id);

@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Главная страница (отображение реестров)
     Route::get('/home', 'App\Http\Controllers\DataController@index')->name('home');
-
+    Route::post('/update-home-note/{id}', 'App\Http\Controllers\DataController@updateNote');
     Route::get('/getData_group_1', 'App\Http\Controllers\DataController@getData_group_1');
     Route::get('/getData_group_2', 'App\Http\Controllers\DataController@getData_group_2');
     Route::get('/getData_group_3', 'App\Http\Controllers\DataController@getData_group_3');

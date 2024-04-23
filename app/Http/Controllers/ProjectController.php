@@ -226,7 +226,7 @@ class ProjectController extends Controller
         return view('add-map', compact('projectNum', 'currentYear', 'projectManagers', 'baseRisks', 'currentUserGroupNum', 'user'));
     }
 
-    // ДОБАВЛЕНИЕ   новой карты проекта
+    // ДОБАВЛЕНИЕ новой карты проекта
     public function storeNew(Request $request)
     {
         /* ---------------- РАСЧЕТ (ОБЩАЯ ИНФА И КОНТАКТ ЛИСТ) ----------------*/
@@ -648,7 +648,7 @@ class ProjectController extends Controller
     public function updateRealizationSubmit($id, Request $req)
     {
         $project = Projects::find($id);
-
+        $num = $project->getOriginal('projNum');
 
         // --------------РЕАЛИЗАЦИЯ----------------//
         // базовая справка
@@ -699,6 +699,28 @@ class ProjectController extends Controller
         $workGroup->supply = $req->supply;
         $workGroup->logistics = $req->logistics;
         $workGroup->save();
+
+        switch ($project->projNumSuf) {
+            case 'Группа 1':
+                RegSInteg::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                break;
+            case 'Группа 2':
+                RegEOB::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                break;
+            case 'Группа 3':
+                RegNHRS::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                break;
+            case 'Группа 4':
+                RegOther::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                break;
+            default:
+                // Обработка, если тип не определен
+                break;
+        }
 
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#realization'])->with('success', 'Project data successfully updated');
     }
@@ -788,8 +810,8 @@ class ProjectController extends Controller
 
         RegEob::create([
             'vnNum' => $project->projNum,
-            'purchaseName' => $project->objectName,
-            'delivery' => $project->delivery,
+            'purchaseName' => $project->proj_note,
+            'delivery' => $project->supply,
             'pir' => $project->pir,
             'kd' => $project->kd,
             'prod' => $project->production,
@@ -815,8 +837,8 @@ class ProjectController extends Controller
 
         RegSInteg::create([
             'vnNum' => $project->projNum,
-            'purchaseName' => $project->objectName,
-            'delivery' => $project->delivery,
+            'purchaseName' => $project->proj_note,
+            'delivery' => $project->supply,
             'pir' => $project->pir,
             'kd' => $project->kd,
             'prod' => $project->production,
@@ -826,7 +848,7 @@ class ProjectController extends Controller
             'smr' => $project->cmr,
             'purchaseOrg' => $project->contractor,
             'endUser' => $project->endCustomer,
-            'object' => $project->proj_note,
+            'object' => $project->objectName,
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
@@ -841,8 +863,8 @@ class ProjectController extends Controller
 
         RegNHRS::create([
             'vnNum' => $project->projNum,
-            'purchaseName' => $project->objectName,
-            'delivery' => $project->delivery,
+            'purchaseName' => $project->proj_note,
+            'delivery' => $project->supply,
             'pir' => $project->pir,
             'kd' => $project->kd,
             'prod' => $project->production,
@@ -852,7 +874,7 @@ class ProjectController extends Controller
             'smr' => $project->cmr,
             'purchaseOrg' => $project->contractor,
             'endUser' => $project->endCustomer,
-            'object' => $project->proj_note,
+            'object' => $project->objectName,
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
@@ -867,7 +889,7 @@ class ProjectController extends Controller
 
         RegOther::create([
             'vnNum' => $project->projNum,
-            'purchaseName' => $project->objectName,
+            'purchaseName' => $project->proj_note,
             'delivery' => $project->supply,
             'pir' => $project->pir,
             'kd' => $project->kd,
@@ -878,7 +900,7 @@ class ProjectController extends Controller
             'smr' => $project->cmr,
             'purchaseOrg' => $project->contractor,
             'endUser' => $project->endCustomer,
-            'object' => $project->proj_note,
+            'object' => $project->objectName,
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
@@ -898,7 +920,7 @@ class ProjectController extends Controller
         if ($registry) {
             $registry->update([
                 'vnNum' => $project->projNum,
-                'purchaseName' => $project->objectName,
+                'purchaseName' => $project->proj_note,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
                 'kd' => $project->kd,
@@ -909,7 +931,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->proj_note,
+                'object' => $project->objectName,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
@@ -929,7 +951,7 @@ class ProjectController extends Controller
         if ($registry) {
             $registry->update([
                 'vnNum' => $project->projNum,
-                'purchaseName' => $project->objectName,
+                'purchaseName' => $project->proj_note,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
                 'kd' => $project->kd,
@@ -940,7 +962,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->proj_note,
+                'object' => $project->objectName,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
@@ -960,7 +982,7 @@ class ProjectController extends Controller
         if ($registry) {
             $registry->update([
                 'vnNum' => $project->projNum,
-                'purchaseName' => $project->objectName,
+                'purchaseName' => $project->proj_note,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
                 'kd' => $project->kd,
@@ -971,7 +993,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->proj_note,
+                'object' => $project->objectName,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
@@ -991,7 +1013,7 @@ class ProjectController extends Controller
         if ($registry) {
             $registry->update([
                 'vnNum' => $project->projNum,
-                'purchaseName' => $project->objectName,
+                'purchaseName' => $project->proj_note,
                 'delivery' => $project->delivery,
                 'pir' => $project->pir,
                 'kd' => $project->kd,
@@ -1002,7 +1024,7 @@ class ProjectController extends Controller
                 'smr' => $project->cmr,
                 'purchaseOrg' => $project->contractor,
                 'endUser' => $project->endCustomer,
-                'object' => $project->proj_note,
+                'object' => $project->objectName,
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
