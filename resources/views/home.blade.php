@@ -15,7 +15,8 @@
                           ($RegSInteg->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 1')))
                             <li class="nav-item flex-sm-fill">
                                 <a class="nav-link border-0 text-uppercase font-weight-bold active" id="SInteg-tab"
-                                   data-bs-toggle="tab" href="#SInteg" role="tab" data-toggle="tab" aria-controls="SInteg"
+                                   data-bs-toggle="tab" href="#SInteg" role="tab" data-toggle="tab"
+                                   aria-controls="SInteg"
                                    aria-selected="true">Группа 1</a>
                             </li>
                         @endif
@@ -23,7 +24,8 @@
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 2')) ||
                           ($RegEOB->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
                             <li class="nav-item flex-sm-fill">
-                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="EOB-tab" data-bs-toggle="tab"
+                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="EOB-tab"
+                                   data-bs-toggle="tab"
                                    href="#EOB" role="tab" data-toggle="tab" aria-controls="EOB"
                                    aria-selected="false">Группа 2</a>
                             </li>
@@ -32,7 +34,8 @@
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 3')) ||
                           ($RegNHRS->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 3')))
                             <li class="nav-item flex-sm-fill">
-                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="NHRS-tab" data-bs-toggle="tab"
+                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="NHRS-tab"
+                                   data-bs-toggle="tab"
                                    href="#NHRS" role="tab" data-toggle="tab" aria-controls="NHRS"
                                    aria-selected="false">Группа 3</a>
                             </li>
@@ -41,7 +44,8 @@
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 4')) ||
                           ($RegOther->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 4')))
                             <li class="nav-item flex-sm-fill">
-                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="Other-tab" data-bs-toggle="tab"
+                                <a class="nav-link border-0 text-uppercase font-weight-bold" id="Other-tab"
+                                   data-bs-toggle="tab"
                                    href="#Other" role="tab" data-toggle="tab" aria-controls="Other"
                                    aria-selected="false">Группа 4</a>
                             </li>
@@ -57,14 +61,19 @@
                         <!-- Содержимое первой вкладки -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 1')) ||
                          ($RegSInteg->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 1')))
-                            <div class="tab-pane fade show active" id="SInteg" role="tabpanel" aria-labelledby="SInteg-tab">
+                            <div class="tab-pane fade show active" id="SInteg" role="tabpanel"
+                                 aria-labelledby="SInteg-tab">
                                 <div class="card-body">
-                                    <table id="table" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+                                    <table id="table" data-toolbar="#toolbar" data-search="true"
+                                           data-show-refresh="true"
                                            data-show-toggle="true" data-show-fullscreen="true" data-show-columns="true"
-                                           data-show-columns-toggle-all="true" data-detail-view="true" data-show-export="true"
+                                           data-show-columns-toggle-all="true" data-detail-view="true"
+                                           data-show-export="true"
                                            data-click-to-select="true" data-detail-formatter="detailFormatter"
-                                           data-minimum-count-columns="12" data-show-pagination-switch="true" data-pagination="true"
-                                           data-id-field="id" data-url="/getData_group_1" data-response-handler="responseHandler">
+                                           data-minimum-count-columns="12" data-show-pagination-switch="true"
+                                           data-pagination="true"
+                                           data-id-field="id" data-url="/getData_group_1"
+                                           data-response-handler="responseHandler">
                                     </table>
                                 </div>
                             </div>
@@ -74,12 +83,16 @@
                          ($RegSEOB->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
                             <div class="tab-pane fade" id="EOB" role="tabpanel" aria-labelledby="EOB-tab">
                                 <div class="card-body">
-                                    <table id="table_eob" data-toolbar="#toolbar" data-search="true" data-show-refresh="true"
+                                    <table id="table_eob" data-toolbar="#toolbar" data-search="true"
+                                           data-show-refresh="true"
                                            data-show-toggle="true" data-show-fullscreen="true" data-show-columns="true"
-                                           data-show-columns-toggle-all="true" data-detail-view="true" data-show-export="true"
+                                           data-show-columns-toggle-all="true" data-detail-view="true"
+                                           data-show-export="true"
                                            data-click-to-select="true" data-detail-formatter="detailFormatter"
-                                           data-minimum-count-columns="12" data-show-pagination-switch="true" data-pagination="true"
-                                           data-id-field="id" data-url="/getData_group_2" data-response-handler="responseHandler">
+                                           data-minimum-count-columns="12" data-show-pagination-switch="true"
+                                           data-pagination="true"
+                                           data-id-field="id" data-url="/getData_group_2"
+                                           data-response-handler="responseHandler">
                                     </table>
                                 </div>
                             </div>
@@ -91,7 +104,8 @@
                                 <div class="card-body">
                                     <table id="table_nhrs" data-toolbar="#toolbar" data-search="true"
                                            data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
-                                           data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
+                                           data-show-columns="true" data-show-columns-toggle-all="true"
+                                           data-detail-view="true"
                                            data-show-export="true" data-click-to-select="true"
                                            data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
                                            data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
@@ -107,7 +121,8 @@
                                 <div class="card-body">
                                     <table id="table_other" data-toolbar="#toolbar" data-search="true"
                                            data-show-refresh="true" data-show-toggle="true" data-show-fullscreen="true"
-                                           data-show-columns="true" data-show-columns-toggle-all="true" data-detail-view="true"
+                                           data-show-columns="true" data-show-columns-toggle-all="true"
+                                           data-detail-view="true"
                                            data-show-export="true" data-click-to-select="true"
                                            data-detail-formatter="detailFormatter" data-minimum-count-columns="12"
                                            data-show-pagination-switch="true" data-pagination="true" data-id-field="id"
@@ -138,9 +153,9 @@
             return {};
         }
 
-        $(function() {
+        $(function () {
             // Отправляем AJAX запрос и при получении данных инициализируем таблицу
-            $.get('/getData_group_1', function(data) {
+            $.get('/getData_group_1', function (data) {
                 initTable($table, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
                 let totalRows = data.length;
@@ -148,7 +163,7 @@
             });
 
             // Отправляем AJAX запрос и при получении данных инициализируем вторую таблицу
-            $.get('/getData_group_2', function(data) {
+            $.get('/getData_group_2', function (data) {
                 initTable($tableEob, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
                 let totalRows = data.length;
@@ -156,14 +171,14 @@
             });
 
             // Отправляем AJAX запрос и при получении данных инициализируем вторую таблицу
-            $.get('/getData_group_3', function(data) {
+            $.get('/getData_group_3', function (data) {
                 initTable($tableNHRS, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
                 let totalRows = data.length;
                 $tableNHRS.attr('data-total-rows', totalRows);
             });
             // Отправляем AJAX запрос и при получении данных инициализируем вторую таблицу
-            $.get('/getData_group_4', function(data) {
+            $.get('/getData_group_4', function (data) {
                 initTable($tableOther, data);
                 // Получаем общее количество строк и устанавливаем атрибут data-total-rows
                 let totalRows = data.length;
@@ -184,14 +199,17 @@
                 'po': 'ПО',
                 'smr': 'СМР',
                 'purchaseOrg': 'Наим. орг. закупки',
-                // 'endUser': 'Головная компания',
                 'object': 'объект',
-                // 'receiptDate': 'Дата поступления заявки',
-                // 'submissionDate': 'Дата подачи предложения',
-                'projectManager': 'Руководитель проекта',
+
+                'proj_cost': 'Цена проекта',
+                'profit': 'Прибыль',
+                'marginality': 'Маржинальность',
+                'remark': 'Примечание',
+                'date_start': 'Дата начала',
+                'date_end': 'Дата окончания',
             };
             let html = [];
-            $.each(row, function(key, value) {
+            $.each(row, function (key, value) {
                 let fieldName = fieldNames[key] ||
                     key; // Получаем название поля из объекта fieldNames или используем ключ, если название не найдено
                 if (key !== 'area' && key !== 'id' && key !== 'tech' && key !== 'primeCost' && key !== 'tkpCost' &&
@@ -208,12 +226,13 @@
                 url: '/get-project-id/' + vnNum,
                 type: 'GET',
                 async: false, // Делаем запрос синхронным, чтобы получить результат перед возвратом
-                success: function(data) {
+                success: function (data) {
                     projectId = data;
                 }
             });
             return projectId;
         }
+
         function initTable($table, data) {
             $table.bootstrapTable('destroy').bootstrapTable({
                 // height: 550,
@@ -223,14 +242,14 @@
                 pageSize: 10,
                 pageList: [10, 25, 50, 'all'],
                 columns: [
-                    [{
+                    [   {
                         title: 'Вн. Номер',
                         field: 'vnNum',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             let vnNum = value; // Получаем значение поля 'vnNum'
                             // Преобразуем значение vnNum в JSON и передаем в JavaScript
                             // Вызываем JavaScript функцию для получения projectId
@@ -240,72 +259,101 @@
                             // Используем значение поля vnNum в качестве текста ссылки
                             return '<a href="' + href + '">' + vnNum + '</a>';
                         }
-                    }, {
-                        field: 'purchaseName',
-                        title: 'Хэштэг',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    },  {
-                        title: 'Наим. орг. закупки',
-                        field: 'purchaseOrg',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    },
-                    //     {
-                    //     title: 'Головная компания',
-                    //     field: 'endUser',
-                    //     rowspan: 2,
-                    //     align: 'center',
-                    //     valign: 'middle',
-                    //     sortable: true
-                    // },
+                        },
                         {
-                        title: 'Объект',
-                        field: 'object',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    },
-                    //     {
-                    //     title: 'Дата поступления заявки',
-                    //     field: 'receiptDate',
-                    //     rowspan: 2,
-                    //     align: 'center',
-                    //     valign: 'middle',
-                    //     sortable: true
-                    // },
-                    //     {
-                    //     title: 'Дата подачи предложения',
-                    //     field: 'submissionDate',
-                    //     rowspan: 2,
-                    //     align: 'center',
-                    //     valign: 'middle',
-                    //     sortable: true
-                    // },
+                            field: 'purchaseName',
+                            title: 'Хэштэг',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
                         {
-                        title: 'Руководитель проекта',
-                        field: 'projectManager',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true
-                    },
+                            field: 'proj_cost',
+                            title: 'Цена проекта',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
+                        {
+                            field: 'profit',
+                            title: 'Прибыль',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
+                        {
+                            field: 'marginality',
+                            title: 'Маржинальность %',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
+                        {
+                            field: 'remark',
+                            title: 'Примечание',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true,
+                            formatter: function (value, row, index, field) {
+                                return '<div class="editable" data-field="' + field + '" data-id="' + row.id + '" contenteditable>' + value + '</div>';
+                            }
+                        },
+                        {
+                            title: 'Наим. орг. закупки',
+                            field: 'purchaseOrg',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
+                        {
+                            title: 'Объект',
+                            field: 'object',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
+                        {
+                            title: 'Руководитель проекта',
+                            field: 'projectManager',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
                         {
                             title: 'Виды работ',
                             colspan: 8,
                             align: 'center'
-                        }],
+                        },
+                        {
+                            field: 'date_start',
+                            title: 'Дата начала',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        }, {
+                        field: 'date_end',
+                        title: 'Дата окончания',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true
+                    }],
                     [{
+
                         field: 'delivery',
                         title: 'Поставка',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return '';
                         }
                     }, {
@@ -313,7 +361,7 @@
                         title: 'ПИР',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return '';
                         }
                     }, {
@@ -321,7 +369,7 @@
                         title: 'КД',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return '';
                         }
                     }, {
@@ -329,7 +377,7 @@
                         title: 'Пр-во',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return '';
                         }
                     }, {
@@ -337,7 +385,7 @@
                         title: 'ШМР',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return '';
                         }
                     }, {
@@ -345,7 +393,7 @@
                         title: 'ПНР',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return ''; // скрываем значение
                         }
                     }, {
@@ -353,7 +401,7 @@
                         title: 'ПО',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return ''; // скрываем значение
                         }
                     }, {
@@ -361,17 +409,17 @@
                         title: 'СМР',
                         sortable: true,
                         cellStyle: cellStyle,
-                        formatter: function(value, row, index, field) {
+                        formatter: function (value, row, index, field) {
                             return ''; // скрываем значение
                         }
                     }]
                 ],
                 data: data,
                 ajaxOptions: {
-                    success: function(data) {
+                    success: function (data) {
                         $table.bootstrapTable('load', data);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error(xhr.responseText);
                     }
                 }

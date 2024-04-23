@@ -632,4 +632,6 @@ td.red-cell {
         }
     }
 }
-
+.editable:focus-visible {
+    outline:none;
+}
