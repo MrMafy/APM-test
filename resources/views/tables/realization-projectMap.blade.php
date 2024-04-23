@@ -45,6 +45,41 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <h4 class="text-center mb-3">Из КСГ</h4>
+                <table id="basic-table" class="">
+                    <thead class="d-none">
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($project->item as $item)
+                        <tr>
+                            <th>Итого срок реализации (дн.)</th>
+                            <td colspan="3">{{ $item->periodDays }}</td>
+                        </tr>
+                        <tr>
+                            <th>Себестоимость (руб. без НДС)</th>
+                            <td colspan="3">{{ $item->price }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <div class=" gap-3">
+                    <div class="d-flex gap-3">
+                        <p>Итого срок реализации (дн.)</p>
+                        <span>{{ $totals['periodDays'] ?? '-'}}</span>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <p>Себестоимость (руб. без НДС)</p>
+                        <span>{{ $totals['price'] ?? '-'}}</span>
+                    </div>
+                </div>
             </div>
             <div class="mb-3">
                 <table id="info-table" class="">

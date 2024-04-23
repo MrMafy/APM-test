@@ -661,6 +661,11 @@ class ProjectController extends Controller
         $BasicReference->projManager = $req->input('projManager');
         $BasicReference->save();
 
+        $FromKSGperiodDays =  updateCalculationSubmit::$periodDays;
+        $FromKSGperiodDays -> save();
+        $FromKSGpriceTotals =  updateCalculationSubmit::$priceTotals;
+        $FromKSGpriceTotals -> save();
+
         // доп информация
         $BasicInfo = BasicInfo::where('project_num', $project->projNum)->first();
         $BasicInfo->contractor = $req->contractor;
