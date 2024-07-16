@@ -79,6 +79,11 @@ class ProjectController extends Controller
         $project = Projects::where('projNum', $vnNum)->first(); // Используем Eloquent для поиска проекта по projNum
         return $project ? $project->id : null; // Возвращаем ID проекта, если найден, иначе null
     }
+    public function getAllProjects()
+    {
+        $projects = Projects::select('id', 'projNum')->get();
+        return response()->json($projects);
+    }
 
 
     // Отображение одного проекта и связанных данных (отображает данные по id) на странице карты проекта
@@ -220,7 +225,8 @@ class ProjectController extends Controller
         $projectManagers = ProjectManager::all();
         $baseRisks = baseRisks::all();
         // Получение group_num пользователя
-        $currentUserGroupNum = Auth::user()->group_num;
+       // $currentUserGroupNum = Auth::user()->group_num;
+        $currentUserGroupNum = Auth::user()->group_name;
         // Получение текущего пользователя
         $user = Auth::user();
         return view('add-map', compact('projectNum', 'currentYear', 'projectManagers', 'baseRisks', 'currentUserGroupNum', 'user'));
@@ -314,7 +320,7 @@ class ProjectController extends Controller
         }
 
 
-        return redirect()->route('project-maps');
+     //   return redirect()->route('project-maps');
     }
 
 

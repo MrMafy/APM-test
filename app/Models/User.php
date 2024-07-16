@@ -39,5 +39,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Group', 'user_groups', 'user_id', 'group_id');
     }
+    public function getGroupNameAttribute()
+    {
+        $group = $this->groups()->first();
+        return $group ? $group->name : null;
+    }
 
 }

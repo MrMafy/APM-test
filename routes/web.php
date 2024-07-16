@@ -69,6 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/project-maps/all/{id}/{tab?}', 'App\Http\Controllers\ProjectController@showOneMessage')->name('project-data-one');
 
     Route::get('/get-project-id/{vnNum}', 'App\Http\Controllers\ProjectController@getProjectIdByVnNum');
+    Route::get('/get-all-projects', 'App\Http\Controllers\ProjectController@getAllProjects');
+
 
 
     // ТАБЫ на странице КАРТА ПРОЕКТА

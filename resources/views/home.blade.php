@@ -80,7 +80,7 @@
                         @endif
                         <!-- Содержимое второй вкладки -->
                         @if($user->role === 'admin' || ($user->role === 'proj_manager' && $user->groups->contains('name', 'Группа 2')) ||
-                         ($RegSEOB->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
+                         ($RegEOB->contains('projectManager', $user->name)) || ($user->role === 'responsible' && $user->groups->contains('name', 'Группа 2')))
                             <div class="tab-pane fade" id="EOB" role="tabpanel" aria-labelledby="EOB-tab">
                                 <div class="card-body">
                                     <table id="table_eob" data-toolbar="#toolbar" data-search="true"
@@ -152,7 +152,7 @@
             }
             return {};
         }
-
+        let allProjects = [];
         $(function () {
             // Отправляем AJAX запрос и при получении данных инициализируем таблицу
             $.get('/getData_group_1', function (data) {
@@ -220,17 +220,27 @@
             return html.join('');
         }
 
+        // function getProjectIdByVnNum(vnNum) {
+        //     let projectId = null;
+        //     $.ajax({
+        //         url: '/get-project-id/' + vnNum,
+        //         type: 'GET',
+        //         async: false, // Делаем запрос синхронным, чтобы получить результат перед возвратом
+        //         success: function (data) {
+        //             projectId = data;
+        //         }
+        //     });
+        //     return projectId;
+        // }
+        // Загружаем все проекты и сохраняем в глобальную переменную
+        $.get('/get-all-projects', function (data) {
+            allProjects = data;
+            initTables();
+        });
+
         function getProjectIdByVnNum(vnNum) {
-            let projectId = null;
-            $.ajax({
-                url: '/get-project-id/' + vnNum,
-                type: 'GET',
-                async: false, // Делаем запрос синхронным, чтобы получить результат перед возвратом
-                success: function (data) {
-                    projectId = data;
-                }
-            });
-            return projectId;
+            let project = allProjects.find(proj => proj.projNum === vnNum);
+            return project ? project.id : null;
         }
 
         function initTable($table, data) {
@@ -242,7 +252,25 @@
                 pageSize: 10,
                 pageList: [10, 25, 50, 'all'],
                 columns: [
-                    [   {
+                    // [   {
+                    //     title: 'Вн. Номер',
+                    //     field: 'vnNum',
+                    //     rowspan: 2,
+                    //     align: 'center',
+                    //     valign: 'middle',
+                    //     sortable: true,
+                    //     formatter: function (value, row, index, field) {
+                    //         let vnNum = value; // Получаем значение поля 'vnNum'
+                    //         // Преобразуем значение vnNum в JSON и передаем в JavaScript
+                    //         // Вызываем JavaScript функцию для получения projectId
+                    //         let projectId = getProjectIdByVnNum(vnNum);
+                    //         // Создаем ссылку
+                    //         let href = "/project-maps/all/" + projectId + '#calculation';
+                    //         // Используем значение поля vnNum в качестве текста ссылки
+                    //         return '<a href="' + href + '">' + vnNum + '</a>';
+                    //     }
+                    //     },
+                    [{
                         title: 'Вн. Номер',
                         field: 'vnNum',
                         rowspan: 2,
@@ -250,16 +278,11 @@
                         valign: 'middle',
                         sortable: true,
                         formatter: function (value, row, index, field) {
-                            let vnNum = value; // Получаем значение поля 'vnNum'
-                            // Преобразуем значение vnNum в JSON и передаем в JavaScript
-                            // Вызываем JavaScript функцию для получения projectId
-                            let projectId = getProjectIdByVnNum(vnNum);
-                            // Создаем ссылку
+                            let projectId = getProjectIdByVnNum(value);
                             let href = "/project-maps/all/" + projectId + '#calculation';
-                            // Используем значение поля vnNum в качестве текста ссылки
-                            return '<a href="' + href + '">' + vnNum + '</a>';
+                            return '<a href="' + href + '">' + value + '</a>';
                         }
-                        },
+                    },
                         {
                             field: 'purchaseName',
                             title: 'Хэштэг',

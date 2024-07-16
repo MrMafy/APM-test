@@ -66,8 +66,7 @@
                         <td>
                             <div class="d-flex gap-2">
                                 <a class="editProduct btn btn-xs btn-info" href="#" data-bs-toggle="modal"
-                                   data-bs-target="#editBaseRisks" data-id="{{ $item->id }}"
-                                   data-nameRisk="{{ $item->nameRisk }}" data-toggle="tooltip" title="Редактировать запись">
+                                   data-bs-target="#editBaseRisks" data-toggle="tooltip" title="Редактировать запись">
                                     <i class="fa-solid fa-edit"></i>
                                 </a>
                                 <a class="deleteProduct btn btn-xs btn-danger" href="#" data-bs-toggle="modal"
