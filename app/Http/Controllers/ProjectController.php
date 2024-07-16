@@ -320,7 +320,7 @@ class ProjectController extends Controller
         }
 
 
-     //   return redirect()->route('project-maps');
+       return redirect()->route('project-maps');
     }
 
 
