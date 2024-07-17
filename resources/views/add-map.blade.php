@@ -51,7 +51,7 @@
                         @endif
                     </div>
                     <div class="form-group mb-3">
-                        <label for="objectName">Наименование объекта:</label>
+                        <label for="objectName">Головная компания:</label>
                         <input type="text" class="form-control" name="proj_note" id="proj_note"
                             placeholder="Введите хэштэг проекта">
                     </div>
