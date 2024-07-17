@@ -49,6 +49,7 @@ class realizationController extends Controller
             $BasicReference->projGoal = $request->projGoal;
             $BasicReference->projCurator = $request->projCurator;
             $BasicReference->projManager = $request->projManager;
+            $BasicReference->linkPlan = $request->linkPlan;
             $BasicReference->save();
 
         // доп информация

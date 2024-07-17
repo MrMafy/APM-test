@@ -17,6 +17,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-.env
 /resources/sass/app.css
-.env
+

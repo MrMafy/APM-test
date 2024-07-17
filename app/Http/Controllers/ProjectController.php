@@ -667,6 +667,7 @@ class ProjectController extends Controller
         $BasicReference->projGoal = $req->input('projGoal');
         $BasicReference->projCurator = $req->input('projCurator');
         $BasicReference->projManager = $req->input('projManager');
+        $BasicReference->linkPlan = $req->input('linkPlan');
         $BasicReference->save();
 
 //        $FromKSGperiodDays =  updateCalculationSubmit::$periodDays;

@@ -149,6 +149,10 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mb-3 blockquote">
+                <input type="text" class="form-control" name="linkPlan" id="linkPlan"
+                       placeholder="Вставьте ссылку на проект в сервисе 'План/факт'">
+            </div>
             {{-- Состав рабочей группы и ответственность --}}
             <div class="mb-5">
                 <h4 class="text-center mb-3">Состав рабочей группы и ответственность</h4>
