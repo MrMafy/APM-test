@@ -580,7 +580,7 @@
 										</th>
 										<td colspan="3" class="gray"><input type="text" class="form-control"
 												name="roles[0][premiumPart]" id="premium_part_change"
-												value="{{ $project->report_team->first()->premium_part }}" readonly>
+												value="{{ $project->report_team->first()->premium_part }}">
 										</td>
 									</tr>
 									<tr>
@@ -1139,7 +1139,7 @@
 										<th class="premiumPart gray">Размер премиальной части проекта, руб. без НДС
 										</th>
 										<td colspan="3" class="gray"><input type="text" class="form-control"
-												name="roles[0][premium_part]" id="premium_part" readonly></td>
+												name="roles[0][premium_part]" id="premium_part" value="0" placeholder="введите значение"></td>
 									</tr>
 									<tr>
 										<th class="projTeam blue">Команда проекта</th>
@@ -1313,16 +1313,16 @@
 			event.preventDefault();
 			index++;
 
-			const sum = Math.round(parseFloat($('#expenseMaterialFact').val() || 0) +
+			let sum = Math.round(parseFloat($('#expenseMaterialFact').val() || 0) +
 				parseFloat($('#expenseDeliveryFact').val() || 0) +
 				parseFloat($('#expenseWorkFact').val() || 0) +
 				parseFloat($('#expenseOtherFact').val() || 0) +
 				parseFloat($('#expenseOpoxFact').val() || 0));
-			const difference = Math.round(parseFloat($('#costRubW').val() || 0) - sum);
-			const premium_part = Math.round(difference * 0.01);
+			let difference = Math.round(parseFloat($('#costRubW').val() || 0) - sum);
+			let premium_part = Math.round(difference * 0.01);
 
 
-			const newRow = $(getHtml(index, premium_part));
+			let newRow = $(getHtml(index, premium_part));
 			newRow.appendTo(`#reportTeam-inputs`);
 
 			newRow.find('.delete-btn').on('click', function() {
@@ -1333,8 +1333,8 @@
 	function getHtml(index, premium_part) {
 		return `
 		<tr>
-			<th class="premiumPart gray d-none">Размер премиальной части проекта, руб. без НДС</th>
-			<td colspan="3" class="gray d-none"><input type="text" class="form-control"
+			<th class="premiumPart gray">Размер премиальной части проекта, руб. без НДС</th>
+			<td colspan="3" class="gray "><input type="text" class="form-control"
 				name="roles[${index}][premium_part]" id="premium_part_${index}" value="${premium_part}"></td>
 		</tr>
 		<tr>
@@ -1370,7 +1370,7 @@
 		const projProfitFact = Math.round(parseFloat($('#profitFact').val() || 0) / parseFloat($(
 			'#costRubW').val() || 0));
 
-		const premium_part = Math.round(difference * 0.01);
+		let premium_part = Math.round(difference * 0.01);
 
 		// Обновляем поля
 		$('#expenseDirectFact').val(sum);
@@ -1382,11 +1382,12 @@
 		$('#projProfitFact').val(projProfitFact);
 
 		$('#premium_part').val(premium_part);
+        console.log(premium_part);
 
 	}
 	$(document).ready(function() {
 		// Указываем, что при изменении текстовых полей нужно вызывать функцию:
-		$("#expenseMaterialFact, #expenseDeliveryFact, #expenseWorkFact, #expenseOtherFact, #expenseOpoxFact, #costRubW, #expenseDirectFact, #marginProfitFact, #marginalityPlan, #expenseOpoxPlan, #expenseOpoxFact, #profitPlan, #profitFact, #premium_part")
+		$("#expenseMaterialFact, #expenseDeliveryFact, #expenseWorkFact, #expenseOtherFact, #expenseOpoxFact, #costRubW, #expenseDirectFact, #marginProfitFact, #marginalityPlan, #expenseOpoxPlan, #expenseOpoxFact, #profitPlan, #profitFact")
 			.on('input', calculateFields);
 	});
 
