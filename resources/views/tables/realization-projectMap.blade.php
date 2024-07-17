@@ -131,6 +131,26 @@
                     <p>Ссылка не доступна</p>
                 @endif
             </div>
+
+            <div class="mb-3">
+                        @if ($project->totals->count() > 0)
+                            @foreach ($project->totals as $totals)
+                                <div class="d-flex gap-4">
+                                    <div class="d-flex gap-3">
+                                        <p>Итого срок реализации (дн.)</p>
+                                        <span>{{ $totals['periodDays'] ?? '-'}}</span>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <p>Себестоимость (руб. без НДС)</p>
+                                        <span>{{ $totals['price'] ?? '-'}}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <h4>Нет данных</h4>
+                        @endif
+                    </div>
+
             <div class="mb-3">
                 <h4 class="text-center mb-3">Состав рабочей группы и ответственность</h4>
                 <table id="workGroup-table" class="">
