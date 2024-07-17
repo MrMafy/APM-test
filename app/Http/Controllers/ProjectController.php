@@ -675,7 +675,7 @@ class ProjectController extends Controller
 //        $FromKSGpriceTotals -> save();
 
         // доп информация
-        $BasicInfo = BasilcInfo::where('project_num', $project->projNum)->first();
+        $BasicInfo = BasicInfo::where('project_num', $project->projNum)->first();
         $BasicInfo->contractor = $req->contractor;
         $BasicInfo->contract_num = $req->contract_num;
         // $BasicInfo->price_plan = $request->price_plan;
