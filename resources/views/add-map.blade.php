@@ -14,29 +14,28 @@
 
                     <div class="form-group mb-3">
                         <label for="projNum">Номер проекта по реестру:</label>
-                        <div class="d-flex gap-3">
-                            {{-- <input type="text" class="form-control" name="projNumPre" id="projNumPre"
-                                value="{{ $projectNum }}-{{ $currentYear }}" readonly> --}}
-                                <input type="hidden" class="form-control" name="projNumPre" id="projNumPre"
-                                value="{{ $currentYear }}" readonly>
+                        <div class="d-flex gap-3 mb-2">
+                            <input type="hidden" class="form-control" name="projNumPre" id="projNumPre" value="{{ $currentYear }}" readonly>
                             <div>
                                 @if($user->role === 'admin' || $user->role === 'responsible')
-                                <input list="projNumbs" name="projNumSuf" required placeholder="Выберите тип"
-                                    id="projNumSuf" class="form-control" />
-                                <datalist id="projNumbs">
-                                    <option value="Группа 1" data-group="1">
-                                    <option value="Группа 2" data-group="2">
-                                    <option value="Группа 3" data-group="3">
-                                    <option value="Группа 4" data-group="4">
-                                </datalist>
+                                    <input list="projNumbs" name="projNumSuf" required placeholder="Выберите тип" id="projNumSuf" class="form-control" />
+                                    <datalist id="projNumbs">
+                                        <option value="Группа 1" data-group="1">
+                                        <option value="Группа 2" data-group="2">
+                                        <option value="Группа 3" data-group="3">
+                                        <option value="Группа 4" data-group="4">
+                                    </datalist>
                                 @else
-                                    <input list="projNumbs" name="projNumSuf" required placeholder="Выберите тип"
-                                           id="projNumSuf" class="form-control" value="{{ $currentUserGroupNum }}" readonly/>
+                                    <input list="projNumbs" name="projNumSuf" required placeholder="Выберите тип" id="projNumSuf" class="form-control" value="{{ $currentUserGroupNum }}" readonly/>
                                 @endif
                             </div>
                         </div>
                         <input type="hidden" name="projNum" id="projNumCombined">
+                        <button class="btn btn-secondary" type="button" id="manualNumBtn">Ввести номер вручную</button>
+                        <input type="text" name="manualProjNum" id="manualProjNum" class="form-control d-none">
                     </div>
+
+
                     <div class="form-group mb-3">
                         <label for="projManager">Руководитель проекта:</label>
                         @if($user->role === 'admin' || $user->role === 'responsible')
@@ -233,19 +232,18 @@
         });
 
 
-        // Скрипт для скрытия некоторых вариантов выбора в поле input с datalist в зависимости от группы текущего пользователя
         jQuery(document).ready(function($) {
             var currentUserGroup = "{{ Auth::user()->group_num }}";
+
+            // Фильтрация групп в зависимости от роли пользователя
             $('#projNumbs option').each(function() {
                 var optionGroup = $(this).data('group');
                 if (optionGroup !== currentUserGroup) {
                     $(this).hide();
                 }
             });
-        });
 
-        // Скрипт для автоматического выбора руководителя проекта на основе имени текущего пользователя
-        jQuery(document).ready(function($) {
+            // Выбор менеджера проекта
             var currentUser = "{{ Auth::user()->name }}";
             $('#projManager option').each(function() {
                 var managerName = $(this).val();
@@ -253,14 +251,12 @@
                     $(this).prop('selected', true);
                 }
             });
-        });
 
-        // Обновленный скрипт для получения руководителей в зависимости от выбранной группы
-        jQuery(document).ready(function($) {
+            // Обновление списка руководителей и номера проекта при изменении группы
             $('#projNumSuf').change(function() {
                 var selectedGroup = $('datalist#projNumbs option[value="' + $(this).val() + '"]').data('group');
 
-                $('#projManager').empty();
+                $('#projManager').empty(); // Очистка текущего списка руководителей
 
                 if (selectedGroup !== undefined) {
                     $.ajax({
@@ -279,6 +275,7 @@
                         }
                     });
                 } else {
+                    // Если группа не определена, заполнить список руководителей начальными данными
                     @foreach ($projectManagers as $manager)
                     $('#projManager').append($('<option>', {
                         value: "{{ $manager->fio }}",
@@ -287,56 +284,31 @@
                     @endforeach
                 }
 
+                // Формирование номера проекта
                 var projNumPre = $('#projNumPre').val();
                 var projNumSuf = $(this).val();
-                var combinedValue = projNumPre + " " + projNumSuf;
+                var combinedValue = projNumPre + '-' + projNumSuf;
                 $('#projNumCombined').val(combinedValue);
+            });
+
+            // Показ/скрытие поля для ввода номера вручную
+            $('#manualNumBtn').on('click', function() {
+                $('#manualProjNum').toggleClass('d-none');
+            });
+
+            // Обработка формы и создание комбинированного значения
+            $('#addMap').on('submit', function() {
+                var manualProjNum = $('#manualProjNum').val();
+                if (manualProjNum) {
+                    $('#projNumCombined').val(manualProjNum);
+                } else {
+                    var projNumPre = $('#projNumPre').val();
+                    var projNumSuf = $('#projNumSuf').val();
+                    var combinedValue = projNumPre + '-' + projNumSuf;
+                    $('#projNumCombined').val(combinedValue);
+                }
             });
         });
 
-        {{--//соединение номера проекта (1-23) с названием (ЭОБ)--}}
-        {{--$(document).ready(function() {--}}
-        {{--    $('#projNumSuf').change(function() {--}}
-        {{--        var selectedGroup = $('datalist#projNumbs option[value="' + $(this).val() + '"]').data(--}}
-        {{--            'group');--}}
-
-
-        {{--        // Очищаем текущий список руководителей--}}
-        {{--        $('#projManager').empty();--}}
-
-        {{--        // Если выбрана группа, делаем AJAX-запрос для получения руководителей--}}
-        {{--        if (selectedGroup !== undefined) {--}}
-        {{--            $.ajax({--}}
-        {{--                url: '/get-managers/' + selectedGroup,--}}
-        {{--                method: 'GET',--}}
-        {{--                success: function(data) {--}}
-        {{--                    // Добавляем новых руководителей в список--}}
-        {{--                    data.forEach(function(manager) {--}}
-        {{--                        $('#projManager').append($('<option>', {--}}
-        {{--                            value: manager.fio,--}}
-        {{--                            text: manager.fio--}}
-        {{--                        }));--}}
-        {{--                    });--}}
-        {{--                },--}}
-        {{--                error: function() {--}}
-        {{--                    console.error('Ошибка при получении данных с сервера');--}}
-        {{--                }--}}
-        {{--            });--}}
-        {{--        } else {--}}
-        {{--            // Если выбранной группы нет, загружаем всех руководителей--}}
-        {{--            @foreach ($projectManagers as $manager)--}}
-        {{--                $('#projManager').append($('<option>', {--}}
-        {{--                    value: "{{ $manager->fio }}",--}}
-        {{--                    text: "{{ $manager->fio }}"--}}
-        {{--                }));--}}
-        {{--            @endforeach--}}
-        {{--        }--}}
-
-        {{--        var projNumPre = $('#projNumPre').val();--}}
-        {{--        var projNumSuf = $(this).val();--}}
-        {{--        var combinedValue = projNumPre + " " + projNumSuf;--}}
-        {{--        $('#projNumCombined').val(combinedValue);--}}
-        {{--    });--}}
-        {{--});--}}
     </script>
 @endsection

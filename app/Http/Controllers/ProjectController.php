@@ -283,27 +283,23 @@ class ProjectController extends Controller
     // ДОБАВЛЕНИЕ новой карты проекта
     public function storeNew(Request $request)
     {
-        /* ---------------- РАСЧЕТ (ОБЩАЯ ИНФА И КОНТАКТ ЛИСТ) ----------------*/
-
-        // // общая информация
-        // $project = new Projects;
-        // // $project->projNum = $request->projNum;
-        // $project->projNum = $request->projNumPre . " " . $request->projNumSuf;
-        // $project->projNumSuf = $request->projNumSuf;
-
-        // Определение количества проектов в выбранной группе
         $group = $request->projNumSuf;
         $year = $request->projNumPre;
-//        $lastProjectInGroup = Projects::where('projNumSuf', $group)->orderBy('id', 'desc')->first();
-        $lastProjectInGroup = Projects::where('projNumSuf', $group)->where('projNumPre', $year)->orderBy('id', 'desc')->first();
+        $manualProjNum = $request->manualProjNum;
 
-        // Определение номера проекта в пределах группы
-        $projectNumberInGroup = ($lastProjectInGroup) ? explode('-', $lastProjectInGroup->projNum)[0] + 1 : 1;
+        if (!empty($manualProjNum)) {
+            // Если номер введен вручную, используем его
+            $projectNumber = $manualProjNum . ' ' . $group;;
+        } else {
+            // Если номер не введен вручную, формируем его автоматически
+            $lastProjectInGroup = Projects::where('projNumSuf', $group)
+                ->where('projNumPre', $year)
+                ->orderBy('id', 'desc')
+                ->first();
+            $projectNumberInGroup = ($lastProjectInGroup) ? explode('-', $lastProjectInGroup->projNum)[0] + 1 : 1;
+            $projectNumber = $projectNumberInGroup . '-' . $year . ' ' . $group;
+        }
 
-        // Формирование номера проекта
-//        $projectNumber = $projectNumberInGroup . '-' . $request->projNumPre . ' ' . $group;
-        // Формирование номера проекта
-        $projectNumber = $projectNumberInGroup . '-' . $year . ' ' . $group;
 
         // Создание записи проекта
         $project = new Projects;
