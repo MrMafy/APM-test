@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\RegReestrKP;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -39,39 +40,86 @@ use Illuminate\Pagination\Paginator;
 class ProjectController extends Controller
 {
     // Отображение списка всех проектов на странице карты проекта
+//    public function allData(Request $request)
+//    {
+//        $user = $request->user();
+//        $projects = Projects::all();
+//
+////        if ($user->role === 'admin') {
+////            $projects = Projects::all();
+////        } elseif ($user->role === 'proj_manager') {
+////            if ($user->group_num === 'Группа 1') {
+////                $projects = Projects::where('projManager', $user->name)->get();
+////            } elseif ($user->group_num === 'Группа 2') {
+////                $projects = Projects::where('projManager', $user->name)->get();
+////            } elseif ($user->group_num === 'Группа 3') {
+////                $projects = Projects::where('projManager', $user->name)->get();
+////            } elseif ($user->group_num === 'Группа 4') {
+////                $projects = Projects::where('projManager', $user->name)->get();
+////            }
+////
+////        } elseif ($user->role === 'responsible') {
+////            if ($user->group_num === 'Группа 1') {
+////                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+////            } elseif ($user->group_num === 'Группа 2') {
+////                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+////            } elseif ($user->group_num === 'Группа 3') {
+////                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+////            } elseif ($user->group_num === 'Группа 4') {
+////                $projects = Projects::where('projNumSuf', $user->group_num)->get();
+////            }
+////
+////        }
+//        return view('all-maps', ['data' => $projects, 'user' => $user]);
+//
+//    }
+
     public function allData(Request $request)
     {
         $user = $request->user();
         $projects = Projects::all();
+        $groups = Group::all();
+        $projectManagers = ProjectManager::all();
 
-//        if ($user->role === 'admin') {
-//            $projects = Projects::all();
-//        } elseif ($user->role === 'proj_manager') {
-//            if ($user->group_num === 'Группа 1') {
-//                $projects = Projects::where('projManager', $user->name)->get();
-//            } elseif ($user->group_num === 'Группа 2') {
-//                $projects = Projects::where('projManager', $user->name)->get();
-//            } elseif ($user->group_num === 'Группа 3') {
-//                $projects = Projects::where('projManager', $user->name)->get();
-//            } elseif ($user->group_num === 'Группа 4') {
-//                $projects = Projects::where('projManager', $user->name)->get();
-//            }
-//
-//        } elseif ($user->role === 'responsible') {
-//            if ($user->group_num === 'Группа 1') {
-//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-//            } elseif ($user->group_num === 'Группа 2') {
-//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-//            } elseif ($user->group_num === 'Группа 3') {
-//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-//            } elseif ($user->group_num === 'Группа 4') {
-//                $projects = Projects::where('projNumSuf', $user->group_num)->get();
-//            }
-//
-//        }
-        return view('all-maps', ['data' => $projects, 'user' => $user]);
-
+        return view('all-maps', [
+            'data' => $projects,
+            'user' => $user,
+            'groups' => $groups,
+            'projectManagers' => $projectManagers
+        ]);
     }
+
+    public function filterProjects(Request $request)
+    {
+        $group = $request->input('group');
+        $manager = $request->input('manager');
+        $sortOrder = $request->input('sortOrder', 'asc');
+
+        $query = Projects::query();
+
+        if ($group) {
+            $query->where('projNumSuf', $group);
+        }
+
+        if ($manager) {
+            $query->where('projManager', $manager);
+        }
+
+        if ($sortOrder) {
+            $query->orderBy('date_application', $sortOrder);
+        }
+
+        $projects = $query->get();
+
+        return view('all-maps', [
+            'data' => $projects,
+            'user' => $request->user(),
+            'groups' => Group::all(),
+            'projectManagers' => ProjectManager::all()
+        ]);
+    }
+
+
 
     // Метод для получения ID проекта по vnNum
     public function getProjectIdByVnNum($vnNum)

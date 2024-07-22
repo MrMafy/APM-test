@@ -65,6 +65,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Все карты проекта
     Route::get('/project-maps/all', 'App\Http\Controllers\ProjectController@allData')->name('project-maps');
+
+    //ФИЛЬТРАЦИЯ ПРОЕКТОВ
+    Route::get('/project-maps/filter', 'App\Http\Controllers\ProjectController@filterProjects')->name('filter-projects');
+
     // одна карта проекта
     Route::get('/project-maps/all/{id}/{tab?}', 'App\Http\Controllers\ProjectController@showOneMessage')->name('project-data-one');
 
