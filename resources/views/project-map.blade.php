@@ -541,5 +541,51 @@
                 loadTabContent(tabId, '{{ $project->id }}'); // Pass both tabId and projectId
             });
         });
+
+        $(document).ready(function() {
+            // Добавить новую строку оборудования с предзаполнением значений
+            // $("#addMore-equipment").on("click", function() {
+            //     var $lastRow = $("#equipment-inputs tr:last");
+            //     var $newRow = $lastRow.clone();
+            //
+            //     $newRow.find("input").each(function() {
+            //         var oldName = $(this).attr("name");
+            //         var newName = oldName.replace(/\[(\d+)\]/, function(_, index) {
+            //             return "[" + (parseInt(index, 10) + 1) + "]";
+            //         });
+            //         $(this).attr("name", newName);
+            //     });
+            //
+            //     // Заполнение значениями предыдущих полей
+            //     $newRow.find("input").each(function() {
+            //         $(this).val($lastRow.find("input[id='" + $(this).attr("id") + "']").val());
+            //     });
+            //
+            //     $("#equipment-inputs").append($newRow);
+            // });
+            if (!$("#addMore-equipment").data('handlerAttached')) {
+                $("#addMore-equipment").on("click", function() {
+                    var $lastRow = $("#equipment-inputs tr:last");
+                    var $newRow = $lastRow.clone();
+
+                    $newRow.find("input").each(function() {
+                        var oldName = $(this).attr("name");
+                        var newName = oldName.replace(/\[(\d+)\]/, function(_, index) {
+                            return "[" + (parseInt(index, 10) + 1) + "]";
+                        });
+                        $(this).attr("name", newName);
+                    });
+
+                    // Заполнение значениями предыдущих полей
+                    $newRow.find("input").each(function() {
+                        $(this).val($lastRow.find("input[id='" + $(this).attr("id") + "']").val());
+                    });
+
+                    $("#equipment-inputs").append($newRow);
+                });
+
+                $("#addMore-equipment").data('handlerAttached', true);
+            }
+        });
     </script>
 @endsection

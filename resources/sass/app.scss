@@ -438,7 +438,11 @@ tbody#changes-inputs td {
     background-color: #f8fafc3d;
   }
 }
-
+.filters {
+    .form-control {
+        background-color: #fff;
+    }
+}
 input, select {
   cursor: auto;
   background: rgb(16 45 75 / 10%) !important;
