@@ -712,7 +712,11 @@ class ProjectController extends Controller
         $BasicReference->projCurator = $req->input('projCurator');
         $BasicReference->projManager = $req->input('projManager');
         $BasicReference->linkPlan = $req->input('linkPlan');
+        $BasicReference->payment = $req->input('payment');
         $BasicReference->save();
+
+        $project->payment = $req->input('payment');
+        $project->save();
 
 //        $FromKSGperiodDays =  updateCalculationSubmit::$periodDays;
 //        $FromKSGperiodDays -> save();
@@ -759,19 +763,19 @@ class ProjectController extends Controller
         switch ($project->projNumSuf) {
             case 'Группа 1':
                 RegSInteg::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact, 'payment' => $req->payment]);
                 break;
             case 'Группа 2':
                 RegEOB::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact, 'payment' => $req->payment]);
                 break;
             case 'Группа 3':
                 RegNHRS::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact, 'payment' => $req->payment]);
                 break;
             case 'Группа 4':
                 RegOther::where('vnNum', $num)->update(['proj_cost' => $req->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact]);
+                    'date_start' => $req->start_date, 'date_end' => $req->end_date_fact, 'payment' => $req->payment]);
                 break;
             default:
                 // Обработка, если тип не определен
@@ -781,7 +785,7 @@ class ProjectController extends Controller
         return redirect()->route('project-data-one', ['id' => $id, 'tab' => '#realization'])->with('success', 'Project data successfully updated');
     }
 
-    // редактирование карты проекта -> ИЗМЕНЕНИЯ (открыывает страницу редактирования по id записи)
+    // редактирование карты проекта -> ИЗМЕНЕНИЯ (открывает страницу редактирования по id записи)
     public function updateChanges($id)
     {
         $project = Projects::find($id);
@@ -881,6 +885,7 @@ class ProjectController extends Controller
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
+            'payment' => $project->payment,
         ]);
     }
 
@@ -908,6 +913,7 @@ class ProjectController extends Controller
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
+            'payment' => $project->payment,
         ]);
     }
 
@@ -934,6 +940,7 @@ class ProjectController extends Controller
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
+            'payment' => $project->payment,
         ]);
     }
 
@@ -960,6 +967,7 @@ class ProjectController extends Controller
             'receiptDate' => $project->date_application,
             'submissionDate' => $project->date_offer,
             'projectManager' => $project->projManager,
+            'payment' => $project->payment,
         ]);
     }
 
@@ -991,6 +999,7 @@ class ProjectController extends Controller
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
+                'payment' => $project->payment,
             ]);
         }
     }
@@ -1022,6 +1031,7 @@ class ProjectController extends Controller
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
+                'payment' => $project->payment,
             ]);
         }
     }
@@ -1053,6 +1063,7 @@ class ProjectController extends Controller
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
+                'payment' => $project->payment,
             ]);
         }
     }
@@ -1084,6 +1095,7 @@ class ProjectController extends Controller
                 'receiptDate' => $project->date_application,
                 'submissionDate' => $project->date_offer,
                 'projectManager' => $project->projManager,
+                'payment' => $project->payment,
             ]);
         }
     }

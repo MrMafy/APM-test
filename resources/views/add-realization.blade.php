@@ -69,6 +69,14 @@
                                     value="{{ $project->projManager }}" readonly>
                             </td>
                         </tr>
+
+                        <tr>
+                            <th>Оплата факт. руб. без НДС</th>
+                            <td colspan="3">
+                                <input type="number" class="form-control" name="payment" id="payment" placeholder="Введите оплату факт. руб. без НДС">
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

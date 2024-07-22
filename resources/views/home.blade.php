@@ -308,6 +308,14 @@
                             sortable: true
                         },
                         {
+                            field: 'payment',
+                            title: 'Оплата факт. руб. без НДС',
+                            rowspan: 2,
+                            align: 'center',
+                            valign: 'middle',
+                            sortable: true
+                        },
+                        {
                             field: 'marginality',
                             title: 'Маржинальность %',
                             rowspan: 2,

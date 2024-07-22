@@ -50,7 +50,11 @@ class realizationController extends Controller
             $BasicReference->projCurator = $request->projCurator;
             $BasicReference->projManager = $request->projManager;
             $BasicReference->linkPlan = $request->linkPlan;
+            $BasicReference->payment = $request->payment;
             $BasicReference->save();
+
+            $project->payment = $request->payment;
+            $project->save();
 
         // доп информация
         $BasicInfo = new BasicInfo;
@@ -94,25 +98,25 @@ class realizationController extends Controller
         switch ($project->projNumSuf) {
             case 'Группа 1':
                 RegSInteg::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact, 'payment' => $request->payment]);
                 break;
             case 'Группа 2':
                 RegEOB::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact, 'payment' => $request->payment]);
                 break;
             case 'Группа 3':
                 RegNHRS::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact, 'payment' => $request->payment]);
                 break;
             case 'Группа 4':
                 RegOther::where('vnNum', $num)->update(['proj_cost' => $request->price_fact, 'profit' => $profit_fact,
-                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact]);
+                    'date_start' => $request->start_date, 'date_end' => $request->end_date_fact, 'payment' => $request->payment]);
                 break;
             default:
                 // Обработка, если тип не определен
                 break;
         }
 
-        return redirect()->route('project-data-one', $id)->with('success');
+       return redirect()->route('project-data-one', $id)->with('success');
         }
 }

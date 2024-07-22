@@ -42,6 +42,10 @@
                             <th>Руководитель/инициатор проекта</th>
                             <td colspan="3">{{ $item->projManager }}</td>
                         </tr>
+                        <tr>
+                            <th>Оплата факт. руб. без НДС</th>
+                            <td colspan="3">{{ $item->payment }}</td>
+                        </tr>
                     @endforeach
                     </tbody>
                 </table>
@@ -126,7 +130,7 @@
             </div>
             <div class="mb-3 blockquote">
                 @if ($project->basicReference->isNotEmpty())
-                    <a href="{{ $project->basicReference->first()->linkPlan }}">Проект в план/факт</a>
+                    <a href="{{ $project->basicReference->first()->linkPlan }}" target="_blank">Проект в план/факт</a>
                 @else
                     <p>Ссылка не доступна</p>
                 @endif

@@ -90,6 +90,15 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <th>Оплата факт. руб. без НДС</th>
+                                            <td colspan="3">
+                                                <div class="col-3">
+                                                    <input type="text" name="payment"
+                                                           value="{{ $item->payment }}" class="input_editable">
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
